@@ -1,0 +1,10 @@
+# macOS metadata
+._*
+.DS_Store
+
+# Internal/dev files
+.claude/
+CLAUDE-CODE-BRIEF-danheale.md
+danheale-site-mockup.html
+files/
+ui-ux-pro-max-skill-main/
