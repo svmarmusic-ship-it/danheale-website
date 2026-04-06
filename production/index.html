@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO -->
+  <title>Free Logic Pro Mixing Template — Dan Heale</title>
+  <meta name="description" content="Download a free professional Logic Pro mixing template used on tracks with 100M+ streams. Get the exact mix bus chain, compression templates, and mastering limiter settings.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://danheale.co.uk/production">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://danheale.co.uk/production">
+  <meta property="og:title" content="Free Logic Pro Mixing Template — Dan Heale">
+  <meta property="og:description" content="Download a free professional Logic Pro mixing template used on tracks with 100M+ streams.">
+  <meta property="og:image" content="https://danheale.co.uk/og-image.jpg">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Free Logic Pro Mixing Template — Dan Heale">
+  <meta name="twitter:description" content="Download a free professional Logic Pro mixing template used on tracks with 100M+ streams.">
+
+  <!-- Favicon: inline SVG gold DH monogram -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230e0d0b'/><text x='50' y='72' text-anchor='middle' font-family='Georgia,Times New Roman,serif' font-size='58' font-weight='700' fill='%23c9a96e' letter-spacing='-3'>DH</text></svg>">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─── Reset & Base ─────────────────────────────────── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg:           #0e0d0b;
+      --bg-elevated:  #151412;
+      --bg-subtle:    #1a1917;
+      --accent:       #c9a96e;
+      --accent-dim:   rgba(201, 169, 110, 0.15);
+      --accent-glow:  rgba(201, 169, 110, 0.06);
+      --text:         #f0ece4;
+      --text-mid:     rgba(240, 236, 228, 0.55);
+      --text-dim:     rgba(240, 236, 228, 0.3);
+      --border:       rgba(240, 236, 228, 0.08);
+      --border-hover: rgba(240, 236, 228, 0.15);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ─── NAV ───────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 20px 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(14, 13, 11, 0.9);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+      transition: color 0.3s ease;
+    }
+
+    .nav-logo:hover { color: var(--accent); }
+
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+    }
+
+    .form-field input:focus-visible,
+    .form-field textarea:focus-visible { outline: none; }
+
+    /* ─── HERO ──────────────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 140px 64px 100px;
+      position: relative;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 100%;
+      background: radial-gradient(ellipse at 50% 30%, var(--accent-glow) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 64px; right: 64px;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .hero-eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .hero-eyebrow::before,
+    .hero-eyebrow::after {
+      content: '';
+      width: 32px; height: 1px;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(40px, 6vw, 76px);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      margin-bottom: 24px;
+      max-width: 760px;
+    }
+
+    .hero h1 em { font-style: italic; color: var(--accent); }
+
+    .hero-sub {
+      font-size: 17px;
+      font-weight: 300;
+      color: var(--text-mid);
+      max-width: 520px;
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+
+    .hero-proof {
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 48px;
+      font-family: 'Space Mono', monospace;
+    }
+
+    .hero-proof span {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    /* ─── EMAIL FORM ────────────────────────────────────── */
+    .capture-form-wrap {
+      width: 100%;
+      max-width: 520px;
+      position: relative;
+    }
+
+    /* FORMSPREE SETUP:
+       1. Go to https://formspree.io — create a free account
+       2. Create a new form — you'll get: https://formspree.io/f/XXXXXXXX
+       3. Set that URL as the action attribute on the form below
+       4. Add a hidden field: <input type="hidden" name="_subject" value="New template download request"> */
+    .capture-form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .form-row-two {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .form-field { display: flex; flex-direction: column; gap: 8px; }
+
+    .form-field label {
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      font-weight: 500;
+      text-align: left;
+    }
+
+    .form-field input {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      padding: 14px 16px;
+      width: 100%;
+      outline: none;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .form-field input:focus {
+      border-color: rgba(201, 169, 110, 0.4);
+      box-shadow: 0 0 0 3px rgba(201, 169, 110, 0.08);
+    }
+
+    .form-field input::placeholder { color: var(--text-dim); }
+
+    .form-submit {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      padding: 18px 36px;
+      background: var(--accent);
+      color: var(--bg);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease;
+    }
+
+    .form-submit:hover {
+      background: #d4b67a;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(201, 169, 110, 0.2);
+    }
+
+    .form-submit .arrow { transition: transform 0.3s ease; }
+    .form-submit:hover .arrow { transform: translateX(4px); }
+
+    @keyframes gold-shimmer {
+      0%   { transform: translateX(-100%) skewX(-12deg); }
+      100% { transform: translateX(250%)  skewX(-12deg); }
+    }
+
+    .form-submit::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 40%; height: 100%;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.14) 50%,
+        transparent 100%
+      );
+      animation: gold-shimmer 4s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .form-note {
+      font-size: 12px;
+      color: var(--text-dim);
+      text-align: center;
+      margin-top: 12px;
+    }
+
+    .form-success {
+      display: none;
+      padding: 20px 24px;
+      background: rgba(201, 169, 110, 0.08);
+      border: 1px solid rgba(201, 169, 110, 0.2);
+      font-size: 14px;
+      color: var(--accent);
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    /* ─── WHAT'S INSIDE ─────────────────────────────────── */
+    .inside-section {
+      padding: 100px 64px;
+      border-top: 1px solid var(--border);
+      position: relative;
+    }
+
+    .inside-section::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 80%; height: 100%;
+      background: radial-gradient(ellipse at 50% 0%, var(--accent-glow) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .inside-inner {
+      position: relative;
+      max-width: 680px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .section-label {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 40px;
+    }
+
+    .section-label::before,
+    .section-label::after {
+      content: '';
+      width: 32px; height: 1px;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .inside-inner h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(32px, 4vw, 48px);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+
+    .inside-inner h2 em { font-style: italic; color: var(--accent); }
+
+    .inside-inner > p {
+      font-size: 15px;
+      color: var(--text-mid);
+      line-height: 1.7;
+      margin-bottom: 56px;
+    }
+
+    .inside-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+    }
+
+    .inside-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      padding: 24px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .inside-item:last-child { border-bottom: 1px solid var(--border); }
+
+    .inside-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+      flex-shrink: 0;
+      margin-top: 3px;
+    }
+
+    .inside-item h4 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+      letter-spacing: -0.01em;
+    }
+
+    .inside-item p {
+      font-size: 14px;
+      color: var(--text-mid);
+      line-height: 1.65;
+    }
+
+    /* ─── FOOTER ────────────────────────────────────────── */
+    footer {
+      padding: 48px 64px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-left { font-size: 13px; color: var(--text-dim); }
+
+    .footer-links { display: flex; gap: 24px; list-style: none; }
+
+    .footer-links a {
+      font-size: 13px;
+      color: var(--text-dim);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .footer-links a:hover { color: var(--accent); }
+
+    /* ─── FADE-UP ───────────────────────────────────────── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .fade-up.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── REDUCED MOTION ────────────────────────────────── */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .fade-up { opacity: 1; transform: none; transition: none; }
+      .form-submit::after { animation: none; }
+      .form-submit { transition: none; }
+    }
+
+    /* ─── MOBILE ────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      nav { padding: 16px 24px; }
+      .hero { padding: 100px 24px 60px; }
+      .hero::after { left: 24px; right: 24px; }
+      .inside-section { padding: 64px 24px; }
+      .form-row-two { grid-template-columns: 1fr; }
+      footer {
+        padding: 32px 24px;
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 { font-size: clamp(36px, 10vw, 52px); }
+      .hero-sub { font-size: 15px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── NAV ──────────────────────────────────────────────── -->
+<nav role="banner">
+  <a href="https://danheale.co.uk" class="nav-logo" aria-label="Dan Heale — home">Dan Heale</a>
+</nav>
+
+
+<!-- ─── HERO ──────────────────────────────────────────────── -->
+<section class="hero" aria-label="Free Logic Pro Mixing Template">
+
+  <div class="hero-eyebrow" aria-hidden="true">Free Download</div>
+
+  <h1>Free Logic Pro<br><em>Mixing Template</em></h1>
+
+  <p class="hero-sub">
+    The exact mixing setup used on tracks that have racked up over 100 million streams. Plug it in, load your session, and start mixing like a professional from day one.
+  </p>
+
+  <p class="hero-proof">Used on tracks with <span>100M+ streams</span> &mdash; house, deep house &amp; dance</p>
+
+  <div class="capture-form-wrap fade-up">
+    <!-- FORMSPREE: replace action URL with your own form endpoint -->
+    <form class="capture-form" action="https://formspree.io/f/XXXXXXXX" method="POST" id="captureForm">
+      <input type="hidden" name="_subject" value="Free Logic Pro Template Download">
+      <input type="hidden" name="_next" value="https://danheale.co.uk/production/thank-you">
+
+      <div class="form-row-two">
+        <div class="form-field">
+          <label for="firstName">First Name</label>
+          <input type="text" id="firstName" name="firstName" placeholder="Your name" required autocomplete="given-name">
+        </div>
+        <div class="form-field">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" placeholder="you@email.com" required autocomplete="email">
+        </div>
+      </div>
+
+      <button type="submit" class="form-submit">
+        Send Me the Template <span class="arrow" aria-hidden="true">&#8594;</span>
+      </button>
+    </form>
+
+    <div class="form-success" id="formSuccess" role="alert">
+      Check your inbox — the template is on its way. 🎛️
+    </div>
+
+    <p class="form-note">No spam. Unsubscribe anytime.</p>
+  </div>
+
+</section>
+
+
+<!-- ─── WHAT'S INSIDE ─────────────────────────────────────── -->
+<section class="inside-section" id="inside" aria-labelledby="inside-label">
+  <div class="inside-inner">
+
+    <div class="section-label" id="inside-label">What's Inside</div>
+
+    <h2>Everything you need to <em>mix</em> properly.</h2>
+
+    <p>
+      This isn't a generic starter template. It's the actual session architecture built over years of professional mixing — refined across hundreds of tracks and multiple label releases.
+    </p>
+
+    <ul class="inside-list" role="list">
+
+      <li class="inside-item fade-up">
+        <span class="inside-num" aria-hidden="true">01</span>
+        <div>
+          <h4>Pro Mix Bus Chain</h4>
+          <p>The exact master bus processing used on release-ready tracks — glue compression, harmonic saturation, and transparent limiting, all calibrated for modern streaming loudness targets.</p>
+        </div>
+      </li>
+
+      <li class="inside-item fade-up">
+        <span class="inside-num" aria-hidden="true">02</span>
+        <div>
+          <h4>Reference Track Routing</h4>
+          <p>A pre-configured reference track setup so you can A/B your mix against commercial releases instantly — the single most effective mixing habit you can build.</p>
+        </div>
+      </li>
+
+      <li class="inside-item fade-up">
+        <span class="inside-num" aria-hidden="true">03</span>
+        <div>
+          <h4>Custom EQ Settings</h4>
+          <p>Channel strip EQ curves for kick, bass, synths, and pads — built for house and dance music, and ready to tweak to your specific session.</p>
+        </div>
+      </li>
+
+      <li class="inside-item fade-up">
+        <span class="inside-num" aria-hidden="true">04</span>
+        <div>
+          <h4>Compression Templates</h4>
+          <p>Pre-set compressor settings for transient control, sidechain pumping, and parallel compression — the dynamics processing approaches that actually work on dance music.</p>
+        </div>
+      </li>
+
+      <li class="inside-item fade-up">
+        <span class="inside-num" aria-hidden="true">05</span>
+        <div>
+          <h4>Mastering Limiter Settings</h4>
+          <p>A final-stage limiter chain dialled in for Spotify, Apple Music, and Beatport — so your tracks hit the right LUFS without sacrificing punch or clarity.</p>
+        </div>
+      </li>
+
+    </ul>
+
+  </div>
+</section>
+
+
+<!-- ─── FOOTER ─────────────────────────────────────────────── -->
+<footer role="contentinfo">
+  <div class="footer-left">&copy; 2026 Dan Heale. All rights reserved.</div>
+  <ul class="footer-links">
+    <li><a href="https://danheale.co.uk">Back to danheale.co.uk</a></li>
+  </ul>
+</footer>
+
+
+<script>
+  // ─── Fade-up on scroll ─────────────────────────────────
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        const siblings = [...el.closest('ul, section, div')?.querySelectorAll('.fade-up') ?? []];
+        const idx = siblings.indexOf(el);
+        setTimeout(() => el.classList.add('is-visible'), idx * 80);
+        observer.unobserve(el);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // ─── Formspree AJAX submit ─────────────────────────────
+  const form = document.getElementById('captureForm');
+  const successMsg = document.getElementById('formSuccess');
+
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          body: data,
+          headers: { 'Accept': 'application/json' }
+        });
+        if (res.ok) {
+          form.style.display = 'none';
+          successMsg.style.display = 'block';
+        } else {
+          form.querySelector('.form-submit').textContent = 'Something went wrong — try again';
+        }
+      } catch {
+        form.querySelector('.form-submit').textContent = 'Something went wrong — try again';
+      }
+    });
+  }
+</script>
+
+</body>
+</html>
