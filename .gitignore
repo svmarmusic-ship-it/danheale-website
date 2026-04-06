@@ -2,6 +2,11 @@
 ._*
 .DS_Store
 
+# Environment / secrets
+.env
+.env.local
+.env*.local
+
 # Internal/dev files
 .claude/
 CLAUDE-CODE-BRIEF-danheale.md

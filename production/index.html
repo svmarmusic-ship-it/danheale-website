@@ -607,28 +607,38 @@
 
   document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 
-  // ─── Formspree AJAX submit ─────────────────────────────
+  // ─── Brevo subscribe ───────────────────────────────────
   const form = document.getElementById('captureForm');
   const successMsg = document.getElementById('formSuccess');
 
   if (form) {
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const data = new FormData(form);
+      const submitBtn = form.querySelector('.form-submit');
+      const firstName = document.getElementById('firstName').value.trim();
+      const email = document.getElementById('email').value.trim();
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending\u2026';
+
       try {
-        const res = await fetch(form.action, {
+        const res = await fetch('/api/subscribe', {
           method: 'POST',
-          body: data,
-          headers: { 'Accept': 'application/json' }
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({ firstName, email }),
         });
+
         if (res.ok) {
           form.style.display = 'none';
+          successMsg.textContent = 'Check your inbox \u2014 your template is on its way.';
           successMsg.style.display = 'block';
         } else {
-          form.querySelector('.form-submit').textContent = 'Something went wrong — try again';
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = 'Send Me the Template <span class="arrow" aria-hidden="true">&#8594;</span>';
         }
       } catch {
-        form.querySelector('.form-submit').textContent = 'Something went wrong — try again';
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Send Me the Template <span class="arrow" aria-hidden="true">&#8594;</span>';
       }
     });
   }
