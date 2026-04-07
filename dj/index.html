@@ -825,6 +825,16 @@
       .cta-btn { padding: 16px 28px; }
     }
   </style>
+
+  <!-- Google Analytics -->
+  <!-- REPLACE GA_MEASUREMENT_ID WITH YOUR GA4 MEASUREMENT ID (e.g. G-XXXXXXXXXX) -->
+  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'GA_MEASUREMENT_ID');
+  </script> -->
 </head>
 <body>
 
@@ -876,6 +886,11 @@
     <div class="section-label" id="dates-label">Upcoming Dates</div>
   </div>
 
+  <!-- ==================== UPCOMING DATES ==================== -->
+  <!-- To add a date: copy one <div class="date-row fade-up"> block and paste it below -->
+  <!-- To remove a date: delete the entire <div class="date-row fade-up"> ... </div> block -->
+  <!-- ========================================================= -->
+
   <div class="dates-list" role="list">
 
     <div class="date-row fade-up" role="listitem">
@@ -895,6 +910,7 @@
     </div>
 
   </div>
+  <!-- ==================== END OF DATES LIST ==================== -->
 
   <p style="margin-top: 32px; font-size: 13px; color: var(--text-dim); padding-left: 24px;">
     More dates to be announced — <a href="#book" style="color: var(--accent); text-decoration: none;">get in touch</a> about booking.
