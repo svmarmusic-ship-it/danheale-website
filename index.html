@@ -552,9 +552,10 @@
     }
 
     .product-card:hover {
-      border-color: var(--border-hover);
+      border-color: rgba(201, 169, 110, 0.32);
       transform: translateY(-4px);
-      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25),
+                  0 0 28px rgba(201, 169, 110, 0.07);
     }
 
     .product-img {
@@ -1132,7 +1133,7 @@
 
 
 <!-- ─── SHOP ──────────────────────────────────────────────── -->
-<section class="shop-preview reveal" id="shop" aria-labelledby="shop-label">
+<section class="shop-preview" id="shop" aria-labelledby="shop-label">
   <div class="section-header">
     <div class="section-label" id="shop-label">Shop</div>
   </div>
@@ -1141,7 +1142,7 @@
        e.g. href="https://danheale.lemonsqueezy.com/checkout/buy/YOUR_PRODUCT_ID"
        For overlay checkout, add the Lemon.js script and data-lemonsqueezy-checkout to each link. -->
   <div class="shop-grid">
-    <a href="https://danhealemusic.gumroad.com/l/mixing-template" class="product-card" aria-label="Free Mixing Logic Pro Template — £0.00" target="_blank" rel="noopener noreferrer">
+    <a href="https://danhealemusic.gumroad.com/l/mixing-template" class="product-card card-reveal" aria-label="Free Mixing Logic Pro Template — £0.00" target="_blank" rel="noopener noreferrer">
       <div class="product-img">
         <img src="images/Mixing Template Artwork.png" alt="Free Mixing Template artwork" style="width:100%;height:100%;object-fit:cover;display:block;">
       </div>
@@ -1153,7 +1154,7 @@
       </div>
     </a>
 
-    <div class="product-card" aria-label="Deep House Essentials Vol. 1 — Sample Pack — Coming soon">
+    <div class="product-card card-reveal" aria-label="Deep House Essentials Vol. 1 — Sample Pack — Coming soon">
       <div class="product-img">
         <span class="img-label">Coming Soon</span>
       </div>
@@ -1165,7 +1166,7 @@
       </div>
     </div>
 
-    <a href="#" class="product-card" aria-label="From DJ to Producer — Course — Waitlist open">
+    <a href="#" class="product-card card-reveal" aria-label="From DJ to Producer — Course — Waitlist open">
       <div class="product-img">
         <span class="img-label">Coming Soon</span>
       </div>
@@ -1333,9 +1334,8 @@
     });
   }
 
-  // ── Review card stagger ───────────────────────────────────
-  var reviewsGrid = document.querySelector('.reviews-grid');
-  if (reviewsGrid && 'IntersectionObserver' in window) {
+  // ── Card stagger (reviews + shop) ────────────────────────
+  if ('IntersectionObserver' in window) {
     var cardObserver = new IntersectionObserver(function(entries) {
       entries.forEach(function(entry) {
         if (entry.isIntersecting) {
@@ -1347,7 +1347,10 @@
       });
     }, { threshold: 0.15 });
 
-    cardObserver.observe(reviewsGrid);
+    ['.reviews-grid', '.shop-grid'].forEach(function(sel) {
+      var el = document.querySelector(sel);
+      if (el) cardObserver.observe(el);
+    });
   }
 
   // ── Stats count-up ───────────────────────────────────────
