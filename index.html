@@ -461,11 +461,24 @@
     }
 
     .review-card:hover {
-      border-color: rgba(201, 169, 110, 0.22);
+      border-color: rgba(201, 169, 110, 0.32);
       background: var(--bg-subtle);
-      transform: translateY(-5px);
-      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3),
-                  0 0 0 1px rgba(201, 169, 110, 0.08);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25),
+                  0 0 28px rgba(201, 169, 110, 0.07);
+    }
+
+    /* ─── REVIEW CARD STAGGER ──────────────────────────── */
+    .card-reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .card-reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     .review-stars {
@@ -865,7 +878,8 @@
         animation: none;
       }
 
-      .reveal {
+      .reveal,
+      .card-reveal {
         opacity: 1;
         transform: none;
         transition: none;
@@ -1072,13 +1086,13 @@
 
 
 <!-- ─── REVIEWS ───────────────────────────────────────────── -->
-<section class="reviews reveal" id="reviews" aria-labelledby="reviews-label">
+<section class="reviews" id="reviews" aria-labelledby="reviews-label">
   <div class="section-header">
     <div class="section-label" id="reviews-label">Client Reviews</div>
   </div>
 
   <div class="reviews-grid">
-    <article class="review-card">
+    <article class="review-card card-reveal">
       <div class="review-stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
       <p class="review-text">"First off, Dan is the man. I came to him with a very specific, borderline impossible request—to recreate an effect chain from a well known EDM record—and he nailed it on the first pass. Not just close. Dead-on. The breakdown, the process, the ear behind it... next level. Turnaround was fast, communication was sharp, and the depth of understanding he brought to the sound design was obvious from the start. This wasn't guesswork. This was someone who actually knows what he's hearing and how to build it from scratch. Honestly, I don't think most producers could've pulled this off the way he did. Way beyond expectations. Total pro."</p>
       <div class="review-author">
@@ -1090,7 +1104,7 @@
       </div>
     </article>
 
-    <article class="review-card">
+    <article class="review-card card-reveal">
       <div class="review-stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
       <p class="review-text">"Dan absolutely smashed it with this track! From start to finish, he was professional, creative, and incredibly easy to work with. His attention to detail and understanding of the vibe I wanted were spot on — the track sounded amazing was what I wanted and more! The delivery was super quick too, without any compromise on quality. You can tell he's got real talent and passion for what he does. I'll definitely be coming back for more projects — highly recommended!"</p>
       <div class="review-author">
@@ -1102,7 +1116,7 @@
       </div>
     </article>
 
-    <article class="review-card">
+    <article class="review-card card-reveal">
       <div class="review-stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
       <p class="review-text">"As always, Dan brings everything to the table. He understands exactly what I want and where I want to go to with a track. Always finds a way to add the last piece to give the production the final finish and the quality of his mixing and mastering is outstanding."</p>
       <div class="review-author">
@@ -1317,6 +1331,23 @@
     document.querySelectorAll('.reveal').forEach(function(el) {
       revealObserver.observe(el);
     });
+  }
+
+  // ── Review card stagger ───────────────────────────────────
+  var reviewsGrid = document.querySelector('.reviews-grid');
+  if (reviewsGrid && 'IntersectionObserver' in window) {
+    var cardObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          cardObserver.unobserve(entry.target);
+          entry.target.querySelectorAll('.card-reveal').forEach(function(card, i) {
+            setTimeout(function() { card.classList.add('visible'); }, i * 160);
+          });
+        }
+      });
+    }, { threshold: 0.15 });
+
+    cardObserver.observe(reviewsGrid);
   }
 
   // ── Stats count-up ───────────────────────────────────────
