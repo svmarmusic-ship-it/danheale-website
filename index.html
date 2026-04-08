@@ -810,6 +810,43 @@
       pointer-events: none;
     }
 
+    /* ─── SCROLL PROGRESS BAR ──────────────────────────── */
+    #scroll-progress {
+      position: fixed;
+      top: 0; left: 0;
+      height: 2px;
+      width: 0%;
+      background: var(--accent);
+      z-index: 200;
+      pointer-events: none;
+    }
+
+    /* ─── HERO STAGGER ─────────────────────────────────── */
+    .hero-animate {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .hero-animate.in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── STAGGER CHILDREN ─────────────────────────────── */
+    .stagger-child {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .stagger-child.in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
     /* ─── FADE-UP ───────────────────────────────────────── */
     .fade-up {
       opacity: 0;
@@ -832,11 +869,15 @@
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
 
-      .fade-up {
+      .fade-up,
+      .hero-animate,
+      .stagger-child {
         opacity: 1;
         transform: none;
         transition: none;
       }
+
+      #scroll-progress { display: none; }
 
       .cta-btn::after,
       .form-submit::after { animation: none; }
@@ -908,6 +949,7 @@
   </script> -->
 </head>
 <body>
+<div id="scroll-progress" aria-hidden="true"></div>
 
 <!-- ─── NAV ──────────────────────────────────────────────── -->
 <nav id="nav" role="banner">
@@ -941,15 +983,15 @@
 
 <!-- ─── HERO ──────────────────────────────────────────────── -->
 <section class="hero" aria-label="Introduction">
-  <div class="hero-eyebrow" aria-hidden="true">Music Producer &bull; Ghost Producer &bull; DJ</div>
+  <div class="hero-eyebrow hero-animate" aria-hidden="true">Music Producer &bull; Ghost Producer &bull; DJ</div>
 
-  <h1>Your next hit,<br><em>produced.</em></h1>
+  <h1 class="hero-animate">Your next hit,<br><em>produced.</em></h1>
 
-  <p class="hero-sub">
+  <p class="hero-sub hero-animate">
     Release-ready tracks from a producer with over 100 million streams. No templates. No shortcuts. Just music that works.
   </p>
 
-  <div class="stats-row" aria-label="Key stats">
+  <div class="stats-row hero-animate" aria-label="Key stats">
     <div class="stat-item">
       <div class="stat-num" data-count="100" data-suffix="M+">100M+</div>
       <div class="stat-label">Streams</div>
@@ -964,7 +1006,7 @@
     </div>
   </div>
 
-  <a href="#contact" class="cta-btn">Start your project <span class="arrow" aria-hidden="true">&#8594;</span></a>
+  <a href="#contact" class="cta-btn hero-animate">Start your project <span class="arrow" aria-hidden="true">&#8594;</span></a>
 </section>
 
 
@@ -1221,9 +1263,10 @@
 <script>
   var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // ── Nav: compact on scroll ───────────────────────────────
+  // ── Nav: compact on scroll + scroll progress ─────────────
   var nav = document.getElementById('nav');
   var heroEl = document.querySelector('.hero');
+  var progressBar = document.getElementById('scroll-progress');
 
   window.addEventListener('scroll', function() {
     var y = window.scrollY;
@@ -1237,6 +1280,12 @@
       var progress = Math.min(y / heroH, 1);
       var glowY = 30 + progress * 22; // 30% → ~52% over the hero height
       heroEl.style.setProperty('--hero-glow-y', glowY + '%');
+    }
+
+    // Scroll progress bar
+    if (progressBar && !reducedMotion) {
+      var docH = document.documentElement.scrollHeight - window.innerHeight;
+      progressBar.style.width = (docH > 0 ? (y / docH) * 100 : 0) + '%';
     }
   }, { passive: true });
 
@@ -1260,14 +1309,51 @@
     });
   });
 
-  // ── Fade-up: sections reveal on scroll ──────────────────
-  // Note: reducedMotion is handled entirely by CSS (@media prefers-reduced-motion).
-  // We always add the class and observe — the CSS rule immediately overrides
-  // opacity/transform/transition for users who prefer reduced motion.
+  // ── Hero stagger ─────────────────────────────────────────
+  var heroItems = document.querySelectorAll('.hero-animate');
+  if (!reducedMotion) {
+    heroItems.forEach(function(el, i) {
+      setTimeout(function() { el.classList.add('in'); }, 120 + i * 130);
+    });
+  } else {
+    heroItems.forEach(function(el) { el.classList.add('in'); });
+  }
+
+  // ── Stagger children: service rows, review cards, product cards ──
   if ('IntersectionObserver' in window) {
-    var fadeTargets = document.querySelectorAll(
-      '.services, .about, .reviews, .shop-preview, .contact-section, footer'
-    );
+    var staggerConfigs = [
+      { section: '.services',    children: '.service-row'  },
+      { section: '.reviews',     children: '.review-card'  },
+      { section: '.shop-preview',children: '.product-card' }
+    ];
+
+    staggerConfigs.forEach(function(cfg) {
+      var section = document.querySelector(cfg.section);
+      if (!section) return;
+      var kids = section.querySelectorAll(cfg.children);
+      kids.forEach(function(child) { child.classList.add('stagger-child'); });
+
+      var sObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            sObserver.unobserve(entry.target);
+            entry.target.querySelectorAll('.stagger-child').forEach(function(child, i) {
+              setTimeout(function() { child.classList.add('in'); }, i * 100);
+            });
+          }
+        });
+      }, { threshold: 0.05, rootMargin: '0px 0px -30px 0px' });
+
+      requestAnimationFrame(function() {
+        requestAnimationFrame(function() { sObserver.observe(section); });
+      });
+    });
+  }
+
+  // ── Fade-up: about, contact, footer ─────────────────────
+  // Note: reducedMotion is handled entirely by CSS (@media prefers-reduced-motion).
+  if ('IntersectionObserver' in window) {
+    var fadeTargets = document.querySelectorAll('.about, .contact-section, footer');
 
     fadeTargets.forEach(function(el) {
       el.classList.add('fade-up');
@@ -1282,8 +1368,6 @@
       });
     }, { threshold: 0, rootMargin: '0px 0px -40px 0px' });
 
-    // Double rAF: ensures the browser has painted the opacity:0 state
-    // before observation starts, so the transition has a visible before/after.
     requestAnimationFrame(function() {
       requestAnimationFrame(function() {
         fadeTargets.forEach(function(el) { fadeObserver.observe(el); });
