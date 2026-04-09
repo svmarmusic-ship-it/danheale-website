@@ -616,6 +616,74 @@
       color: var(--accent);
     }
 
+    /* ─── COURSE WAITLIST FORM ──────────────────────────── */
+    .waitlist-form { margin-top: 16px; position: relative; }
+
+    /* Honeypot — hidden from users, visible to bots */
+    .waitlist-hp {
+      opacity: 0;
+      position: absolute;
+      top: 0; left: 0;
+      height: 0; width: 0;
+      pointer-events: none;
+    }
+
+    .waitlist-fields {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .waitlist-input {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      padding: 11px 14px;
+      width: 100%;
+      outline: none;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    .waitlist-input::placeholder { color: var(--text-dim); }
+
+    .waitlist-input:focus {
+      border-color: rgba(201, 169, 110, 0.4);
+      box-shadow: 0 0 0 2px rgba(201, 169, 110, 0.07);
+    }
+
+    .waitlist-btn {
+      width: 100%;
+      padding: 12px 16px;
+      background: var(--accent);
+      color: var(--bg);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .waitlist-btn:hover { background: #d4b67a; transform: translateY(-1px); }
+    .waitlist-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    .waitlist-success {
+      display: none;
+      font-size: 13px;
+      color: var(--accent);
+      line-height: 1.6;
+      padding: 14px 0 4px;
+    }
+
     /* ─── CONTACT ───────────────────────────────────────── */
     .contact-section {
       padding: 120px 64px;
@@ -1166,17 +1234,30 @@
       </div>
     </div>
 
-    <a href="#" class="product-card card-reveal" aria-label="From DJ to Producer — Course — Waitlist open">
+    <div class="product-card card-reveal" aria-label="From DJ to Producer — Course — Waitlist open">
       <div class="product-img">
         <span class="img-label">Coming Soon</span>
       </div>
       <div class="product-info">
         <div class="product-tag">Course</div>
         <h4>From DJ to Producer</h4>
-        <p>Everything I've learned in 10+ years of production, broken down step by step. Coming soon.</p>
-        <div class="product-price">Waitlist open</div>
+        <p>Everything I've learned in 10+ years of production, broken down step by step. Join the waitlist for early access.</p>
+
+        <form class="waitlist-form" id="courseWaitlistForm" novalidate>
+          <!-- Honeypot: hidden from users, visible to bots -->
+          <input type="text" name="website" class="waitlist-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <div class="waitlist-fields">
+            <input type="text" name="firstName" class="waitlist-input" placeholder="Your name" required autocomplete="given-name">
+            <input type="email" name="email" class="waitlist-input" placeholder="your@email.com" required autocomplete="email">
+            <button type="submit" class="waitlist-btn">Join the waitlist &#8594;</button>
+          </div>
+        </form>
+
+        <p class="waitlist-success" id="courseWaitlistSuccess" role="status" aria-live="polite">
+          You're on the list. Check your inbox — your free mixing template is on its way.
+        </p>
       </div>
-    </a>
+    </div>
   </div>
 </section>
 
@@ -1433,6 +1514,53 @@
       alert('Something went wrong \u2014 please email info@danheale.co.uk directly.');
     });
   });
+
+  // ── Course waitlist form ──────────────────────────────────
+  var courseForm = document.getElementById('courseWaitlistForm');
+  var courseSuccess = document.getElementById('courseWaitlistSuccess');
+
+  if (courseForm) {
+    courseForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      var btn = courseForm.querySelector('.waitlist-btn');
+      var hp = courseForm.querySelector('[name="website"]').value;
+      var firstName = courseForm.querySelector('[name="firstName"]').value.trim();
+      var email = courseForm.querySelector('[name="email"]').value.trim();
+
+      if (!firstName || !email) return;
+
+      btn.disabled = true;
+      btn.textContent = 'Joining\u2026';
+
+      fetch('/api/course-waitlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ firstName: firstName, email: email, hp: hp }),
+      })
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        if (data.success) {
+          courseForm.style.display = 'none';
+          courseSuccess.style.display = 'block';
+          setTimeout(function() {
+            window.open(
+              'https://drive.google.com/drive/folders/1NUEHjynU-7H1NUfuAypK3I28eOKy0FQy?usp=sharing',
+              '_blank',
+              'noopener,noreferrer'
+            );
+          }, 3000);
+        } else {
+          btn.disabled = false;
+          btn.innerHTML = 'Join the waitlist &#8594;';
+        }
+      })
+      .catch(function() {
+        btn.disabled = false;
+        btn.innerHTML = 'Join the waitlist &#8594;';
+      });
+    });
+  }
 </script>
 
 <!-- JSON-LD Structured Data -->
