@@ -617,7 +617,21 @@
     }
 
     /* ─── COURSE WAITLIST FORM ──────────────────────────── */
-    .waitlist-form { margin-top: 16px; position: relative; }
+
+    /* Trigger: identical to .product-price visually */
+    .waitlist-trigger {
+      font-family: 'Space Mono', monospace;
+      font-size: 14px;
+      color: var(--accent);
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      text-align: left;
+      transition: opacity 0.2s ease;
+    }
+
+    .waitlist-trigger:hover { opacity: 0.7; }
 
     /* Honeypot — hidden from users, visible to bots */
     .waitlist-hp {
@@ -626,6 +640,21 @@
       top: 0; left: 0;
       height: 0; width: 0;
       pointer-events: none;
+    }
+
+    /* Form hidden by default; revealed on trigger click */
+    .waitlist-form {
+      display: none;
+      opacity: 0;
+      transform: translateY(-6px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      margin-top: 12px;
+      position: relative;
+    }
+
+    .waitlist-form.is-open {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     .waitlist-fields {
@@ -678,10 +707,9 @@
 
     .waitlist-success {
       display: none;
-      font-size: 13px;
+      font-family: 'Space Mono', monospace;
+      font-size: 14px;
       color: var(--accent);
-      line-height: 1.6;
-      padding: 14px 0 4px;
     }
 
     /* ─── CONTACT ───────────────────────────────────────── */
@@ -1241,10 +1269,13 @@
       <div class="product-info">
         <div class="product-tag">Course</div>
         <h4>From DJ to Producer</h4>
-        <p>Everything I've learned in 10+ years of production, broken down step by step. Join the waitlist for early access.</p>
+        <p>Everything I've learned in 10+ years of production, broken down step by step. Coming soon.</p>
+
+        <button class="waitlist-trigger" id="courseWaitlistTrigger" type="button">
+          Join the waitlist &#8594;
+        </button>
 
         <form class="waitlist-form" id="courseWaitlistForm" novalidate>
-          <!-- Honeypot: hidden from users, visible to bots -->
           <input type="text" name="website" class="waitlist-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
           <div class="waitlist-fields">
             <input type="text" name="firstName" class="waitlist-input" placeholder="Your name" required autocomplete="given-name">
@@ -1516,8 +1547,21 @@
   });
 
   // ── Course waitlist form ──────────────────────────────────
+  var courseTrigger = document.getElementById('courseWaitlistTrigger');
   var courseForm = document.getElementById('courseWaitlistForm');
   var courseSuccess = document.getElementById('courseWaitlistSuccess');
+
+  if (courseTrigger && courseForm) {
+    courseTrigger.addEventListener('click', function() {
+      courseTrigger.style.display = 'none';
+      courseForm.style.display = 'block';
+      requestAnimationFrame(function() {
+        requestAnimationFrame(function() {
+          courseForm.classList.add('is-open');
+        });
+      });
+    });
+  }
 
   if (courseForm) {
     courseForm.addEventListener('submit', function(e) {
