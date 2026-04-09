@@ -1254,7 +1254,7 @@
         </form>
 
         <p class="waitlist-success" id="courseWaitlistSuccess" role="status" aria-live="polite">
-          You're on the list. Check your inbox — your free mixing template is on its way.
+          You're on the list.
         </p>
       </div>
     </div>
@@ -1543,13 +1543,6 @@
         if (data.success) {
           courseForm.style.display = 'none';
           courseSuccess.style.display = 'block';
-          setTimeout(function() {
-            window.open(
-              'https://drive.google.com/drive/folders/1NUEHjynU-7H1NUfuAypK3I28eOKy0FQy?usp=sharing',
-              '_blank',
-              'noopener,noreferrer'
-            );
-          }, 3000);
         } else {
           btn.disabled = false;
           btn.innerHTML = 'Join the waitlist &#8594;';
