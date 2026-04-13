@@ -1046,15 +1046,14 @@
     }
   </style>
 
-  <!-- Google Analytics -->
-  <!-- REPLACE GA_MEASUREMENT_ID WITH YOUR GA4 MEASUREMENT ID (e.g. G-XXXXXXXXXX) -->
-  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+  <!-- Google Analytics — replace GA_MEASUREMENT_ID with your G-XXXXXXXXXX id -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', 'GA_MEASUREMENT_ID');
-  </script> -->
+  </script>
 </head>
 <body>
 <div id="scroll-progress" aria-hidden="true"></div>
@@ -1228,6 +1227,10 @@
       </div>
     </article>
   </div>
+
+  <div style="text-align:center; margin-top:56px;">
+    <a href="#contact" class="cta-btn">Start your project <span class="arrow" aria-hidden="true">&#8594;</span></a>
+  </div>
 </section>
 
 
@@ -1340,9 +1343,10 @@
           <label for="budget">Budget range</label>
           <select id="budget" name="budget" required>
             <option value="" disabled selected>Select a budget</option>
-            <option value="under-250">Under £250</option>
-            <option value="250-500">£250–£500</option>
-            <option value="500-plus">£500+</option>
+            <option value="under-150">Under £150</option>
+            <option value="150-350">£150–£350</option>
+            <option value="350-600">£350–£600</option>
+            <option value="600-plus">£600+</option>
             <option value="not-sure">Not sure yet</option>
           </select>
         </div>
