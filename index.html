@@ -346,7 +346,7 @@
 
     .service-row {
       display: grid;
-      grid-template-columns: 240px 1fr 130px;
+      grid-template-columns: 40px 220px 1fr 130px;
       gap: 40px;
       padding: 36px 24px;
       border-top: 1px solid var(--border);
@@ -1014,6 +1014,8 @@
       .stat-item::after { display: none !important; }
 
       .services { padding: 64px 24px; }
+      .service-num { display: none; }
+
       .service-row {
         grid-template-columns: 1fr;
         gap: 8px;
@@ -1044,6 +1046,107 @@
       .hero-sub { font-size: 15px; }
       .cta-btn { padding: 16px 28px; }
     }
+
+    /* ─── GRAIN TEXTURE ─────────────────────────────────── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1000;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 300px 300px;
+    }
+
+    /* ─── CURSOR GLOW ────────────────────────────────────── */
+    #cursor-glow {
+      position: fixed;
+      width: 700px;
+      height: 700px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(201, 169, 110, 0.055) 0%, transparent 65%);
+      pointer-events: none;
+      z-index: 1;
+      transform: translate(-50%, -50%);
+      left: -9999px;
+      top: -9999px;
+      will-change: left, top;
+    }
+
+    /* ─── MARQUEE ────────────────────────────────────────── */
+    .marquee-strip {
+      overflow: hidden;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 13px 0;
+      background: var(--bg-elevated);
+    }
+
+    .marquee-track {
+      display: flex;
+      align-items: center;
+      width: max-content;
+      animation: marquee 35s linear infinite;
+    }
+
+    .marquee-item {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      padding: 0 32px;
+      white-space: nowrap;
+    }
+
+    .marquee-sep {
+      color: var(--accent);
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ─── SERVICE NUMBERS ────────────────────────────────── */
+    .service-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--text-dim);
+      letter-spacing: 0.08em;
+      align-self: center;
+    }
+
+    /* ─── REVIEW QUOTE MARKS ─────────────────────────────── */
+    .review-card {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .review-card::before {
+      content: '\201C';
+      position: absolute;
+      top: 8px;
+      right: 20px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 120px;
+      font-weight: 700;
+      color: var(--accent);
+      opacity: 0.08;
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* ─── REDUCED MOTION (additions) ─────────────────────── */
+    @media (prefers-reduced-motion: reduce) {
+      .marquee-track { animation: none; }
+      #cursor-glow { display: none; }
+      body::after { display: none; }
+    }
   </style>
 
   <!-- Google tag (gtag.js) -->
@@ -1057,6 +1160,7 @@
 </head>
 <body>
 <div id="scroll-progress" aria-hidden="true"></div>
+<div id="cursor-glow" aria-hidden="true"></div>
 
 <!-- ─── NAV ──────────────────────────────────────────────── -->
 <nav id="nav" role="banner">
@@ -1117,6 +1221,29 @@
 </section>
 
 
+<!-- ─── MARQUEE ──────────────────────────────────────────── -->
+<div class="marquee-strip" aria-hidden="true">
+  <div class="marquee-track">
+    <span class="marquee-item">Ghost Production</span><span class="marquee-sep">·</span>
+    <span class="marquee-item">Mixing &amp; Mastering</span><span class="marquee-sep">·</span>
+    <span class="marquee-item">Remixes</span><span class="marquee-sep">·</span>
+    <span class="marquee-item">100M+ Streams</span><span class="marquee-sep">·</span>
+    <span class="marquee-item">200+ Tracks Delivered</span><span class="marquee-sep">·</span>
+    <span class="marquee-item">10+ Years Experience</span><span class="marquee-sep">·</span>
+    <span class="marquee-item">Newcastle, UK</span><span class="marquee-sep">·</span>
+    <span class="marquee-item">Available Worldwide</span><span class="marquee-sep">·</span>
+    <!-- duplicate for seamless loop -->
+    <span class="marquee-item">Ghost Production</span><span class="marquee-sep">·</span>
+    <span class="marquee-item">Mixing &amp; Mastering</span><span class="marquee-sep">·</span>
+    <span class="marquee-item">Remixes</span><span class="marquee-sep">·</span>
+    <span class="marquee-item">100M+ Streams</span><span class="marquee-sep">·</span>
+    <span class="marquee-item">200+ Tracks Delivered</span><span class="marquee-sep">·</span>
+    <span class="marquee-item">10+ Years Experience</span><span class="marquee-sep">·</span>
+    <span class="marquee-item">Newcastle, UK</span><span class="marquee-sep">·</span>
+    <span class="marquee-item">Available Worldwide</span><span class="marquee-sep">·</span>
+  </div>
+</div>
+
 <!-- ─── SERVICES ─────────────────────────────────────────── -->
 <section class="services reveal" id="services" aria-labelledby="services-label">
   <div class="section-header">
@@ -1125,18 +1252,21 @@
 
   <div class="services-list" role="list">
     <a href="#contact" class="service-row" role="listitem">
+      <span class="service-num" aria-hidden="true">01</span>
       <h3>Ghost Production</h3>
       <p>Full track production from concept to master. Your name, your release, built by a producer who's done it at scale. Complete ownership and confidentiality. Typically delivered in 7–10 days.</p>
       <div class="service-price">From £350 <span class="arrow-link" aria-hidden="true">&#8594;</span></div>
     </a>
 
     <a href="#contact" class="service-row" role="listitem">
+      <span class="service-num" aria-hidden="true">02</span>
       <h3>Mixing &amp; Finishing</h3>
       <p>Send your stems, get back a polished, release-ready track. Professional mixdown and mastering from someone who knows what labels want.</p>
       <div class="service-price">From £150 <span class="arrow-link" aria-hidden="true">&#8594;</span></div>
     </a>
 
     <a href="#contact" class="service-row" role="listitem">
+      <span class="service-num" aria-hidden="true">03</span>
       <h3>Remixes</h3>
       <p>Official remixes with a fresh perspective. Send the stems, tell me the vibe, and I'll deliver something that stands on its own.</p>
       <div class="service-price">On request <span class="arrow-link" aria-hidden="true">&#8594;</span></div>
@@ -1552,6 +1682,15 @@
       alert('Something went wrong \u2014 please email info@danheale.com directly.');
     });
   });
+
+  // ── Cursor glow ──────────────────────────────────────────
+  var cursorGlowEl = document.getElementById('cursor-glow');
+  if (cursorGlowEl && !reducedMotion) {
+    document.addEventListener('mousemove', function(e) {
+      cursorGlowEl.style.left = e.clientX + 'px';
+      cursorGlowEl.style.top  = e.clientY + 'px';
+    }, { passive: true });
+  }
 
   // ── Course waitlist form ──────────────────────────────────
   var courseTrigger = document.getElementById('courseWaitlistTrigger');
