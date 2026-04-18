@@ -1025,6 +1025,16 @@
       .service-price { text-align: left; justify-content: flex-start; }
       .arrow-link { opacity: 1; }
 
+      .how-it-works { padding: 64px 24px; }
+      .how-steps { grid-template-columns: 1fr; }
+      .how-step {
+        border-left: none;
+        border-top: 1px solid var(--border);
+        padding: 32px 0;
+      }
+      .how-step:first-child { border-top: none; padding-top: 0; }
+      .my-work { padding: 64px 24px; }
+
       .about { padding: 64px 24px; grid-template-columns: 1fr; gap: 48px; }
       .reviews { padding: 64px 24px; }
       .reviews-grid { grid-template-columns: 1fr; }
@@ -1140,6 +1150,75 @@
       pointer-events: none;
       user-select: none;
     }
+
+    /* ─── HOW IT WORKS ──────────────────────────────────── */
+    .how-it-works { padding: 100px 64px; border-top: 1px solid var(--border); }
+
+    .how-steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      margin-top: 56px;
+    }
+
+    .how-step {
+      padding: 0 48px 0 40px;
+      border-left: 1px solid var(--border);
+    }
+
+    .how-step:first-child { padding-left: 0; border-left: none; }
+
+    .how-step-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      margin-bottom: 20px;
+    }
+
+    .how-step h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 14px;
+    }
+
+    .how-step p {
+      font-size: 14px;
+      color: var(--text-mid);
+      line-height: 1.75;
+    }
+
+    /* ─── SELECTED WORK ──────────────────────────────────── */
+    .my-work { padding: 100px 64px; border-top: 1px solid var(--border); }
+
+    .work-embeds {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 56px;
+      max-width: 780px;
+    }
+
+    .work-embeds iframe {
+      display: block;
+      border-radius: 0 !important;
+    }
+
+    .work-spotify-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 28px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--accent);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: opacity 0.3s ease;
+    }
+
+    .work-spotify-link:hover { opacity: 0.7; }
 
     /* ─── REDUCED MOTION (additions) ─────────────────────── */
     @media (prefers-reduced-motion: reduce) {
@@ -1272,6 +1351,68 @@
       <div class="service-price">On request <span class="arrow-link" aria-hidden="true">&#8594;</span></div>
     </a>
   </div>
+</section>
+
+
+<!-- ─── HOW IT WORKS ─────────────────────────────────────── -->
+<section class="how-it-works reveal" id="process" aria-labelledby="process-label">
+  <div class="section-header">
+    <div class="section-label" id="process-label">How It Works</div>
+  </div>
+
+  <div class="how-steps">
+    <div class="how-step">
+      <div class="how-step-num">01</div>
+      <h3>Brief me</h3>
+      <p>Tell me your genre, references, and vision. I'll come back with any questions before I start — no guesswork, no wasted rounds.</p>
+    </div>
+    <div class="how-step">
+      <div class="how-step-num">02</div>
+      <h3>I produce</h3>
+      <p>Full track built from scratch, or your stems mixed to a professional finish. Typically delivered in 7–10 days.</p>
+    </div>
+    <div class="how-step">
+      <div class="how-step-num">03</div>
+      <h3>You own it</h3>
+      <p>Receive your stems, WAV masters, and full ownership transfer. Complete confidentiality. No strings attached.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ─── SELECTED WORK ─────────────────────────────────────── -->
+<section class="my-work reveal" id="work" aria-labelledby="work-label">
+  <div class="section-header">
+    <div class="section-label" id="work-label">Selected Work</div>
+  </div>
+
+  <div class="work-embeds">
+    <iframe
+      src="https://open.spotify.com/embed/track/1M2eYYojjNSeFbVPnh20zF?utm_source=generator"
+      width="100%" height="152" frameborder="0"
+      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+      loading="lazy"
+      title="Dan Heale — selected track on Spotify">
+    </iframe>
+    <iframe
+      src="https://open.spotify.com/embed/track/1gPCt4RuOSExfFVo6Bm9C9?utm_source=generator"
+      width="100%" height="152" frameborder="0"
+      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+      loading="lazy"
+      title="Dan Heale — selected track on Spotify">
+    </iframe>
+    <iframe
+      src="https://open.spotify.com/embed/track/2Pdy3QJO6po7ftG02eDT9E?utm_source=generator"
+      width="100%" height="152" frameborder="0"
+      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+      loading="lazy"
+      title="Dan Heale — selected track on Spotify">
+    </iframe>
+  </div>
+
+  <a href="https://open.spotify.com/artist/5yAHHdRoedRFt5oe02qoVg" class="work-spotify-link" target="_blank" rel="noopener noreferrer">
+    View all on Spotify <span aria-hidden="true">&#8594;</span>
+  </a>
 </section>
 
 
