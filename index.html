@@ -1226,6 +1226,18 @@
       #cursor-glow { display: none; }
       body::after { display: none; }
     }
+
+    /* ─── HOW IT WORKS — mobile stack ───────────────────── */
+    @media (max-width: 768px) {
+      .how-it-works { padding: 64px 24px; }
+      .how-steps { grid-template-columns: 1fr; }
+      .how-step {
+        border-left: none;
+        border-top: 1px solid var(--border);
+        padding: 32px 0;
+      }
+      .how-step:first-child { border-top: none; padding-top: 0; }
+    }
   </style>
 
   <!-- Google tag (gtag.js) -->
