@@ -13,3 +13,8 @@ CLAUDE-CODE-BRIEF-danheale.md
 danheale-site-mockup.html
 files/
 ui-ux-pro-max-skill-main/
+
+# three-scenes build (Vercel regenerates this on every deploy —
+# see vercel.json buildCommand — so it's not committed)
+three-scenes/node_modules/
+assets/3d/

@@ -1,0 +1,453 @@
+/* ══════════════════════════════════════════════════════════
+   SHARED STYLESHEET — danheale.com
+   Loaded by: index.html, /production/, /dj/, /suno-reproduction/
+
+   Only rules verified byte-identical (or safely inert where the
+   matching HTML/element doesn't exist on a given page) live here.
+   Genuinely divergent rules — production's centered .section-label,
+   its nav justify-content:center, nav-logo hover on /dj/ and
+   /production/, its .form-field label text-align — stay as small,
+   commented overrides in each page's own <style> block.
+
+   The grain texture is gated behind `body.has-grain` rather than a
+   bare `body::after`, because only index.html and
+   /suno-reproduction/ currently render it — a bare selector here
+   would silently add it to /dj/ and /production/ too.
+
+   Palette v2 (near-black / off-white / sparing gold): gold is
+   reserved for the logo, the primary CTA fill, thin rule lines, and
+   small uppercase labels — NOT for decorative hover states. Most
+   hover states below use --text (a brightness lift) instead of
+   --accent; see the "gold audit" comments at each one.
+   ══════════════════════════════════════════════════════════ */
+
+/* ─── Reset & Base ─────────────────────────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg:           #0f0e0c;
+  --bg-elevated:  #161510;
+  --bg-subtle:    #1c1b15;
+  --accent:       #c4a265;
+  --accent-hover: #d4bb85;
+  --accent-dim:   rgba(196, 162, 101, 0.15);
+  --accent-glow:  rgba(196, 162, 101, 0.06);
+  --text:         #f5f5f2;
+  --text-mid:     rgba(245, 245, 242, 0.55);
+  --text-dim:     rgba(245, 245, 242, 0.3);
+  --border:       rgba(245, 245, 242, 0.08);
+  --border-hover: rgba(245, 245, 242, 0.15);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── FOCUS ─────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.form-field input:focus-visible,
+.form-field select:focus-visible,
+.form-field textarea:focus-visible { outline: none; }
+
+/* ─── NAV SHELL ─────────────────────────────────────────
+   justify-content:space-between matches index.html, /dj/,
+   /suno-reproduction/. /production/ overrides to `center`
+   locally (logo-only nav). */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 20px 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(14, 13, 11, 0.9);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--border);
+  transition: padding 0.3s ease;
+}
+
+nav.scrolled { padding-top: 14px; padding-bottom: 14px; }
+
+/* Base only — hover/transition intentionally omitted.
+   /dj/ and /production/ add color-on-hover locally; the
+   homepage and /suno-reproduction/ never had that hover. */
+.nav-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  text-decoration: none;
+  letter-spacing: -0.02em;
+}
+
+.nav-links { display: flex; gap: 36px; list-style: none; }
+
+.nav-links a {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-mid);
+  text-decoration: none;
+  letter-spacing: 0.03em;
+  transition: color 0.3s ease;
+}
+
+/* Gold audit: brightness lift, not gold — nav links are plain
+   navigation, not CTAs. Focus rings stay gold (thin, deliberate). */
+.nav-links a:hover { color: var(--text); }
+.nav-links a:focus-visible { color: var(--accent); }
+
+.nav-cta {
+  padding: 10px 24px;
+  background: var(--accent);
+  color: var(--bg);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.nav-cta:hover { background: var(--accent-hover); transform: translateY(-1px); }
+
+/* Hamburger (mobile only) */
+.nav-hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 32px;
+  height: 32px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.nav-hamburger span {
+  display: block;
+  height: 1px;
+  background: var(--text);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.nav-hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.nav-hamburger.open span:nth-child(2) { opacity: 0; }
+.nav-hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+/* Mobile nav drawer */
+.nav-mobile-menu {
+  display: none;
+  position: fixed;
+  top: 57px;
+  left: 0; right: 0;
+  background: rgba(14, 13, 11, 0.97);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--border);
+  padding: 24px;
+  z-index: 99;
+  flex-direction: column;
+}
+
+.nav-mobile-menu.open { display: flex; }
+
+.nav-mobile-menu a {
+  display: block;
+  padding: 16px 0;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-mid);
+  text-decoration: none;
+  border-bottom: 1px solid var(--border);
+  transition: color 0.3s ease;
+}
+
+.nav-mobile-menu a:last-child { border-bottom: none; }
+.nav-mobile-menu a:hover { color: var(--text); } /* gold audit: brightness lift, not gold */
+
+.nav-mobile-menu .nav-cta {
+  margin-top: 20px;
+  display: inline-block;
+  text-align: center;
+  padding: 14px 24px;
+  color: var(--bg);
+  border-bottom: none;
+}
+
+/* ─── CTA BUTTON + SHIMMER ────────────────────────────
+   Unused on /production/ (no .cta-btn element there) —
+   inert, no visual effect. */
+.cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 20px 40px;
+  background: var(--accent);
+  color: var(--bg);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.cta-btn:hover {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(196, 162, 101, 0.2);
+}
+
+.cta-btn .arrow { transition: transform 0.3s ease; }
+.cta-btn:hover .arrow { transform: translateX(4px); }
+
+@keyframes gold-shimmer {
+  0%   { transform: translateX(-100%) skewX(-12deg); }
+  100% { transform: translateX(250%)  skewX(-12deg); }
+}
+
+.cta-btn::after,
+.form-submit::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 40%; height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.14) 50%,
+    transparent 100%
+  );
+  animation: gold-shimmer 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* ─── FORM FIELDS ─────────────────────────────────────
+   .form-row (16px gap) is distinct from /production/'s
+   own .form-row-two (12px gap) — left untouched there. */
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+.form-field { display: flex; flex-direction: column; gap: 8px; }
+
+.form-field label {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  font-weight: 500;
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  padding: 14px 16px;
+  width: 100%;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.form-field select {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23c4a265' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  padding-right: 40px;
+}
+
+.form-field select option { background: var(--bg-elevated); color: var(--text); }
+
+.form-field textarea { resize: vertical; min-height: 120px; line-height: 1.6; }
+
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+  border-color: rgba(196, 162, 101, 0.4);
+  box-shadow: 0 0 0 3px rgba(196, 162, 101, 0.08);
+}
+
+.form-field input::placeholder,
+.form-field textarea::placeholder { color: var(--text-dim); }
+
+.form-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 18px 36px;
+  background: var(--accent);
+  color: var(--bg);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.form-submit:hover {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(196, 162, 101, 0.2);
+}
+
+.form-submit .arrow { transition: transform 0.3s ease; }
+.form-submit:hover .arrow { transform: translateX(4px); }
+
+.form-success {
+  display: none;
+  padding: 20px 24px;
+  background: rgba(196, 162, 101, 0.08);
+  border: 1px solid rgba(196, 162, 101, 0.2);
+  font-size: 14px;
+  color: var(--accent);
+  text-align: center;
+  line-height: 1.6;
+}
+
+/* Unused on /production/ (no "email directly" line there) — inert. */
+.contact-direct {
+  font-size: 13px;
+  color: var(--text-dim);
+  text-align: center;
+  margin-top: 24px;
+}
+
+.contact-direct a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 500;
+  transition: opacity 0.3s ease;
+}
+
+.contact-direct a:hover { opacity: 0.7; }
+
+/* ─── FOOTER ────────────────────────────────────────── */
+footer {
+  padding: 48px 64px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-left { font-size: 13px; color: var(--text-dim); }
+
+.footer-links { display: flex; gap: 24px; list-style: none; }
+
+.footer-links a {
+  font-size: 13px;
+  color: var(--text-dim);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-links a:hover { color: var(--text); } /* gold audit: brightness lift, not gold */
+
+/* ─── AMBIENT EFFECTS ─────────────────────────────────
+   Only index.html and /suno-reproduction/ include the
+   matching HTML (#scroll-progress, #cursor-glow,
+   body class="has-grain") — inert everywhere else. */
+#scroll-progress {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  width: 0%;
+  background: var(--accent);
+  z-index: 200;
+  pointer-events: none;
+}
+
+#cursor-glow {
+  position: fixed;
+  width: 700px;
+  height: 700px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(196, 162, 101, 0.05) 0%, transparent 65%);
+  pointer-events: none;
+  z-index: 1;
+  transform: translate(-50%, -50%);
+  left: -9999px;
+  top: -9999px;
+  will-change: left, top;
+}
+
+body.has-grain::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1000;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 300px 300px;
+}
+
+/* ─── SCROLL REVEAL ─────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ─── REDUCED MOTION (shared subset) ──────────────────
+   Each page appends its own block for page-specific
+   animated elements (.hero-animate, .fade-up, .date-row,
+   .card-reveal, .marquee-track, etc). */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+  #scroll-progress { display: none; }
+  #cursor-glow { display: none; }
+  body.has-grain::after { display: none; }
+  .cta-btn::after, .form-submit::after { animation: none; }
+  .cta-btn, .nav-cta, .form-submit { transition: none; }
+}
+
+/* ─── MOBILE (shared subset) ───────────────────────────
+   nav-links/nav-cta/nav-hamburger rules are inert on
+   /production/ (no matching elements there). */
+@media (max-width: 900px) {
+  nav { padding: 16px 24px; }
+  .nav-links { display: none; }
+  .nav-cta { display: none; }
+  .nav-hamburger { display: flex; }
+
+  .form-row { grid-template-columns: 1fr; }
+
+  footer {
+    padding: 32px 24px;
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+  }
+}
