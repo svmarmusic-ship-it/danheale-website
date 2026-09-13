@@ -1,4 +1,6 @@
 {
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "buildCommand": "cd three-scenes && npm install && npm run build",
+  "outputDirectory": "."
 }

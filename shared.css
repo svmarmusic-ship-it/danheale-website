@@ -13,23 +13,30 @@
    bare `body::after`, because only index.html and
    /suno-reproduction/ currently render it — a bare selector here
    would silently add it to /dj/ and /production/ too.
+
+   Palette v2 (near-black / off-white / sparing gold): gold is
+   reserved for the logo, the primary CTA fill, thin rule lines, and
+   small uppercase labels — NOT for decorative hover states. Most
+   hover states below use --text (a brightness lift) instead of
+   --accent; see the "gold audit" comments at each one.
    ══════════════════════════════════════════════════════════ */
 
 /* ─── Reset & Base ─────────────────────────────────── */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root {
-  --bg:           #0e0d0b;
-  --bg-elevated:  #151412;
-  --bg-subtle:    #1a1917;
-  --accent:       #c9a96e;
-  --accent-dim:   rgba(201, 169, 110, 0.15);
-  --accent-glow:  rgba(201, 169, 110, 0.06);
-  --text:         #f0ece4;
-  --text-mid:     rgba(240, 236, 228, 0.55);
-  --text-dim:     rgba(240, 236, 228, 0.3);
-  --border:       rgba(240, 236, 228, 0.08);
-  --border-hover: rgba(240, 236, 228, 0.15);
+  --bg:           #0f0e0c;
+  --bg-elevated:  #161510;
+  --bg-subtle:    #1c1b15;
+  --accent:       #c4a265;
+  --accent-hover: #d4bb85;
+  --accent-dim:   rgba(196, 162, 101, 0.15);
+  --accent-glow:  rgba(196, 162, 101, 0.06);
+  --text:         #f5f5f2;
+  --text-mid:     rgba(245, 245, 242, 0.55);
+  --text-dim:     rgba(245, 245, 242, 0.3);
+  --border:       rgba(245, 245, 242, 0.08);
+  --border-hover: rgba(245, 245, 242, 0.15);
 }
 
 html { scroll-behavior: smooth; }
@@ -97,7 +104,9 @@ nav.scrolled { padding-top: 14px; padding-bottom: 14px; }
   transition: color 0.3s ease;
 }
 
-.nav-links a:hover,
+/* Gold audit: brightness lift, not gold — nav links are plain
+   navigation, not CTAs. Focus rings stay gold (thin, deliberate). */
+.nav-links a:hover { color: var(--text); }
 .nav-links a:focus-visible { color: var(--accent); }
 
 .nav-cta {
@@ -112,7 +121,7 @@ nav.scrolled { padding-top: 14px; padding-bottom: 14px; }
   transition: background 0.3s ease, transform 0.3s ease;
 }
 
-.nav-cta:hover { background: #d4b67a; transform: translateY(-1px); }
+.nav-cta:hover { background: var(--accent-hover); transform: translateY(-1px); }
 
 /* Hamburger (mobile only) */
 .nav-hamburger {
@@ -168,7 +177,7 @@ nav.scrolled { padding-top: 14px; padding-bottom: 14px; }
 }
 
 .nav-mobile-menu a:last-child { border-bottom: none; }
-.nav-mobile-menu a:hover { color: var(--accent); }
+.nav-mobile-menu a:hover { color: var(--text); } /* gold audit: brightness lift, not gold */
 
 .nav-mobile-menu .nav-cta {
   margin-top: 20px;
@@ -200,9 +209,9 @@ nav.scrolled { padding-top: 14px; padding-bottom: 14px; }
 }
 
 .cta-btn:hover {
-  background: #d4b67a;
+  background: var(--accent-hover);
   transform: translateY(-2px);
-  box-shadow: 0 12px 40px rgba(201, 169, 110, 0.2);
+  box-shadow: 0 12px 40px rgba(196, 162, 101, 0.2);
 }
 
 .cta-btn .arrow { transition: transform 0.3s ease; }
@@ -262,7 +271,7 @@ nav.scrolled { padding-top: 14px; padding-bottom: 14px; }
 
 .form-field select {
   cursor: pointer;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23c9a96e' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23c4a265' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 16px center;
   padding-right: 40px;
@@ -275,8 +284,8 @@ nav.scrolled { padding-top: 14px; padding-bottom: 14px; }
 .form-field input:focus,
 .form-field select:focus,
 .form-field textarea:focus {
-  border-color: rgba(201, 169, 110, 0.4);
-  box-shadow: 0 0 0 3px rgba(201, 169, 110, 0.08);
+  border-color: rgba(196, 162, 101, 0.4);
+  box-shadow: 0 0 0 3px rgba(196, 162, 101, 0.08);
 }
 
 .form-field input::placeholder,
@@ -303,9 +312,9 @@ nav.scrolled { padding-top: 14px; padding-bottom: 14px; }
 }
 
 .form-submit:hover {
-  background: #d4b67a;
+  background: var(--accent-hover);
   transform: translateY(-2px);
-  box-shadow: 0 12px 40px rgba(201, 169, 110, 0.2);
+  box-shadow: 0 12px 40px rgba(196, 162, 101, 0.2);
 }
 
 .form-submit .arrow { transition: transform 0.3s ease; }
@@ -314,8 +323,8 @@ nav.scrolled { padding-top: 14px; padding-bottom: 14px; }
 .form-success {
   display: none;
   padding: 20px 24px;
-  background: rgba(201, 169, 110, 0.08);
-  border: 1px solid rgba(201, 169, 110, 0.2);
+  background: rgba(196, 162, 101, 0.08);
+  border: 1px solid rgba(196, 162, 101, 0.2);
   font-size: 14px;
   color: var(--accent);
   text-align: center;
@@ -359,7 +368,7 @@ footer {
   transition: color 0.3s ease;
 }
 
-.footer-links a:hover { color: var(--accent); }
+.footer-links a:hover { color: var(--text); } /* gold audit: brightness lift, not gold */
 
 /* ─── AMBIENT EFFECTS ─────────────────────────────────
    Only index.html and /suno-reproduction/ include the
@@ -380,7 +389,7 @@ footer {
   width: 700px;
   height: 700px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(201, 169, 110, 0.055) 0%, transparent 65%);
+  background: radial-gradient(circle, rgba(196, 162, 101, 0.05) 0%, transparent 65%);
   pointer-events: none;
   z-index: 1;
   transform: translate(-50%, -50%);
