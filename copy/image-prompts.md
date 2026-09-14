@@ -40,7 +40,10 @@ no vinyl records, no turntables, no drums, no band instruments, no cartoon or il
 
 ## 2. Session layers reference — `assets/images/studio-layers-reference.png`
 
-Not yet generated. Use `hero-studio.png` as `image_references`.
+Generated 2026-09-14. Job `d3fef15a-5525-4ee3-b224-83cabdcc4791`. 2688 x 1520, 16:9, quality
+high, 2k. Reference: hero job `2ac9cc52-3b7b-4d50-a86a-d9d378a4e3bc` passed as
+`image_references` (the hero file on disk is that job's untouched download, so the job ID is
+equivalent to uploading it). Awaiting review.
 
 Defines the "session-built-up" motif used in the scroll video: the same studio, gear unchanged,
 but the DAW screen shows a much fuller session. This image's only job is the screen. Nothing
@@ -71,12 +74,35 @@ Aspect ratio: 16:9. Quality: high. Resolution: 2k.
 
 ## 3. Gear detail macro — `assets/images/gear-detail.png`
 
-Not yet generated. Use `hero-studio.png` as `image_references`. Prompt in skill, item 3.
+Generated 2026-09-14. Job `c8535c06-c85f-4902-a0a8-4ace9d46596a`. 2688 x 1520, 16:9, quality
+high, 2k. Reference: hero job `2ac9cc52-3b7b-4d50-a86a-d9d378a4e3bc` as `image_references`.
+Awaiting review.
+
+A first pass (job `35fabe4e-265f-4a02-b6ed-e818e2ef8f7a`) had faint text-like markings on the
+console surface. Kept as `assets/images/superseded/gear-detail-v1-markings-superseded.png`. The
+prompt below adds an explicit ban on markings, which fixed it.
+
+```txt
+Create a premium cinematic macro image of a mixing console: close-up on faders, knobs, and VU
+meters, same studio and lighting style as the reference hero image — near-black background, deep
+violet and blue rim light, shallow depth of field, realistic texture and reflections. No text, no
+logos, no hands, no people. No text, no lettering, no markings or engravings resembling text or
+numerals on any surface.
+```
 
 ## 4. Controller detail — `assets/images/controller-detail.png`
 
-Not yet generated. Replaces the earlier turntable-detail asset, which conflicts with the no-vinyl
-direction. Use `hero-studio.png` as `image_references`. Prompt in skill, item 4.
+Generated 2026-09-14. Job `9749ad0a-dd08-4bc5-a99f-9e90b7b59ffb`. 2688 x 1520, 16:9, quality
+high, 2k. Reference: hero job `2ac9cc52-3b7b-4d50-a86a-d9d378a4e3bc` as `image_references`.
+Replaces the earlier turntable-detail asset, which conflicted with the no-vinyl direction.
+Awaiting review.
+
+```txt
+Create a premium cinematic image of a MIDI pad controller and keyboard on the desk, three-quarter
+angle, pads glowing, same studio and lighting style as the reference hero image — near-black
+background, deep violet and blue light catching the keys and pad edges, shallow depth of field.
+No text, no logos, no hands, no people.
+```
 
 ---
 
