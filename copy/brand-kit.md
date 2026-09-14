@@ -78,7 +78,11 @@ Audited from the live repo. Do not change without approval.
 
 ## Logo and favicon
 
-- `images/Dan Heale Logo (White).png` — white logo, works on the near-black background.
-- `images/New Favicon.png`, `images/favicon-512x512.png`, `images/favicon.ico` — current favicon set.
+- `images/logo-white.png` — white logo, used in the nav on every page.
+- `assets/images/favicon-source.png` — 3000px favicon artwork: white DH monogram on the violet
+  accent (`#7c5cff`). Recoloured from the original gold on 2026-09-14.
+- Generated from it, all sizes: `favicon.ico` (32px PNG-in-ICO), `favicon-32x32.png`,
+  `favicon-192x192.png`, `apple-touch-icon.png` (180px) at the repo root, and
+  `images/favicon-512x512.png`. Regenerate all of them together if the source changes.
 
-Any gold-tinted version of the logo is out of use.
+Any gold-tinted version of the logo or favicon is out of use.
