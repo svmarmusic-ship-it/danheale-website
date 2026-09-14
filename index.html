@@ -34,6 +34,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
+  <script>document.documentElement.classList.add('js');</script>
   <link rel="stylesheet" href="/shared.css">
   <style>
     /* ─── Reset & Base ─────────────────────────────────── */
@@ -44,6 +45,7 @@
     body {
       background: var(--bg);
       color: var(--text);
+      perspective: 1600px;
       font-family: 'DM Sans', sans-serif;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
@@ -188,6 +190,39 @@
       justify-content: center;
       padding: 120px 64px 80px;
       position: relative;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    /* Hero background: looping video on desktop, still poster on phones / reduced motion */
+    .hero-media {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      overflow: hidden;
+      background: var(--bg) url('/assets/images/hero-poster.jpg') center / cover no-repeat;
+    }
+
+    .hero-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .hero-video[hidden] { display: none; }
+
+    .hero-tint {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(var(--bg-rgb), 0.84) 0%, rgba(var(--bg-rgb), 0.5) 55%, rgba(var(--bg-rgb), 0.3) 100%),
+        linear-gradient(180deg, rgba(var(--bg-rgb), 0.35) 0%, rgba(var(--bg-rgb), 0.35) 60%, rgba(var(--bg-rgb), 0.96) 100%);
+    }
+
+    @media (max-width: 768px), (prefers-reduced-motion: reduce) {
+      .hero-video { display: none; }
     }
 
     .hero::before {
@@ -207,25 +242,6 @@
       left: 64px; right: 64px;
       height: 1px;
       background: var(--border);
-    }
-
-    .hero-eyebrow {
-      font-size: 11px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--accent);
-      font-weight: 500;
-      margin-bottom: 32px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .hero-eyebrow::before {
-      content: '';
-      width: 32px; height: 1px;
-      background: var(--accent);
-      flex-shrink: 0;
     }
 
     .hero h1 {
@@ -302,40 +318,60 @@
     .cta-btn .arrow { transition: transform 0.3s ease; }
     .cta-btn:hover .arrow { transform: translateX(4px); }
 
-    /* ─── SECTION SHARED ────────────────────────────────── */
-    .section-label {
-      font-size: 11px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--accent);
-      font-weight: 500;
-      display: flex;
-      align-items: center;
-      gap: 12px;
+    /* ─── SECTION TITLES ────────────────────────────────── */
+    /* Plain headings do the work; no eyebrow labels, rules, or numbering anywhere. */
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 38px;
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 48px;
     }
 
-    .section-label::before {
-      content: '';
-      width: 32px; height: 1px;
-      background: var(--accent);
-      flex-shrink: 0;
-    }
-
-    .section-header {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      margin-bottom: 56px;
-    }
+    .section-title em { font-style: italic; color: var(--accent); }
 
     /* ─── SERVICES ──────────────────────────────────────── */
-    .services { padding: 100px 64px; }
+    .services {
+      padding: 100px 64px;
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+      perspective: 1400px;
+    }
 
-    .services-list { display: flex; flex-direction: column; }
+    /* Dimmed cinemagraph backdrop: a fader/knob macro, barely-there behind the list. */
+    .services-media {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .services-media video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.22;
+    }
+
+    .services-media::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg,
+        var(--bg) 0%, rgba(var(--bg-rgb), 0.6) 28%,
+        rgba(var(--bg-rgb), 0.6) 72%, var(--bg) 100%);
+    }
+
+    .services-list { display: flex; flex-direction: column; perspective: 1100px; }
 
     .service-row {
       display: grid;
-      grid-template-columns: 40px 220px 1fr 130px;
+      grid-template-columns: 220px 1fr 130px;
       gap: 40px;
       padding: 36px 24px;
       border-top: 1px solid var(--border);
@@ -393,11 +429,13 @@
     /* ─── ABOUT ─────────────────────────────────────────── */
     .about {
       padding: 100px 64px;
-      border-top: 1px solid var(--border);
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 80px;
+      perspective: 1400px;
     }
+
+    .about-content { perspective: 1400px; }
 
     .about-content h2 {
       font-family: 'Bebas Neue', sans-serif;
@@ -417,60 +455,47 @@
       margin-bottom: 16px;
     }
 
-    .credential-list { list-style: none; display: flex; flex-direction: column; margin-top: 8px; }
-
-    .credential-item {
-      padding: 20px 0;
+    .about-content .about-credentials {
+      padding-top: 20px;
       border-top: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      font-size: 14px;
-      color: var(--text-mid);
     }
 
-    .credential-item .check { color: var(--accent); font-size: 10px; flex-shrink: 0; }
-    .credential-item strong { color: var(--text); font-weight: 500; }
+    .about-content .about-credentials strong { color: var(--text); font-weight: 500; }
+
+    .about-media {
+      margin: 0;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      aspect-ratio: 16 / 10;
+      align-self: center;
+      background: var(--bg-elevated);
+    }
+
+    .about-media img,
+    .about-media video {
+      display: block;
+      width: 100%;
+      height: 118%;
+      object-fit: cover;
+      will-change: transform;
+    }
 
     /* ─── REVIEWS ───────────────────────────────────────── */
-    .reviews { padding: 100px 64px; border-top: 1px solid var(--border); }
+    .reviews { padding: 100px 64px; perspective: 1400px; }
 
     .reviews-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-      margin-top: 56px;
+      gap: 64px;
+      perspective: 1100px;
     }
 
+    /* Reviews are set as open quotes, not boxed cards: a large faded quote mark leads each one. */
     .review-card {
-      background: var(--bg-elevated);
-      border: 1px solid var(--border);
-      padding: 36px 28px;
+      padding: 44px 0 0;
       display: flex;
       flex-direction: column;
-      transition: border-color 0.4s ease, background 0.4s ease,
-                  transform 0.4s ease, box-shadow 0.4s ease;
-    }
-
-    .review-card:hover {
-      border-color: rgba(var(--accent-rgb), 0.32);
-      background: var(--bg-subtle);
-      transform: translateY(-4px);
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25),
-                  0 0 28px rgba(var(--accent-rgb), 0.07);
-    }
-
-    /* ─── REVIEW CARD STAGGER ──────────────────────────── */
-    .card-reveal {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
-                  transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
-    }
-
-    .card-reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
     }
 
     .review-stars {
@@ -493,22 +518,6 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      padding-top: 20px;
-      border-top: 1px solid var(--border);
-    }
-
-    .review-avatar {
-      width: 36px; height: 36px;
-      border-radius: 50%;
-      background: var(--accent-dim);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 16px;
-      font-weight: 600;
-      color: var(--accent);
-      flex-shrink: 0;
     }
 
     .author-name { font-size: 13px; font-weight: 500; color: var(--text); }
@@ -521,13 +530,13 @@
     }
 
     /* ─── SHOP ──────────────────────────────────────────── */
-    .shop-preview { padding: 100px 64px; border-top: 1px solid var(--border); }
+    .shop-preview { padding: 100px 64px; perspective: 1400px; }
 
     .shop-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 24px;
-      margin-top: 56px;
+      perspective: 1100px;
     }
 
     /* LEMONSQUEEZY: Replace href="#" on each .product-card with your product URL.
@@ -709,6 +718,7 @@
       padding: 120px 64px;
       border-top: 1px solid var(--border);
       position: relative;
+      perspective: 1400px;
     }
 
     .contact-section::before {
@@ -940,17 +950,12 @@
     .hero > .hero-animate:nth-child(4) { animation-delay: 0.60s; }
     .hero > .hero-animate:nth-child(5) { animation-delay: 0.75s; }
 
-    /* ─── SCROLL REVEAL ────────────────────────────────── */
-    .reveal {
+    /* ─── SCROLL REVEAL (GSAP ScrollTrigger — see js/motion.js) ── */
+    /* Hidden only while <html class="js">; motion.js removes that class if it cannot run. */
+    .js [data-reveal],
+    .js [data-reveal-group] > * {
       opacity: 0;
-      transform: translateY(28px);
-      transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-                  transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-    }
-
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
+      visibility: hidden;
     }
 
     /* ─── SCROLL MARGIN ─────────────────────────────────── */
@@ -967,11 +972,10 @@
         animation: none;
       }
 
-      .reveal,
-      .card-reveal {
+      .js [data-reveal],
+      .js [data-reveal-group] > * {
         opacity: 1;
-        transform: none;
-        transition: none;
+        visibility: visible;
       }
 
       #scroll-progress { display: none; }
@@ -1003,7 +1007,6 @@
       .stat-item::after { display: none !important; }
 
       .services { padding: 64px 24px; }
-      .service-num { display: none; }
 
       .service-row {
         grid-template-columns: 1fr;
@@ -1016,12 +1019,7 @@
 
       .how-it-works { padding: 64px 24px; }
       .how-steps { grid-template-columns: 1fr; }
-      .how-step {
-        border-left: none;
-        border-top: 1px solid var(--border);
-        padding: 32px 0;
-      }
-      .how-step:first-child { border-top: none; padding-top: 0; }
+      .how-steps { gap: 32px; }
       .my-work { padding: 64px 24px; }
 
       .about { padding: 64px 24px; grid-template-columns: 1fr; gap: 48px; }
@@ -1073,52 +1071,6 @@
       will-change: left, top;
     }
 
-    /* ─── MARQUEE ────────────────────────────────────────── */
-    .marquee-strip {
-      overflow: hidden;
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      padding: 13px 0;
-      background: var(--bg-elevated);
-    }
-
-    .marquee-track {
-      display: flex;
-      align-items: center;
-      width: max-content;
-      animation: marquee 35s linear infinite;
-    }
-
-    .marquee-item {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 10px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      padding: 0 32px;
-      white-space: nowrap;
-    }
-
-    .marquee-sep {
-      color: var(--accent);
-      font-size: 14px;
-      flex-shrink: 0;
-    }
-
-    @keyframes marquee {
-      from { transform: translateX(0); }
-      to   { transform: translateX(-50%); }
-    }
-
-    /* ─── SERVICE NUMBERS ────────────────────────────────── */
-    .service-num {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 11px;
-      color: var(--text-dim);
-      letter-spacing: 0.08em;
-      align-self: center;
-    }
-
     /* ─── REVIEW QUOTE MARKS ─────────────────────────────── */
     .review-card {
       position: relative;
@@ -1128,8 +1080,8 @@
     .review-card::before {
       content: '\201C';
       position: absolute;
-      top: 8px;
-      right: 20px;
+      top: -18px;
+      left: -6px;
       font-family: 'Bebas Neue', sans-serif;
       font-size: 120px;
       font-weight: 700;
@@ -1141,28 +1093,16 @@
     }
 
     /* ─── HOW IT WORKS ──────────────────────────────────── */
-    .how-it-works { padding: 100px 64px; border-top: 1px solid var(--border); }
+    .how-it-works { padding: 100px 64px; perspective: 1400px; }
 
     .how-steps {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      margin-top: 56px;
+      gap: 48px;
+      perspective: 1100px;
     }
 
-    .how-step {
-      padding: 0 48px 0 40px;
-      border-left: 1px solid var(--border);
-    }
-
-    .how-step:first-child { padding-left: 0; border-left: none; }
-
-    .how-step-num {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 11px;
-      color: var(--accent);
-      letter-spacing: 0.1em;
-      margin-bottom: 20px;
-    }
+    .how-step { padding: 0; }
 
     .how-step h3 {
       font-family: 'Bebas Neue', sans-serif;
@@ -1179,7 +1119,7 @@
     }
 
     /* ─── SELECTED WORK ──────────────────────────────────── */
-    .my-work { padding: 100px 64px; border-top: 1px solid var(--border); }
+    .my-work { padding: 100px 64px; perspective: 1400px; }
 
     .work-embeds {
       display: flex;
@@ -1192,6 +1132,35 @@
     .work-embeds iframe {
       display: block;
       border-radius: 0 !important;
+    }
+
+    .work-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: stretch;
+      perspective: 1100px;
+    }
+
+    .work-grid .work-embeds { margin-top: 0; max-width: none; }
+
+    .work-media {
+      margin: 0;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      min-height: 352px;
+      background: var(--bg-elevated);
+    }
+
+    .work-media img,
+    .work-media video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 118%;
+      object-fit: cover;
+      will-change: transform;
     }
 
     .work-spotify-link {
@@ -1211,21 +1180,20 @@
 
     /* ─── REDUCED MOTION (additions) ─────────────────────── */
     @media (prefers-reduced-motion: reduce) {
-      .marquee-track { animation: none; }
       #cursor-glow { display: none; }
       body::after { display: none; }
     }
 
-    /* ─── HOW IT WORKS — mobile stack ───────────────────── */
+    /* ─── MOBILE OVERRIDES THAT MUST FOLLOW LATER BASE RULES ─────
+       These duplicate values already set in the (max-width: 900px) block above, but the
+       matching base rule (no media guard) sits below that block in source order, so an
+       equal-specificity override placed only up there gets shadowed. Repeating it here,
+       after every relevant base rule, is what actually wins the cascade. */
     @media (max-width: 768px) {
       .how-it-works { padding: 64px 24px; }
-      .how-steps { grid-template-columns: 1fr; }
-      .how-step {
-        border-left: none;
-        border-top: 1px solid var(--border);
-        padding: 32px 0;
-      }
-      .how-step:first-child { border-top: none; padding-top: 0; }
+      .how-steps { grid-template-columns: 1fr; gap: 32px; }
+      .work-grid { grid-template-columns: 1fr; }
+      .work-media { min-height: 240px; }
     }
   </style>
 
@@ -1276,8 +1244,6 @@
 
 <!-- ─── HERO ──────────────────────────────────────────────── -->
 <section class="hero" aria-label="Introduction">
-  <div class="hero-eyebrow hero-animate" aria-hidden="true">Music Producer &bull; Ghost Producer &bull; DJ</div>
-
   <h1 class="hero-animate">The producer behind<br><em>100M streams.</em></h1>
 
   <p class="hero-sub hero-animate">
@@ -1300,69 +1266,52 @@
   </div>
 
   <a href="#contact" class="cta-btn hero-animate">Start your project <span class="arrow" aria-hidden="true">&#8594;</span></a>
+
+  <div class="hero-media" aria-hidden="true">
+    <video class="hero-video" muted loop playsinline autoplay preload="auto"
+      poster="/assets/images/hero-video-poster.jpg"
+      data-src="/assets/videos/bg.mp4"></video>
+    <div class="hero-tint"></div>
+  </div>
 </section>
 
 
-<!-- ─── MARQUEE ──────────────────────────────────────────── -->
-<div class="marquee-strip" aria-hidden="true">
-  <div class="marquee-track">
-    <span class="marquee-item">Ghost Production</span><span class="marquee-sep">·</span>
-    <span class="marquee-item">Mixing &amp; Mastering</span><span class="marquee-sep">·</span>
-    <span class="marquee-item">Remixes</span><span class="marquee-sep">·</span>
-    <span class="marquee-item">100M+ Streams</span><span class="marquee-sep">·</span>
-    <span class="marquee-item">200+ Tracks Delivered</span><span class="marquee-sep">·</span>
-    <span class="marquee-item">10+ Years Experience</span><span class="marquee-sep">·</span>
-    <span class="marquee-item">Newcastle, UK</span><span class="marquee-sep">·</span>
-    <span class="marquee-item">Available Worldwide</span><span class="marquee-sep">·</span>
-    <!-- duplicate for seamless loop -->
-    <span class="marquee-item">Ghost Production</span><span class="marquee-sep">·</span>
-    <span class="marquee-item">Mixing &amp; Mastering</span><span class="marquee-sep">·</span>
-    <span class="marquee-item">Remixes</span><span class="marquee-sep">·</span>
-    <span class="marquee-item">100M+ Streams</span><span class="marquee-sep">·</span>
-    <span class="marquee-item">200+ Tracks Delivered</span><span class="marquee-sep">·</span>
-    <span class="marquee-item">10+ Years Experience</span><span class="marquee-sep">·</span>
-    <span class="marquee-item">Newcastle, UK</span><span class="marquee-sep">·</span>
-    <span class="marquee-item">Available Worldwide</span><span class="marquee-sep">·</span>
-  </div>
-</div>
-
 <!-- ─── SERVICES ─────────────────────────────────────────── -->
-<section class="services reveal" id="services" aria-labelledby="services-label">
-  <div class="section-header">
-    <div class="section-label" id="services-label">Services</div>
+<section class="services" id="services" aria-labelledby="services-label">
+  <div class="services-media" aria-hidden="true">
+    <video muted loop playsinline preload="auto"
+      poster="/assets/images/fader-macro-loop-poster.jpg"
+      src="/assets/videos/fader-macro-loop.mp4"></video>
   </div>
 
-  <div class="services-list" role="list">
+  <h2 class="section-title" id="services-label" data-reveal>Services</h2>
+
+  <div class="services-list" role="list" data-reveal-group>
     <a href="#contact" class="service-row" role="listitem">
-      <span class="service-num" aria-hidden="true">01</span>
       <h3>Ghost Production</h3>
       <p>Full track production from concept to master. Your name, your release, built by a producer who's done it at scale. Complete ownership and confidentiality.</p>
       <div class="service-price">From £800 <span class="arrow-link" aria-hidden="true">&#8594;</span></div>
     </a>
 
     <a href="#contact" class="service-row" role="listitem">
-      <span class="service-num" aria-hidden="true">02</span>
       <h3>Mixing &amp; Finishing</h3>
       <p>Send your stems, get back a polished, release-ready track. Professional mixdown and mastering from someone who knows what labels actually want.</p>
       <div class="service-price">From £150 <span class="arrow-link" aria-hidden="true">&#8594;</span></div>
     </a>
 
     <a href="#contact" class="service-row" role="listitem">
-      <span class="service-num" aria-hidden="true">03</span>
       <h3>Remixes</h3>
       <p>Official remixes with a fresh perspective. Send the stems, tell me the vibe, and I'll deliver something that stands on its own.</p>
       <div class="service-price">On request <span class="arrow-link" aria-hidden="true">&#8594;</span></div>
     </a>
 
     <a href="#contact" class="service-row" role="listitem">
-      <span class="service-num" aria-hidden="true">04</span>
       <h3>Priority Production</h3>
       <p>For serious artists and labels who need release-ready music fast. Priority turnaround, stems delivery, and a 1-to-1 mix feedback call included. Limited availability — get in touch to discuss your project.</p>
       <div class="service-price">From £2,500 <span class="arrow-link" aria-hidden="true">&#8594;</span></div>
     </a>
 
     <a href="/suno-reproduction/" class="service-row" role="listitem">
-      <span class="service-num" aria-hidden="true">05</span>
       <h3>Suno Reproduction</h3>
       <p>Got a Suno demo that labels won't touch? I rebuild the instrumental from scratch — every AI element replaced with a fully human-produced, commercially-safe track that preserves your original direction.</p>
       <div class="service-price">On request <span class="arrow-link" aria-hidden="true">&#8594;</span></div>
@@ -1372,112 +1321,86 @@
 
 
 <!-- ─── HOW IT WORKS ─────────────────────────────────────── -->
-<section class="how-it-works reveal" id="process" aria-labelledby="process-label">
-  <div class="section-header">
-    <div class="section-label" id="process-label">How It Works</div>
-  </div>
+<section class="how-it-works" id="process" aria-labelledby="process-label">
+  <h2 class="section-title" id="process-label" data-reveal>How it works</h2>
 
-  <div class="how-steps">
+  <div class="how-steps" data-reveal-group>
     <div class="how-step">
-      <div class="how-step-num">01</div>
       <h3>Brief me</h3>
       <p>Tell me your genre, references, and vision. I'll come back with any questions before I start — no guesswork, no wasted rounds.</p>
     </div>
     <div class="how-step">
-      <div class="how-step-num">02</div>
       <h3>I produce</h3>
       <p>Full track built from scratch, or your stems mixed to a professional finish. Typically delivered in 7–10 days.</p>
     </div>
     <div class="how-step">
-      <div class="how-step-num">03</div>
       <h3>You own it</h3>
       <p>Receive your stems, WAV masters, and full ownership transfer. Complete confidentiality. No strings attached.</p>
     </div>
   </div>
 
-  <div style="text-align:center; margin-top:56px;">
+  <div style="text-align:center; margin-top:56px;" data-reveal>
     <a href="#contact" class="cta-btn">Start your project <span class="arrow" aria-hidden="true">&#8594;</span></a>
   </div>
 </section>
 
 
 <!-- ─── ABOUT ────────────────────────────────────────────── -->
-<section class="about reveal" id="about" aria-labelledby="about-heading">
+<section class="about" id="about" aria-labelledby="about-heading">
   <div class="about-content">
-    <h2 id="about-heading">Built on <em>years</em><br>behind the desk.</h2>
-    <p>I've spent over a decade producing, DJing, and working behind the scenes for artists across house, deep house, and dance music. My tracks have been signed to major labels and racked up over 100 million streams — and some of my best work you'll never know is mine.</p>
-    <p>If you're serious about your next release, get in touch. I work with a small number of clients at any one time to make sure every track gets the attention it deserves.</p>
+    <h2 id="about-heading" data-reveal>Built on <em>years</em><br>behind the desk.</h2>
+    <p data-reveal>I've spent over a decade producing, DJing, and working behind the scenes for artists across house, deep house, and dance music. My tracks have been signed to major labels and racked up over 100 million streams — and some of my best work you'll never know is mine.</p>
+    <p data-reveal>If you're serious about your next release, get in touch. I work with a small number of clients at any one time to make sure every track gets the attention it deserves.</p>
+    <p class="about-credentials" data-reveal><strong>100M+ streams</strong> across platforms, <strong>credits with Universal, Sony, Warner</strong> &amp; independent labels, and <strong>UK Silver certified</strong> — 6.5M Spotify streams. <strong>5-star rated</strong> across 200+ client projects, with <strong>200+ tracks delivered</strong> for clients worldwide, alongside <strong>international DJ residencies</strong> and bookings. <strong>Based in Newcastle, UK</strong> — available globally.</p>
   </div>
 
-  <div>
-    <ul class="credential-list" aria-label="Credentials">
-      <li class="credential-item">
-        <span class="check" aria-hidden="true">&#9670;</span>
-        <span><strong>100M+ streams</strong> across platforms</span>
-      </li>
-      <li class="credential-item">
-        <span class="check" aria-hidden="true">&#9670;</span>
-        <span><strong>Credits with Universal, Sony, Warner</strong> &amp; independent labels</span>
-      </li>
-      <li class="credential-item">
-        <span class="check" aria-hidden="true">&#9670;</span>
-        <span><strong>UK Silver certified</strong> — 6.5M Spotify streams</span>
-      </li>
-      <li class="credential-item">
-        <span class="check" aria-hidden="true">&#9670;</span>
-        <span><strong>5-star rated</strong> across 200+ client projects</span>
-      </li>
-      <li class="credential-item">
-        <span class="check" aria-hidden="true">&#9670;</span>
-        <span><strong>International DJ residencies</strong> and bookings</span>
-      </li>
-      <li class="credential-item">
-        <span class="check" aria-hidden="true">&#9670;</span>
-        <span><strong>200+ tracks delivered</strong> for clients worldwide</span>
-      </li>
-      <li class="credential-item">
-        <span class="check" aria-hidden="true">&#9670;</span>
-        <span><strong>Based in Newcastle, UK</strong> — available globally</span>
-      </li>
-    </ul>
-  </div>
+  <figure class="about-media" data-reveal data-parallax>
+    <video muted loop playsinline preload="auto"
+      poster="/assets/images/gear-detail-loop-poster.jpg"
+      src="/assets/videos/gear-detail-loop.mp4"
+      aria-label="Close-up of a mixing console under violet and blue studio light: faders, knobs and VU meters, with a faint drift of haze"></video>
+  </figure>
 </section>
 
 
 <!-- ─── SELECTED WORK ─────────────────────────────────────── -->
-<section class="my-work reveal" id="work" aria-labelledby="work-label">
-  <div class="section-header">
-    <div class="section-label" id="work-label">Selected Work</div>
+<section class="my-work" id="work" aria-labelledby="work-label">
+  <h2 class="section-title" id="work-label" data-reveal>Selected work</h2>
+
+  <div class="work-grid">
+    <div class="work-embeds" data-reveal>
+      <iframe
+        src="https://open.spotify.com/embed/playlist/3lEUOgRppfqjeRlIvy3B3h?utm_source=generator"
+        width="100%" height="352" frameborder="0"
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        loading="lazy"
+        title="Dan Heale — selected works playlist on Spotify">
+      </iframe>
+    </div>
+
+    <figure class="work-media" data-reveal data-parallax>
+      <video muted loop playsinline preload="auto"
+        poster="/assets/images/controller-detail-loop-poster.jpg"
+        src="/assets/videos/controller-detail-loop.mp4"
+        aria-label="MIDI pad controller and keyboard glowing under violet light in the studio, pads shifting gently"></video>
+    </figure>
   </div>
 
-  <div class="work-embeds">
-    <iframe
-      src="https://open.spotify.com/embed/playlist/3lEUOgRppfqjeRlIvy3B3h?utm_source=generator"
-      width="100%" height="352" frameborder="0"
-      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-      loading="lazy"
-      title="Dan Heale — selected works playlist on Spotify">
-    </iframe>
-  </div>
-
-  <a href="https://open.spotify.com/artist/5yAHHdRoedRFt5oe02qoVg" class="work-spotify-link" target="_blank" rel="noopener noreferrer">
+  <a href="https://open.spotify.com/artist/5yAHHdRoedRFt5oe02qoVg" class="work-spotify-link" target="_blank" rel="noopener noreferrer" data-reveal>
     View all on Spotify <span aria-hidden="true">&#8594;</span>
   </a>
 </section>
 
 
 <!-- ─── REVIEWS ───────────────────────────────────────────── -->
-<section class="reviews" id="reviews" aria-labelledby="reviews-label">
-  <div class="section-header">
-    <div class="section-label" id="reviews-label">Client Reviews</div>
-  </div>
+<section class="reviews" id="reviews" aria-labelledby="reviews-heading">
+  <h2 class="section-title" id="reviews-heading" data-reveal>Reviews</h2>
 
-  <div class="reviews-grid">
-    <article class="review-card card-reveal">
+  <div class="reviews-grid" data-reveal-group>
+    <article class="review-card">
       <div class="review-stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
       <p class="review-text">"First off, Dan is the man. I came to him with a very specific, borderline impossible request—to recreate an effect chain from a well known EDM record—and he nailed it on the first pass. Not just close. Dead-on. The breakdown, the process, the ear behind it... next level. Turnaround was fast, communication was sharp, and the depth of understanding he brought to the sound design was obvious from the start. This wasn't guesswork. This was someone who actually knows what he's hearing and how to build it from scratch. Honestly, I don't think most producers could've pulled this off the way he did. Way beyond expectations. Total pro."</p>
       <div class="review-author">
-        <div class="review-avatar" aria-hidden="true">J</div>
         <div>
           <div class="author-name">Jase</div>
           <div class="author-detail">Ghost Production Client, UK</div>
@@ -1485,11 +1408,10 @@
       </div>
     </article>
 
-    <article class="review-card card-reveal">
+    <article class="review-card">
       <div class="review-stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
       <p class="review-text">"Dan absolutely smashed it with this track! From start to finish, he was professional, creative, and incredibly easy to work with. His attention to detail and understanding of the vibe I wanted were spot on — the track sounded amazing was what I wanted and more! The delivery was super quick too, without any compromise on quality. You can tell he's got real talent and passion for what he does. I'll definitely be coming back for more projects — highly recommended!"</p>
       <div class="review-author">
-        <div class="review-avatar" aria-hidden="true">S</div>
         <div>
           <div class="author-name">Sean</div>
           <div class="author-detail">Ghost Production Client, UK</div>
@@ -1497,11 +1419,10 @@
       </div>
     </article>
 
-    <article class="review-card card-reveal">
+    <article class="review-card">
       <div class="review-stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
       <p class="review-text">"As always, Dan brings everything to the table. He understands exactly what I want and where I want to go to with a track. Always finds a way to add the last piece to give the production the final finish and the quality of his mixing and mastering is outstanding."</p>
       <div class="review-author">
-        <div class="review-avatar" aria-hidden="true">T</div>
         <div>
           <div class="author-name">Tobi</div>
           <div class="author-detail">Repeat Client, Germany</div>
@@ -1510,23 +1431,18 @@
     </article>
   </div>
 
-  <div style="text-align:center; margin-top:56px;">
-    <a href="#contact" class="cta-btn">Start your project <span class="arrow" aria-hidden="true">&#8594;</span></a>
-  </div>
 </section>
 
 
 <!-- ─── SHOP ──────────────────────────────────────────────── -->
 <section class="shop-preview" id="shop" aria-labelledby="shop-label">
-  <div class="section-header">
-    <div class="section-label" id="shop-label">Shop</div>
-  </div>
+  <h2 class="section-title" id="shop-label" data-reveal>Shop</h2>
 
   <!-- LEMONSQUEEZY: Replace each href="#" with your Lemonsqueezy checkout URL.
        e.g. href="https://danheale.lemonsqueezy.com/checkout/buy/YOUR_PRODUCT_ID"
        For overlay checkout, add the Lemon.js script and data-lemonsqueezy-checkout to each link. -->
-  <div class="shop-grid">
-    <a href="https://danhealemusic.gumroad.com/l/mixing-template" class="product-card card-reveal" aria-label="Free Mixing Logic Pro Template — £0.00" target="_blank" rel="noopener noreferrer">
+  <div class="shop-grid" data-reveal-group>
+    <a href="https://danhealemusic.gumroad.com/l/mixing-template" class="product-card" aria-label="Free Mixing Logic Pro Template — £0.00" target="_blank" rel="noopener noreferrer">
       <div class="product-img">
         <img src="images/Mixing Template Artwork.png" alt="Free Mixing Template artwork" style="width:100%;height:100%;object-fit:cover;display:block;">
       </div>
@@ -1538,7 +1454,7 @@
       </div>
     </a>
 
-    <a href="https://danhealemusic.gumroad.com/l/uk-house-essentials-vol-1" class="product-card card-reveal" aria-label="UK House Essentials Vol. 1 — Sample Pack — £20.00" target="_blank" rel="noopener noreferrer">
+    <a href="https://danhealemusic.gumroad.com/l/uk-house-essentials-vol-1" class="product-card" aria-label="UK House Essentials Vol. 1 — Sample Pack — £20.00" target="_blank" rel="noopener noreferrer">
       <div class="product-img">
         <img src="images/UK House Essentials Vol. 1 Thumbnail.png" alt="UK House Essentials Vol. 1 artwork" style="width:100%;height:100%;object-fit:cover;display:block;">
       </div>
@@ -1551,7 +1467,7 @@
     </a>
 
 
-    <div class="product-card card-reveal" aria-label="From DJ to Producer — Course — Waitlist open">
+    <div class="product-card" aria-label="From DJ to Producer — Course — Waitlist open">
       <div class="product-img">
         <span class="img-label">Coming Soon</span>
       </div>
@@ -1583,8 +1499,8 @@
 
 
 <!-- ─── CONTACT ───────────────────────────────────────────── -->
-<section class="contact-section reveal" id="contact" aria-labelledby="contact-heading">
-  <div class="contact-inner">
+<section class="contact-section" id="contact" aria-labelledby="contact-heading">
+  <div class="contact-inner" data-reveal>
     <h2 id="contact-heading">Ready to get <em>started?</em></h2>
     <p>Tell me about your project. I'll get back to you within 24 hours.</p>
 
@@ -1658,7 +1574,7 @@
 
 
 <!-- ─── FOOTER ────────────────────────────────────────────── -->
-<footer class="reveal" role="contentinfo">
+<footer role="contentinfo" data-reveal>
   <div class="footer-left">&#169; 2026 Dan Heale. All rights reserved.</div>
 
   <!-- SOCIAL LINKS: Replace each href="#" with your real profile URLs -->
@@ -1721,40 +1637,7 @@
     });
   });
 
-  // ── Scroll reveal ─────────────────────────────────────────
-  if ('IntersectionObserver' in window) {
-    var revealObserver = new IntersectionObserver(function(entries) {
-      entries.forEach(function(entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          revealObserver.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.1 });
-
-    document.querySelectorAll('.reveal').forEach(function(el) {
-      revealObserver.observe(el);
-    });
-  }
-
-  // ── Card stagger (reviews + shop) ────────────────────────
-  if ('IntersectionObserver' in window) {
-    var cardObserver = new IntersectionObserver(function(entries) {
-      entries.forEach(function(entry) {
-        if (entry.isIntersecting) {
-          cardObserver.unobserve(entry.target);
-          entry.target.querySelectorAll('.card-reveal').forEach(function(card, i) {
-            setTimeout(function() { card.classList.add('visible'); }, i * 160);
-          });
-        }
-      });
-    }, { threshold: 0.15 });
-
-    ['.reviews-grid', '.shop-grid'].forEach(function(sel) {
-      var el = document.querySelector(sel);
-      if (el) cardObserver.observe(el);
-    });
-  }
+  // ── Scroll reveals live in js/motion.js (GSAP ScrollTrigger) ──
 
   // ── Stats count-up ───────────────────────────────────────
   var statsRow = document.querySelector('.stats-row');
@@ -1899,6 +1782,11 @@
     });
   }
 </script>
+
+<!-- Motion layer: GSAP + ScrollTrigger (vendored, no CDN) -->
+<script src="/js/vendor/gsap.min.js" defer></script>
+<script src="/js/vendor/ScrollTrigger.min.js" defer></script>
+<script src="/js/motion.js" defer></script>
 
 <!-- JSON-LD Structured Data -->
 <script type="application/ld+json">

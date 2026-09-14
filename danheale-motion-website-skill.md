@@ -1,27 +1,32 @@
 ---
 name: danheale-motion-website
 description: >-
-  Production workflow and build rules for the danheale.com scroll-driven motion website rebuild,
-  built with Claude Code, Higgsfield MCP, GPT Image 2, Seedance 2.0, Vite, React, GSAP, Lenis, and
-  ScrollTrigger. Use this skill whenever working on the danheale.com landing page, its AI-generated
-  studio images, the scroll-scrubbed background video, service/about/work sections, React
-  implementation, video encoding, motion timing, dark premium UI, or asset replacement workflow.
-  Triggers: danheale, studio motion website, scroll-driven website, Higgsfield MCP, GSAP, Lenis,
-  ScrollTrigger, Seedance 2.0, GPT Image 2, ghost producer landing page.
+  Production workflow and build rules for the danheale.com motion website rebuild, built with
+  Claude Code, Higgsfield MCP, GPT Image 2, Seedance 2.0, GSAP and ScrollTrigger on the existing
+  static HTML site. Use this skill whenever working on the danheale.com landing page, its
+  AI-generated studio images, the looping hero background video, scroll-reveal animations,
+  service/about/work sections, video encoding, motion timing, dark premium UI, or asset
+  replacement workflow. Triggers: danheale, studio motion website, hero video, scroll reveal,
+  Higgsfield MCP, GSAP, ScrollTrigger, Seedance 2.0, GPT Image 2, ghost producer landing page.
 ---
 
-# danheale.com scroll-driven motion website
+# danheale.com motion website
 
-A rebuild of danheale.com — a single-page, scroll-driven site for Dan Heale, a UK-based ghost
-producer, mixing/mastering engineer, and DJ. The site should feel like a premium studio's site,
-not a generic AI-generated SaaS template.
+A rebuild of danheale.com — a single-page site for Dan Heale, a UK-based ghost producer,
+mixing/mastering engineer, and DJ. The site should feel like a premium studio's site, not a
+generic AI-generated SaaS template.
 
-The main visual hook is an AI-generated studio film used as a full-screen background video. As the
-visitor scrolls, the video is scrubbed frame-by-frame with GSAP ScrollTrigger and Lenis, so a
-single cinematic shot moves through Dan's studio — opening close on the pad controller, pulling
-back to reveal the desk, monitors, keyboard, rack and cables, then gliding across the room — while
-the DAW session on screen visibly builds up with more layers and colour as the user scrolls,
-mirroring how a track comes together.
+**Scope change 2026-09-14.** The original plan was a full-page video scrubbed by scroll position.
+That is gone. The hero is now the `hero-studio` still with a short cinematic pull-back (starts
+zoomed in, eases to normal scale with a slight upward drift while the hero is briefly pinned),
+and every other section uses calmer GSAP ScrollTrigger fade-up/stagger reveals as elements enter
+the viewport. The generated studio film and its loop encode are kept in the repo, unused, in
+case a video hero is wanted later.
+
+The hero film is one continuous shot through Dan's studio — opening close on the pad controller,
+pulling back to reveal the desk, monitors, keyboard, rack and cables, then gliding across the
+room — while the DAW session on screen visibly builds up with more layers and colour, mirroring
+how a track comes together.
 
 This supersedes the earlier React Three Fiber / GLB approach on this project (the `three-scenes`
 Vite project and its dependency). That approach produced AI renders that read as amateur when
@@ -31,35 +36,36 @@ consistent because every asset is chained off one master reference image, and th
 
 The workflow runs in **Claude Code** in the existing `danheale-website` repo. Claude Code creates
 planning files, generates media through Higgsfield MCP only after explicit approval at each stage,
-builds the React/Vite motion layer, encodes the final video for scroll scrubbing, and verifies the
-result before considering the site complete.
+adds the motion layer to the existing static HTML, encodes the hero loop, and verifies the result
+in a real browser at desktop and phone widths before considering the site complete.
 
 The site should be built around one strong idea:
 
-> A producer's studio, revealed by the scroll, as the track builds on screen.
+> A producer's studio at work, as the track builds on screen.
 
 ---
 
 ## Project facts
 
-- **Project type:** Scroll-driven cinematic landing page rebuild
+- **Project type:** Cinematic landing page rebuild (looping hero video + scroll reveals)
 - **Site:** danheale.com (existing repo: `svmarmusic-ship-it/danheale-website`)
 - **Subject:** Dan Heale — ghost producer, mixing/mastering engineer, DJ
-- **Core interaction:** Scroll-scrubbed AI video background of the studio
+- **Core interaction:** Hero still image with a scroll-driven zoom-out + drift (pinned ~55vh on
+  desktop, unpinned on phones); GSAP ScrollTrigger fade-up/stagger reveals on every other section
 - **Main video concept:** One continuous camera move through the studio (close on the pad
   controller, pull back and rise to reveal the full desk, glide laterally across it, settle on a
-  wider calmer frame) while the DAW session on screen fills up with more layers and colour as
-  the user scrolls — the track being built, not gear coming apart
+  wider calmer frame) while the DAW session on screen fills up with more layers and colour — the
+  track being built, not gear coming apart. Played forward then reversed as a 30 s seamless loop
 - **Audience:** prospective ghost production / mixing clients, DJ booking contacts, the existing
   ~13k email list and ~16k/~6k Instagram audiences
 - **Website goal:** Move away from the current numbered-card, stat-marquee, generic-SaaS-template
   look toward something that reads as a real working studio's site
 - **Build environment:** Claude Code, existing repo, deploys to Vercel via GitHub push
-- **Stack:** Vite + React + GSAP + Lenis + ScrollTrigger — no build step beyond this; drop
-  React Three Fiber/GLB entirely
+- **Stack:** the existing static HTML pages + vendored GSAP 3 and ScrollTrigger in `js/vendor/`
+  + `js/motion.js`. No bundler, no framework, no build step — Vercel serves the repo root as-is
 - **Image model:** GPT Image 2 through Higgsfield MCP
 - **Video model:** Seedance 2.0 through Higgsfield MCP
-- **Background video format:** 16:9, slow, cinematic, all-keyframe H.264 after encoding
+- **Background video format:** 16:9 1080p H.264, standard GOP, CRF 27, silent, ping-pong loop (~7 MB)
 
 ---
 
@@ -73,10 +79,18 @@ danheale-website/
 │  │  ├─ studio-layers-reference.png
 │  │  ├─ gear-detail.png
 │  │  ├─ controller-detail.png
+│  │  ├─ hero-poster.jpg              (hero-studio.png as 1920px JPEG — the hero image)
+│  │  ├─ hero-poster@2x.jpg           (full 2688px JPEG, served via srcset on retina)
+│  │  ├─ hero-video-poster.jpg        (first frame of the raw clip — <video poster>, dormant)
+│  │  ├─ gear-detail.jpg              (1600px JPEG served on the page)
+│  │  ├─ controller-detail.jpg        (1600px JPEG served on the page)
 │  │  └─ superseded/            (archived gold-direction renders, not references)
 │  └─ videos/
-│     ├─ danheale-scroll-background-raw.mp4
-│     └─ danheale-scroll-background-all-keyframe.mp4
+│     ├─ danheale-scroll-background-raw.mp4   (Seedance output, kept as the source)
+│     └─ bg.mp4                               (hero loop — kept, currently unused)
+├─ js/
+│  ├─ vendor/gsap.min.js, vendor/ScrollTrigger.min.js   (pinned, no CDN)
+│  └─ motion.js                       (hero video source gating + all scroll reveals)
 ├─ copy/
 │  ├─ brand-kit.md
 │  ├─ asset-plan.md
@@ -85,7 +99,7 @@ danheale-website/
 │  └─ website-brief.md
 ├─ scripts/
 │  └─ swap-bg-video.sh
-└─ (existing site files: index.html, /production/, /dj/, /suno-reproduction/, shared.css, shared.js)
+└─ (existing site files: index.html, /production/, /dj/, /suno-reproduction/, shared.css)
 ```
 
 Rules:
@@ -100,21 +114,32 @@ Rules:
 
 ## Required stack
 
-- Vite
-- React
-- JavaScript, not TypeScript
-- GSAP + `gsap/ScrollTrigger`
-- Lenis for smooth scrolling
-- CSS variables for brand tokens (already exist in `shared.css` — extend, don't replace, unless a
-  value is explicitly changed below)
+- The existing static HTML pages, edited in place — no Vite, no React, no bundler
+- Plain JavaScript, not TypeScript
+- GSAP 3 + ScrollTrigger, vendored under `js/vendor/` and loaded with `defer` before
+  `js/motion.js` (all three scripts are deferred, so order is preserved)
+- CSS variables for brand tokens in `shared.css` — extend, don't replace
 - Higgsfield MCP for GPT Image 2 and Seedance 2.0 generations
-- `ffmpeg` for all-keyframe H.264 video encoding
+- `ffmpeg` for the hero loop encode (`scripts/swap-bg-video.sh`)
 
-Portable static build:
+There is no production build. "Build" means: serve the repo root locally
+(`python3 -m http.server 8765`) and verify in a browser. Vercel deploys the repo root unchanged.
 
-```bash
-npm run build -- --base=./
-```
+How the motion layer is wired:
+
+- An inline `<script>` in `<head>` adds class `js` to `<html>`. CSS hides `[data-reveal]` and the
+  children of `[data-reveal-group]` only under `.js`, so nothing is hidden without JavaScript.
+- `motion.js` removes that class and returns if GSAP is missing or `prefers-reduced-motion` is
+  set, so every element is simply visible.
+- `data-reveal` = single element fades up (0.8 s, power3.out, from 28px, `once: true`, trigger at
+  top 88%). `data-reveal-group` = direct children stagger in (0.75 s, 0.11 s apart, trigger at
+  top 85%). `data-parallax` = the `<img>` inside drifts slower than scroll on desktop only.
+- The hero `<img class="hero-image">` gets `scale(1.13)` from CSS under `.js`, then `motion.js`
+  tweens it to scale 1 / `yPercent: -5` with `scrub: 0.6`. Desktop pins the hero for `+=55%`
+  of the viewport so the pull-back has room; phones use `end: 'bottom top'` with no pin. The
+  headline/subhead keep their existing CSS fade-up on load, layered over the zoom.
+- Dormant video path: the `<video class="hero-video">` markup sits commented out in
+  `.hero-media`; `motion.js` still gates its `src` on desktop + motion allowed if it is put back.
 
 ---
 
@@ -133,7 +158,9 @@ Claude Code must not:
 - Use credits before approval.
 - Generate more variations than requested.
 - Bake website text into images or video.
-- Replace the requested Vite/React/GSAP/Lenis/ScrollTrigger stack with another framework.
+- Introduce a bundler, framework, or build step — the site is static HTML on purpose.
+- Tie any animation to scroll position as a timeline (scrubbing). Reveals fire once as elements
+  enter the viewport; only the two parallax images use `scrub`.
 - Reintroduce React Three Fiber or GLB models for this rebuild.
 - Change fonts, palette values, or copy without flagging the change first — see Brand tokens and
   Content to preserve below.
@@ -335,7 +362,11 @@ Aspect ratio: 16:9. Quality: high. Resolution: 2k.
 ### 5. Scroll background video
 
 Raw file: `assets/videos/danheale-scroll-background-raw.mp4`
-Production file: copied into the site's static asset path as `bg.mp4` after encoding.
+Production file: `assets/videos/bg.mp4`, the ping-pong loop built by `scripts/swap-bg-video.sh`.
+
+The prompt below still says "scroll scrubbing" because it was written before the scope change; it
+was the prompt actually used for the approved clip. The stability constraints it asks for are
+just as useful for a loop, so leave it as the record of what was generated.
 
 Prompt:
 
@@ -379,46 +410,42 @@ Duration: 12 to 16 seconds. Aspect ratio: 16:9. Quality: high.
 
 ---
 
-## Re-encode the video for scroll scrubbing
+## Encode the hero loop
+
+The script is `scripts/swap-bg-video.sh`. This site serves static files from the repo root, so
+the production file is `assets/videos/bg.mp4`, served at `/assets/videos/bg.mp4`. Requires
+ffmpeg (`brew install ffmpeg`; installed 2026-09-14, version 8.1 with libx264).
 
 ```bash
-mkdir -p scripts
-cat > scripts/swap-bg-video.sh <<'SCRIPT'
-#!/usr/bin/env bash
-set -euo pipefail
-INPUT="$1"
-OUTPUT="path/to/site/static/bg.mp4"   # adjust to wherever this repo serves static assets from
-ffmpeg -y -i "$INPUT" -an -c:v libx264 -preset slow -crf 18 \
-  -g 1 -keyint_min 1 -sc_threshold 0 -pix_fmt yuv420p \
-  -movflags +faststart "$OUTPUT"
-echo "Encoded all-keyframe background video to $OUTPUT"
-SCRIPT
-chmod +x scripts/swap-bg-video.sh
+scripts/swap-bg-video.sh assets/videos/danheale-scroll-background-raw.mp4
 ```
 
-After swapping, confirm in the browser console:
+What it does: plays the clip forward then reversed (ping-pong) so the loop has no seam — the raw
+clip opens on a close-up and ends on a wide frame, so a straight loop would jump-cut every 15 s.
+Encodes libx264 at preset slow, CRF 27, GOP 48, yuv420p, no audio, moov atom first. The 30 s
+1080p result is about 7 MB. It also writes `assets/images/hero-video-poster.jpg` from the first
+frame so playback starts without a visible jump.
 
-```js
-window.__bgv.readyState === 4
-window.__bgv.duration
-```
+Verify in a browser: the hero `<video>` should reach `readyState` 4, report `duration` ≈ 30, and
+`currentTime` should advance. On a phone-width viewport or with reduced motion it must have no
+`src` attribute at all and the poster background must show instead.
 
 ---
 
 ## Website section plan (maps onto the existing site's sections)
 
 ### `#home` — hero
-Full-screen scroll-controlled background video. Headline "The producer behind 100M streams." +
-subhead, off-center, stats folded into prose nearby. Violet CTA button only — everything else
-white/off-white on near-black.
+Full-bleed `hero-poster.jpg` still inside `.hero-media`, under a dark two-axis tint
+(`.hero-tint`) that darkens the left where the text sits and the bottom edge. The image starts at
+scale 1.13 and pulls back to 1 with a slight upward drift as the user scrolls, with the section
+pinned briefly on desktop so the move has room. Headline "The producer behind 100M streams." +
+subhead + stats + CTA fade/slide up on load via the existing CSS keyframes; the stats count up
+from zero. Reduced motion: no zoom, no pin. Violet CTA button only — everything else
+white/off-white on near-black. This is deliberately the only dramatic motion on the page.
 
-### `#split` — pinned "how it's made" moment
-This replaces the old standalone "How It Works" 3-step section. Pin this while the background
-video passes the DAW screen and the session fills up with more layers and colour. Fold the
-"Brief me / I produce / You own it" copy in here as short lines that reveal word-by-word as the
-user scrolls, timed so each line lands as the session gains another layer — the copy should feel
-tied to a track being built, not to a generic diagram. The pin releases as focus falls off the
-screen and the camera continues past.
+### `#process` — how it works
+The existing three-step "Brief me / I produce / You own it" block stays as it is; the three steps
+stagger in as a `data-reveal-group`. There is no pinned section any more.
 
 ### `#services`
 The 5 existing services, restyled as cards or a scroll-triggered list — not numbered 01–05. Copy,
@@ -445,11 +472,10 @@ links preserved.
 
 ## Mobile behavior
 
-Scroll-scrubbed video can be heavy on mobile.
-
-- Use `hero-studio.png` as a fixed poster/background on touch devices instead of the video
-- Reduce or remove pinned sections on small screens
-- Respect `prefers-reduced-motion` — poster fallback there too
+- Below 769px the hero zoom-out still runs but without pinning, mapped to the hero scrolling
+  out of view; the dormant video path would never be given a `src` there either
+- Parallax is desktop-only (`gsap.matchMedia('(min-width: 769px)')`); reveals still run on phones
+- `prefers-reduced-motion`: no video, no reveals, everything visible immediately
 - Test that Formspree and the waitlist form both still submit correctly on mobile
 
 ---
@@ -461,20 +487,21 @@ Scroll-scrubbed video can be heavy on mobile.
 - [ ] `hero-studio.png` exists and is used as the reference for everything else
 - [ ] `studio-layers-reference.png`, `gear-detail.png`, `controller-detail.png` exist
 - [ ] Raw Seedance 2.0 video exists in `assets/videos`
-- [ ] All-keyframe encoded video exists at the site's static `bg.mp4` path
+- [ ] Ping-pong hero loop exists at `assets/videos/bg.mp4` (~7 MB, 30 s) with its poster JPEG
 - [ ] Fonts are Bebas Neue / DM Sans / Space Mono — unchanged from the live audit
 - [ ] Palette is near-black / off-white / violet-as-sparing-accent — no gold anywhere, violet
       not flooding the page
-- [ ] Vite dev server runs, GSAP/ScrollTrigger/Lenis wired correctly
-- [ ] Video scrubs smoothly on scroll, hero text stays readable over it
-- [ ] `#split` pinned section works and reads the "how it works" copy correctly
+- [ ] GSAP + ScrollTrigger load from `js/vendor/`, `motion.js` creates its triggers, no console errors
+- [ ] Hero image starts at scale 1.13 and reaches 1 by the end of the short pin; text readable over the tint
+- [ ] Every `data-reveal` / group child ends fully visible after scrolling the page
+- [ ] Phone width: no pin, zoom-out plays as the hero scrolls away, reveals still work
 - [ ] Services, about, work, reviews, shop, contact all present with original copy intact
 - [ ] Formspree endpoint, both Gumroad links, waitlist fetch + honeypot all still work
 - [ ] `/suno-reproduction` untouched in URL/headings/copy, palette-only inherited via shared.css
 - [ ] Nav logo and favicon actually load (fix the pre-existing 404 in this pass)
 - [ ] Mobile fallback poster works, `prefers-reduced-motion` respected
 - [ ] `three-scenes` R3F/GLB project removed once this approach is confirmed working
-- [ ] Production build passes
+- [ ] Page verified in a real browser at 1440px and 390px widths, and with reduced motion
 - [ ] No real third-party logos or marks in generated media
 - [ ] No text baked into images or video
 
@@ -487,13 +514,14 @@ Scroll-scrubbed video can be heavy on mobile.
 3. Review and approve planning files
 4. Generate the 4 still images (hero first, then reference-chain the rest) — approve before video
 5. Generate the background video using the hero + layers reference — approve before build
-6. Re-encode video to all-keyframe H.264
-7. Build the motion layer (video scrub + pinned split section) first, verify it alone
-8. Then rebuild each existing section (services, about, work, reviews, shop, contact) around it,
-   preserving all copy and integrations
+6. Encode the hero loop with `scripts/swap-bg-video.sh`
+7. Add the hero still + tint + pull-back to `#home`, verify the pin and zoom on desktop and the
+   unpinned version on phones
+8. Add `data-reveal` / `data-reveal-group` / `data-parallax` to each section in turn, preserving
+   all copy and integrations
 9. Remove the old `three-scenes` R3F project
 10. Mobile fallback + reduced-motion pass
-11. Production build, then push
+11. Browser verification at desktop and phone widths, then push
 
 ---
 
@@ -542,12 +570,7 @@ path and wait for approval.
 
 ## Website build prompt
 
-```txt
-The images and video are approved. Re-encode the background video to all-keyframe H.264 using
-scripts/swap-bg-video.sh. Build the motion layer first (fixed scroll-scrubbed video background +
-pinned #split section) and let me see it alone before rebuilding the rest of the sections around
-it. Preserve all existing copy, the Formspree endpoint, both Gumroad links, the waitlist API, and
-the /suno-reproduction page untouched apart from inheriting the shared palette. Remove the
-three-scenes R3F project once this is confirmed working. Add mobile/reduced-motion fallback using
-hero-studio.png. Run the production build and report any issues.
-```
+Superseded by the 2026-09-14 scope change. The build that shipped: looping hero video behind
+`#home` only, GSAP ScrollTrigger reveals on every other section, all copy and integrations
+preserved, verified in a browser at desktop and phone widths. See "Required stack" for how it is
+wired.
