@@ -17,23 +17,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
+  <link rel="stylesheet" href="/shared.css">
   <style>
     /* ─── Reset & Base ─────────────────────────────────── */
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-    :root {
-      --bg:           #0e0d0b;
-      --bg-elevated:  #151412;
-      --bg-subtle:    #1a1917;
-      --accent:       #c9a96e;
-      --accent-dim:   rgba(201, 169, 110, 0.15);
-      --accent-glow:  rgba(201, 169, 110, 0.06);
-      --text:         #f0ece4;
-      --text-mid:     rgba(240, 236, 228, 0.55);
-      --text-dim:     rgba(240, 236, 228, 0.3);
-      --border:       rgba(240, 236, 228, 0.08);
-      --border-hover: rgba(240, 236, 228, 0.15);
-    }
 
     html { scroll-behavior: smooth; }
 
@@ -151,7 +138,7 @@
     .home-btn:hover {
       background: #d4b67a;
       transform: translateY(-2px);
-      box-shadow: 0 12px 40px rgba(201, 169, 110, 0.2);
+      box-shadow: 0 12px 40px rgba(var(--accent-rgb), 0.2);
     }
 
     .home-btn .arrow { transition: transform 0.3s ease; }
