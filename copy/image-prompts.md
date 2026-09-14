@@ -38,10 +38,36 @@ Restrictions: no text, no lettering, no logos, no brand marks, no people, no han
 no vinyl records, no turntables, no drums, no band instruments, no cartoon or illustration style.
 ```
 
-## 2. Studio layers reference — `assets/images/studio-layers-reference.png`
+## 2. Session layers reference — `assets/images/studio-layers-reference.png`
 
-Not yet generated. Use `hero-studio.png` as `image_references`. Prompt is in the
-danheale-motion-website skill, section "Media asset plan", item 2.
+Not yet generated. Use `hero-studio.png` as `image_references`.
+
+Defines the "session-built-up" motif used in the scroll video: the same studio, gear unchanged,
+but the DAW screen shows a much fuller session. This image's only job is the screen. Nothing
+separates, floats, or deconstructs. The earlier "deconstructed gear" concept is gone for good.
+
+```txt
+Using the provided studio image as reference, create a cinematic image of the exact same studio
+— same mixing desk, studio monitors, MIDI keyboard, pad controller, outboard rack, cables, same
+camera position and framing — where the only change is the computer screen: the digital audio
+workstation session on it is now much fuller. Many more clip blocks stacked across many more
+tracks, denser waveforms, a richer spread of colour across the timeline, as if the track has been
+built up layer by layer since the reference frame.
+
+Keep every physical item, material, and the lighting identical to the reference. Do not add,
+move, or remove gear. Do not change the identity of any item.
+
+The screen content stays soft-focus and completely unreadable: no readable text, no real
+software logos, no recognisable interface branding. It reads as colour and structure only.
+
+Style: same as reference — moody, cinematic, near-black background, deep violet and blue light,
+shallow depth of field, realistic textures. The screen may glow slightly brighter than in the
+reference so the fuller session reads at a glance.
+
+Restrictions: no text, no logos, no hands, no people, no floating or separated gear.
+
+Aspect ratio: 16:9. Quality: high. Resolution: 2k.
+```
 
 ## 3. Gear detail macro — `assets/images/gear-detail.png`
 

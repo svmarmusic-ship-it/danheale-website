@@ -18,8 +18,10 @@ not a generic AI-generated SaaS template.
 
 The main visual hook is an AI-generated studio film used as a full-screen background video. As the
 visitor scrolls, the video is scrubbed frame-by-frame with GSAP ScrollTrigger and Lenis, so a
-single cinematic shot of Dan's studio setup — desk, monitors, keyboard, rack, cables — slowly separates into
-its individual pieces of gear as the user scrolls, mirroring how a producer's kit comes together.
+single cinematic shot moves through Dan's studio — opening close on the pad controller, pulling
+back to reveal the desk, monitors, keyboard, rack and cables, then gliding across the room — while
+the DAW session on screen visibly builds up with more layers and colour as the user scrolls,
+mirroring how a track comes together.
 
 This supersedes the earlier React Three Fiber / GLB approach on this project (the `three-scenes`
 Vite project and its dependency). That approach produced AI renders that read as amateur when
@@ -34,7 +36,7 @@ result before considering the site complete.
 
 The site should be built around one strong idea:
 
-> A producer's studio, revealed and deconstructed by the scroll.
+> A producer's studio, revealed by the scroll, as the track builds on screen.
 
 ---
 
@@ -44,9 +46,10 @@ The site should be built around one strong idea:
 - **Site:** danheale.com (existing repo: `svmarmusic-ship-it/danheale-website`)
 - **Subject:** Dan Heale — ghost producer, mixing/mastering engineer, DJ
 - **Core interaction:** Scroll-scrubbed AI video background of the studio
-- **Main video concept:** An assembled studio setup slowly separates into its individual pieces
-  (the keyboard lifts away, the pad controller floats out, rack units slide apart, cables trail
-  off, the mixing desk's fader panel detaches) as the user scrolls
+- **Main video concept:** One continuous camera move through the studio (close on the pad
+  controller, pull back and rise to reveal the full desk, glide laterally across it, settle on a
+  wider calmer frame) while the DAW session on screen fills up with more layers and colour as
+  the user scrolls — the track being built, not gear coming apart
 - **Audience:** prospective ghost production / mixing clients, DJ booking contacts, the existing
   ~13k email list and ~16k/~6k Instagram audiences
 - **Website goal:** Move away from the current numbered-card, stat-marquee, generic-SaaS-template
@@ -270,32 +273,35 @@ no vinyl records, no turntables, no drums, no band instruments, no cartoon or il
 Aspect ratio: 16:9. Quality: high. Resolution: 2k.
 ```
 
-### 2. Studio layers reference — `assets/images/studio-layers-reference.png`
+### 2. Session layers reference — `assets/images/studio-layers-reference.png`
 
-Use `hero-studio.png` as the image reference. Defines the "deconstructed gear" motif used in the
-scroll video.
+Use `hero-studio.png` as the image reference. Defines the "session-built-up" motif used in the
+scroll video: the same studio, gear unchanged, but the DAW screen now shows a much fuller session.
+This image's only job is the screen. Nothing separates, floats, or deconstructs.
 
 Prompt:
 
 ```txt
-Using the provided studio image as reference, create a cinematic image of the same studio gear —
-mixing desk, studio monitors, MIDI keyboard, pad controller, outboard rack, screen, cables —
-separated and floating in a clean vertical/layered arrangement, as if deconstructed for a premium
-product reveal.
+Using the provided studio image as reference, create a cinematic image of the exact same studio
+— same mixing desk, studio monitors, MIDI keyboard, pad controller, outboard rack, cables, same
+camera position and framing — where the only change is the computer screen: the digital audio
+workstation session on it is now much fuller. Many more clip blocks stacked across many more
+tracks, denser waveforms, a richer spread of colour across the timeline, as if the track has been
+built up layer by layer since the reference frame.
 
-Keep the exact same items, materials, and lighting style as the reference — same desk, same
-monitors, same keyboard, same rack. Do not add new gear or change the identity of any item.
+Keep every physical item, material, and the lighting identical to the reference. Do not add,
+move, or remove gear. Do not change the identity of any item.
+
+The screen content stays soft-focus and completely unreadable: no readable text, no real
+software logos, no recognisable interface branding. It reads as colour and structure only.
 
 Style: same as reference — moody, cinematic, near-black background, deep violet and blue light,
-shallow depth of field, realistic textures.
+shallow depth of field, realistic textures. The screen may glow slightly brighter than in the
+reference so the fuller session reads at a glance.
 
-Composition: items arranged in a clean, readable, floating layout with dark negative space around
-them.
+Restrictions: no text, no logos, no hands, no people, no floating or separated gear.
 
-Restrictions: no text, no logos, no hands, no people, no messy or chaotic arrangement — keep it
-elegant and readable.
-
-Aspect ratio: 16:9. High quality.
+Aspect ratio: 16:9. Quality: high. Resolution: 2k.
 ```
 
 ### 3. Gear detail macro — `assets/images/gear-detail.png`
@@ -340,30 +346,32 @@ progress with GSAP ScrollTrigger, Lenis, and frame-by-frame video scrubbing. Mot
 stable, smooth, and readable when manually scrubbed.
 
 Use the provided reference images:
-1. The assembled studio hero reference
-2. The deconstructed studio layers reference
+1. The studio hero reference (the session on the DAW screen at its starting state)
+2. The session layers reference (the same studio, with the DAW screen showing a much fuller
+   session — more tracks, more clip blocks, more colour)
 
-Sequence:
-1. Start with the studio gear fully assembled — desk, monitors, MIDI keyboard, pad controller,
-   outboard rack, screen, cables — in a dark cinematic setup, deep violet and blue light, subtle
-   atmosphere.
-2. Camera slowly pushes in, then begins a smooth orbit around the desk.
-3. In the second half, the gear gently separates — the keyboard lifts away, the pad controller
-   floats out, rack units slide apart, cables trail off, the fader panel detaches — into the
-   clean floating arrangement shown in the layers reference.
-4. End on a centered, readable frame with the gear cleanly separated and floating.
+Camera and motion direction: Open close on the pad controller, then pull back and rise slightly
+to reveal the full studio. Midway, glide laterally across the desk. Foreground, midground, and
+background elements should shift at different rates as the camera moves, creating real parallax
+depth. Rack unit LEDs pulse and flicker subtly at different times. The pad controller's pads
+light up in a rhythmic, sequential pattern — as if notes or steps are being triggered — rather
+than flickering randomly. Keep this subtle and musical-feeling, not strobing or glitchy. Fine
+haze and dust particles drift slowly through the light beams. The DAW screen stays soft-focus
+throughout except for one brief moment where focus pulls slightly sharper on it as the session
+appears to fill with more colour and layers (matching the layers reference), then falls back out
+of focus as the camera continues past. End on a wider, calmer frame than the opening shot.
+
+Keep all of this smooth, slow, and stable enough for scroll scrubbing — no shake, no fast cuts,
+no chaotic motion.
 
 Visual style: cinematic, dark studio aesthetic, deep violet and blue highlights, near-black background,
 realistic materials, shallow depth of field but the subject stays readable, premium website hero
-background.
-
-Camera: one continuous uninterrupted shot — no cuts, no scene changes, no jump cuts. Push-in,
-orbit, controlled rotation, elegant pacing. Energetic but not chaotic.
+background. One continuous uninterrupted shot — no cuts, no scene changes, no jump cuts.
 
 Important constraints:
 - Use only the two reference images for identity — do not add or change gear
 - No text, no logos, no people, no hands
-- No fast cuts, no camera shake, no flicker, no chaotic motion
+- No fast cuts, no camera shake, no strobing or glitching, no chaotic motion
 - Keep enough dark negative space around the gear for website text and UI overlays
 
 Duration: 12 to 16 seconds. Aspect ratio: 16:9. Quality: high.
@@ -406,8 +414,11 @@ white/off-white on near-black.
 
 ### `#split` — pinned "how it's made" moment
 This replaces the old standalone "How It Works" 3-step section. Pin this while the background
-video plays through its separation phase. Fold the "Brief me / I produce / You own it" copy in
-here as short lines that reveal word-by-word as the user scrolls, rather than a generic diagram.
+video passes the DAW screen and the session fills up with more layers and colour. Fold the
+"Brief me / I produce / You own it" copy in here as short lines that reveal word-by-word as the
+user scrolls, timed so each line lands as the session gains another layer — the copy should feel
+tied to a track being built, not to a generic diagram. The pin releases as focus falls off the
+screen and the camera continues past.
 
 ### `#services`
 The 5 existing services, restyled as cards or a scroll-triggered list — not numbered 01–05. Copy,
