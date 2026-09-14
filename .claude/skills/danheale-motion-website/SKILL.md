@@ -177,10 +177,10 @@ borders/rules, and small labels — not on body text, not on every hover state, 
 Blue is for glows and rim-light effects, never for text.
 
 Tokens live in `shared.css` at the repo root, linked from every page as `/shared.css`. It holds
-the full set the pages use (`--bg-elevated`, `--bg-subtle`, `--accent-rgb`, `--accent-dim`,
-`--accent-glow`, `--accent-2-rgb`, `--text-mid`, `--text-dim`, `--border-hover`) on top of the
-four above. Never hardcode an accent colour in page CSS: use `var(--accent)` or
-`rgba(var(--accent-rgb), <alpha>)`. Inline SVG data URIs and SoundCloud embed colour parameters
+the full set the pages use (`--bg-rgb`, `--bg-elevated`, `--bg-subtle`, `--accent-rgb`,
+`--accent-hover`, `--accent-dim`, `--accent-glow`, `--accent-2-rgb`, `--text-mid`, `--text-dim`,
+`--border-hover`) on top of the four above. Never hardcode an accent colour in page CSS: use
+`var(--accent)`, `var(--accent-hover)` for hover states, or `rgba(var(--accent-rgb), <alpha>)`. Inline SVG data URIs and SoundCloud embed colour parameters
 use the hex `7c5cff` directly.
 
 ### Typography — audited from the live repo, do not change without approval

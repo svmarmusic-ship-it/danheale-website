@@ -58,8 +58,10 @@ fill. Blue is for glows and rim-light effects behind or beside elements, never f
 
 `shared.css` at the repo root, linked from every page (`index.html`, `404.html`, `/production/`,
 `/dj/`, `/suno-reproduction/`) as `/shared.css`. It carries the full set the pages use, not just
-the four above: `--bg-elevated`, `--bg-subtle`, `--accent-rgb`, `--accent-dim`, `--accent-glow`,
-`--accent-2-rgb`, `--text-mid`, `--text-dim`, `--border-hover`.
+the four above: `--bg-rgb`, `--bg-elevated`, `--bg-subtle`, `--accent-rgb`, `--accent-hover`,
+`--accent-dim`, `--accent-glow`, `--accent-2-rgb`, `--text-mid`, `--text-dim`, `--border-hover`.
+Button hover states use `--accent-hover` (`#9580ff`), a lighter violet, never a hand-picked hex.
+Translucent surfaces derived from the background use `rgba(var(--bg-rgb), <alpha>)`.
 
 Never write an accent colour as a literal in page CSS. Use `var(--accent)` for solid colour and
 `rgba(var(--accent-rgb), <alpha>)` for translucent glows, borders, and shadows. Inline SVG data

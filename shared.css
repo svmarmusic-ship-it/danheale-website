@@ -5,12 +5,14 @@
 :root {
   /* Surfaces */
   --bg:            #0b0a10;
+  --bg-rgb:        11, 10, 16;
   --bg-elevated:   #14121c;
   --bg-subtle:     #1a1826;
 
   /* Accent — violet. Logo, primary CTA, thin rules, small labels only. */
   --accent:        #7c5cff;
   --accent-rgb:    124, 92, 255;
+  --accent-hover:  #9580ff;
   --accent-dim:    rgba(var(--accent-rgb), 0.15);
   --accent-glow:   rgba(var(--accent-rgb), 0.06);
 
