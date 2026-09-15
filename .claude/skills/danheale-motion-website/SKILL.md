@@ -100,7 +100,8 @@ The site should be built around one strong idea:
 - **Stack:** the existing static HTML pages + vendored GSAP 3, ScrollTrigger, and Three.js (core +
   GLTFLoader, used only by the dormant 3D-sculpture hero) in `js/vendor/` + `js/motion.js` (reveals,
   dormant hero-video gating) + `js/hero-scrub.js` (the active hero) + `js/card-tilt.js` (sitewide
-  hover tilt/glow). No bundler, no framework, no build step — Vercel serves the repo root as-is
+  hover tilt/glow) + `js/cinemagraph-tilt.js` (tilt on the three section cinemagraphs). No bundler,
+  no framework, no build step — Vercel serves the repo root as-is
 - **Image model:** GPT Image 2 through Higgsfield MCP
 - **Video model:** Seedance 2.0 through Higgsfield MCP
 - **Background video formats:** `bg.mp4` — 16:9 1080p H.264, standard GOP, CRF 27, silent, ping-pong
@@ -155,7 +156,8 @@ danheale-website/
 │  ├─ hero-scrub.js    (the active hero: pinned ScrollTrigger scrubs bg-scrub.mp4 by scroll)
 │  ├─ hero-scale.js    (dormant — photo scale + parallax, no pin)
 │  ├─ hero-3d.js       (dormant — loads the GLB, rotates it, scroll-linked drift)
-│  └─ card-tilt.js     (active, sitewide — magnetic hover tilt + cursor glow on cards)
+│  ├─ card-tilt.js     (active, sitewide — magnetic hover tilt + cursor glow on cards)
+│  └─ cinemagraph-tilt.js  (active — cursor tilt + scale on the three section cinemagraphs)
 ├─ copy/
 │  ├─ brand-kit.md
 │  ├─ asset-plan.md
@@ -232,6 +234,16 @@ How the motion layer is wired:
   `.tilt-active` rule, because the sitewide reveal system leaves `filter: blur(0px)` as an inline
   style on every revealed element once its entrance tween completes, and inline always beats a
   stylesheet rule on the same property regardless of specificity.
+- `js/cinemagraph-tilt.js`: cursor-tracked tilt + scale-up (subtler than `card-tilt.js` — 5deg max,
+  1.03x) on the three section cinemagraphs: `.about-media` (gear-detail-loop), `.work-media`
+  (controller-detail-loop), and `.services-media` (fader-macro-loop, the dimmed Services backdrop).
+  The transform lands on the figure/div *around* the video, not the `<video>` element itself,
+  because `.about-media video`/`.work-media video` already carry their own scroll-parallax
+  transform (motion.js, direct on the video) — writing to the same element's `transform` from two
+  places would fight. `.services-media` sits behind the Services list at `z-index: -1`, so it never
+  receives its own mouse events; the hover area there is the whole `.services` section instead,
+  with the transform still landing on `.services-media`. Same mouse-only/reduced-motion gating as
+  `card-tilt.js`.
 - Dormant hero paths: `<img class="hero-image">` (CSS zoom-pull-back), `<video class="hero-video">`
   (plain loop), `<canvas class="hero-3d-canvas">` (rotating GLB sculpture), and `js/hero-scale.js`
   (photo scale + parallax, no pin) all sit commented out in `.hero-media` / the script tags;

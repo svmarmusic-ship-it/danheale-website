@@ -440,6 +440,26 @@
       transform: scale(1.015);
     }
 
+    /* ─── CINEMAGRAPH TILT ──────────────────────────────── */
+    /* The three section cinemagraphs (About, Selected Work, Services backdrop) tilt
+       and scale toward the cursor, js/cinemagraph-tilt.js. .about-media and
+       .work-media already carry their own scroll-parallax transform (set directly
+       on the <video> inside, motion.js); tilting the *figure* around that video
+       instead of the video itself avoids two systems fighting over one element's
+       transform. Same story for .services-media, which sits behind the Services
+       list at z-index:-1 — the hover area is the whole .services section (so the
+       cursor can be tracked over the visible list content sitting on top of it),
+       but the transform lands on this backdrop element. No transition while
+       tracking, so it follows the cursor instantly; .cinemagraph-settling enables
+       one only for the ease back to flat on mouse leave. */
+    .about-media, .work-media, .services-media { will-change: transform; }
+
+    .about-media.cinemagraph-settling,
+    .work-media.cinemagraph-settling,
+    .services-media.cinemagraph-settling {
+      transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
     /* ─── SERVICES ──────────────────────────────────────── */
     .services {
       padding: 100px 64px;
@@ -1474,7 +1494,7 @@
     <video muted loop playsinline preload="auto"
       poster="/assets/images/gear-detail-loop-poster.jpg"
       src="/assets/videos/gear-detail-loop.mp4"
-      aria-label="Close-up of a mixing console under violet and blue studio light: faders, knobs and VU meters, with a faint drift of haze"></video>
+      aria-label="Close-up of a mixing console under violet and blue studio light: faders, knobs and VU meters"></video>
   </figure>
 </section>
 
@@ -1909,6 +1929,7 @@
 <script src="/js/hero-3d.js" defer></script>
 -->
 <script src="/js/card-tilt.js" defer></script>
+<script src="/js/cinemagraph-tilt.js" defer></script>
 
 <!-- JSON-LD Structured Data -->
 <script type="application/ld+json">
