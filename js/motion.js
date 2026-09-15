@@ -14,11 +14,12 @@
     root.classList.remove('js');
   }
 
-  // ── Hero background video ─────────────────────────────────
-  // Plays as a simple, constant-scale looping background — no scroll-pin, no
-  // scroll-linked zoom. Only attach the source on desktop with motion allowed, so
-  // phones and reduced-motion users never download the file; CSS shows the poster
-  // image behind it instead.
+  // ── Hero background video (dormant) ───────────────────────
+  // The hero is currently the rotating 3D sculpture in js/hero-3d.js. This block
+  // is inert — `.hero-video` only exists inside an HTML comment right now — but
+  // it's left wired so uncommenting the markup brings the video hero straight
+  // back: plays as a simple, constant-scale looping background, no scroll-pin, no
+  // scroll-linked zoom, source attached only on desktop with motion allowed.
   var video = document.querySelector('.hero-video');
   if (video) {
     if (desktop && !reduced && video.dataset.src) {

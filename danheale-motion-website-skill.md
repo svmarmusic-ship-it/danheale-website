@@ -16,12 +16,19 @@ A rebuild of danheale.com — a single-page site for Dan Heale, a UK-based ghost
 mixing/mastering engineer, and DJ. The site should feel like a premium studio's site, not a
 generic AI-generated SaaS template.
 
-**Scope change 2026-09-14.** The original plan was a full-page video scrubbed by scroll position.
-That is gone. The hero is now the `hero-studio` still with a short cinematic pull-back (starts
-zoomed in, eases to normal scale with a slight upward drift while the hero is briefly pinned),
-and every other section uses calmer GSAP ScrollTrigger fade-up/stagger reveals as elements enter
-the viewport. The generated studio film and its loop encode are kept in the repo, unused, in
-case a video hero is wanted later.
+**Scope changes, 2026-09-14 (same day, in order).** The original plan was a full-page video
+scrubbed by scroll position. That went first, replaced by the `hero-studio` still with a CSS
+scroll-pinned zoom-out. That pull-back is gone too — it read as gimmicky rather than cinematic —
+replaced by `bg.mp4` as a plain looping background video, no pin, no scroll-linked scale. That in
+turn is now superseded by the current hero: an abstract 3D sculpture (a faceted violet/blue orb,
+Higgsfield image-to-3D → GLB) rendered with Three.js, rotating continuously with a subtle
+scroll-linked drift — again no pin. Every earlier hero (the studio still, the video) is kept in
+the repo and in `index.html` as commented-out dormant markup, not deleted, in case any of them is
+wanted back. The rest of the page separately got a second treatment: every section's GSAP
+ScrollTrigger reveal was upgraded from a flat fade-up to a 3D entrance (rotateX/rotateY, scale,
+blur-to-sharp, real CSS `perspective` on each element's parent, a hand-written custom easing) —
+see "How the motion layer is wired" below. That reveal system is unrelated to the hero and applies
+site-wide regardless of which hero is active.
 
 The hero film is one continuous shot through Dan's studio — opening close on the pad controller,
 pulling back to reveal the desk, monitors, keyboard, rack and cables, then gliding across the
@@ -61,8 +68,9 @@ The site should be built around one strong idea:
 - **Website goal:** Move away from the current numbered-card, stat-marquee, generic-SaaS-template
   look toward something that reads as a real working studio's site
 - **Build environment:** Claude Code, existing repo, deploys to Vercel via GitHub push
-- **Stack:** the existing static HTML pages + vendored GSAP 3 and ScrollTrigger in `js/vendor/`
-  + `js/motion.js`. No bundler, no framework, no build step — Vercel serves the repo root as-is
+- **Stack:** the existing static HTML pages + vendored GSAP 3, ScrollTrigger, and Three.js (core +
+  GLTFLoader) in `js/vendor/` + `js/motion.js` (reveals, dormant hero-video gating) + `js/hero-3d.js`
+  (the active hero). No bundler, no framework, no build step — Vercel serves the repo root as-is
 - **Image model:** GPT Image 2 through Higgsfield MCP
 - **Video model:** Seedance 2.0 through Higgsfield MCP
 - **Background video format:** 16:9 1080p H.264, standard GOP, CRF 27, silent, ping-pong loop (~7 MB)
@@ -79,18 +87,30 @@ danheale-website/
 │  │  ├─ studio-layers-reference.png
 │  │  ├─ gear-detail.png
 │  │  ├─ controller-detail.png
-│  │  ├─ hero-poster.jpg              (hero-studio.png as 1920px JPEG — the hero image)
-│  │  ├─ hero-poster@2x.jpg           (full 2688px JPEG, served via srcset on retina)
-│  │  ├─ hero-video-poster.jpg        (first frame of the raw clip — <video poster>, dormant)
-│  │  ├─ gear-detail.jpg              (1600px JPEG served on the page)
-│  │  ├─ controller-detail.jpg        (1600px JPEG served on the page)
+│  │  ├─ hero-poster.jpg, hero-poster@2x.jpg   (hero-studio.png as JPEG — dormant still hero)
+│  │  ├─ hero-video-poster.jpg        (first frame of the raw clip — dormant video hero)
+│  │  ├─ hero-sculpture-source.png    (2048px concept render fed to image-to-3D)
+│  │  ├─ hero-3d-poster.jpg           (real capture of the live Three.js canvas — active poster)
+│  │  ├─ gear-detail.jpg, controller-detail.jpg   (1600px JPEGs, dormant — see cinemagraphs below)
+│  │  ├─ gear-detail-loop-poster.jpg, controller-detail-loop-poster.jpg,
+│  │  │  fader-macro-loop-poster.jpg  (poster frames for the three cinemagraph loops)
+│  │  ├─ fader-macro.png              (still behind the Services cinemagraph, chained off the hero)
 │  │  └─ superseded/            (archived gold-direction renders, not references)
-│  └─ videos/
-│     ├─ danheale-scroll-background-raw.mp4   (Seedance output, kept as the source)
-│     └─ bg.mp4                               (hero loop — kept, currently unused)
+│  ├─ videos/
+│  │  ├─ danheale-scroll-background-raw.mp4   (Seedance output, kept as the source)
+│  │  ├─ bg.mp4                               (dormant hero loop)
+│  │  ├─ gear-detail-loop.mp4, controller-detail-loop.mp4, fader-macro-loop.mp4
+│  │  │  (active — About / Selected Work / Services cinemagraphs, ~200-500 KB each)
+│  │  └─ raw/                                 (un-encoded Seedance outputs for the three loops)
+│  └─ 3d/
+│     ├─ hero-sculpture-source.glb    (Meshy output before optimisation, ~10 MB, kept as source)
+│     └─ hero-sculpture.glb           (texture-resized to 1024px, ~1.75 MB — the one the page loads)
 ├─ js/
 │  ├─ vendor/gsap.min.js, vendor/ScrollTrigger.min.js   (pinned, no CDN)
-│  └─ motion.js                       (hero video source gating + all scroll reveals)
+│  ├─ vendor/three.module.min.js, vendor/GLTFLoader.js, vendor/BufferGeometryUtils.js
+│  │  (pinned from the `three` npm package; GLTFLoader's imports patched to relative paths)
+│  ├─ motion.js       (dormant hero-video gating, section cinemagraph autoplay, all scroll reveals)
+│  └─ hero-3d.js       (the active hero: loads the GLB, rotates it, scroll-linked drift)
 ├─ copy/
 │  ├─ brand-kit.md
 │  ├─ asset-plan.md
@@ -134,12 +154,25 @@ How the motion layer is wired:
 - `data-reveal` = single element fades up (0.8 s, power3.out, from 28px, `once: true`, trigger at
   top 88%). `data-reveal-group` = direct children stagger in (0.75 s, 0.11 s apart, trigger at
   top 85%). `data-parallax` = the `<img>` inside drifts slower than scroll on desktop only.
-- The hero `<img class="hero-image">` gets `scale(1.13)` from CSS under `.js`, then `motion.js`
-  tweens it to scale 1 / `yPercent: -5` with `scrub: 0.6`. Desktop pins the hero for `+=55%`
-  of the viewport so the pull-back has room; phones use `end: 'bottom top'` with no pin. The
-  headline/subhead keep their existing CSS fade-up on load, layered over the zoom.
-- Dormant video path: the `<video class="hero-video">` markup sits commented out in
-  `.hero-media`; `motion.js` still gates its `src` on desktop + motion allowed if it is put back.
+- `data-reveal`/`data-reveal-group` are now a 3D entrance, not a flat fade-up: singles tip up
+  from `rotateX: 26deg` at 90% scale and 7px blur to flat/full-size/sharp (1.1 s); group children
+  alternate `rotateY: ±26deg` by index plus a shared `rotateX: 10deg` (1.0 s, 0.13 s stagger). Both
+  use a hand-written cubic-bezier ease (`0.16, 1, 0.3, 1`, no CustomEase plugin needed) instead of
+  a named GSAP ease. The rotation only reads as 3D because real CSS `perspective` is set on each
+  target's actual parent element (13 containers — grids, lists, sections) — not a per-element
+  `transformPerspective` trick, which would give each item its own vanishing point instead of a
+  shared one.
+- The active hero (`js/hero-3d.js`): a `<canvas id="hero-3d-canvas">` inside `.hero-media` loads
+  `assets/3d/hero-sculpture.glb` via the vendored GLTFLoader, centers/scales it to a consistent
+  size, and spins it continuously (`baseSpin` rad/s). A plain `scroll` listener (no ScrollTrigger
+  needed here) drives `scrollProgress` = hero scroll fraction 0–1, which speeds up the spin and
+  drifts the whole rig down/back slightly — a parallax, never a pin. Gated on desktop +
+  motion-allowed + WebGL feature-detect, same pattern as the dormant video/image heroes; everyone
+  else gets `hero-3d-poster.jpg` as `.hero-media`'s CSS background (no canvas, no GLB fetched).
+  Headline/subhead keep their original CSS fade-up on load, unrelated to any of this.
+- Dormant hero paths: both the `<img class="hero-image">` (CSS zoom-pull-back) and
+  `<video class="hero-video">` markup sit commented out in `.hero-media`; `motion.js` still gates
+  the video's `src` on desktop + motion allowed if it's ever uncommented back in.
 
 ---
 

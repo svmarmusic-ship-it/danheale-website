@@ -194,7 +194,11 @@
       isolation: isolate;
     }
 
-    /* Hero background: looping video on desktop, still poster on phones / reduced motion */
+    /* Hero background: the static hero-studio.png (served as hero-poster.jpg), with
+       a restrained scroll-linked scale-down (108% -> 100%) and a slight parallax
+       drift — no pin, no scroll-jacking. Desktop only, same convention as the
+       About/Work parallax in motion.js; phones and reduced motion see it at rest.
+       See js/hero-scale.js. */
     .hero-media {
       position: absolute;
       inset: 0;
@@ -203,6 +207,35 @@
       background: var(--bg) url('/assets/images/hero-poster.jpg') center / cover no-repeat;
     }
 
+    .hero-image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      will-change: transform;
+    }
+
+    .hero-3d-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .hero-3d-canvas[hidden] { display: none; }
+
+    /* Two earlier heroes, kept dormant — a rotating abstract 3D sculpture, and before
+       that a plain looping video (CSS only; their markup is commented out in the
+       .hero-media block below). A third attempt, a particle system that assembled
+       the photo from scattered points on scroll, was tried and removed entirely
+       (not kept dormant) — it read as a gimmick rather than cinematic. To re-enable
+       either kept hero: uncomment its element below, comment out the active
+       <img class="hero-image">, and re-point .hero-media's background at
+       hero-3d-poster.jpg or hero-video-poster.jpg. js/hero-3d.js and
+       js/motion.js's video-gating block still work unchanged; scripts/swap-bg-video.sh
+       still builds bg.mp4.
     .hero-video {
       position: absolute;
       inset: 0;
@@ -212,6 +245,7 @@
     }
 
     .hero-video[hidden] { display: none; }
+    */
 
     .hero-tint {
       position: absolute;
@@ -222,7 +256,7 @@
     }
 
     @media (max-width: 768px), (prefers-reduced-motion: reduce) {
-      .hero-video { display: none; }
+      .hero-3d-canvas { display: none; }
     }
 
     .hero::before {
@@ -331,6 +365,58 @@
     }
 
     .section-title em { font-style: italic; color: var(--accent); }
+
+    /* ─── MAGNETIC TILT ─────────────────────────────────── */
+    /* How It Works steps, Reviews, Services rows, and Shop cards. js/card-tilt.js
+       sets --glow-x/--glow-y and the transform directly with no transition, so the
+       tilt tracks the cursor instantly; a transition is enabled only for the
+       settle-back on mouse leave, via .tilt-settling. The glow lives on ::after so
+       it never collides with .review-card's own ::before quote mark. Mouse-only —
+       untouched by JS on touch, which instead gets the plain :active rule below. */
+    .how-step, .review-card, .service-row, .product-card {
+      --glow-x: 50%;
+      --glow-y: 50%;
+      position: relative;
+      transition: filter 0.4s ease;
+    }
+
+    .how-step::after, .review-card::after, .service-row::after, .product-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+      background: radial-gradient(circle at var(--glow-x) var(--glow-y),
+        rgba(var(--accent-rgb), 0.16), rgba(var(--accent-2-rgb), 0.06) 45%, transparent 70%);
+    }
+
+    .how-step.tilt-active::after, .review-card.tilt-active::after,
+    .service-row.tilt-active::after, .product-card.tilt-active::after {
+      opacity: 1;
+    }
+
+    /* The lift shadow itself is set in card-tilt.js, not here — every one of these
+       four is inside a [data-reveal-group], and the reveal system's GSAP tween
+       always leaves `filter: blur(0px)` as an inline style once it finishes (that's
+       just how GSAP tweens work). An inline style beats any stylesheet rule
+       regardless of specificity, so a CSS value for .tilt-active's filter could
+       never actually apply — only overwriting it from JS, the same way this file
+       already overwrites transform, works. It's drop-shadow rather than box-shadow
+       because .review-card and .product-card both need their own overflow:hidden
+       (quote-mark clip, image crop), which would otherwise clip a box-shadow on the
+       same element down to nothing.
+    */
+
+    .how-step.tilt-settling, .review-card.tilt-settling,
+    .service-row.tilt-settling, .product-card.tilt-settling {
+      transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), filter 0.4s ease;
+    }
+
+    /* Tap feedback everywhere, including touch, where the JS above never runs. */
+    .how-step:active, .review-card:active, .service-row:active, .product-card:active {
+      transform: scale(1.015);
+    }
 
     /* ─── SERVICES ──────────────────────────────────────── */
     .services {
@@ -549,14 +635,11 @@
       overflow: hidden;
       text-decoration: none;
       color: inherit;
-      transition: border-color 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease;
+      transition: border-color 0.35s ease, filter 0.4s ease;
     }
 
     .product-card:hover {
       border-color: rgba(var(--accent-rgb), 0.32);
-      transform: translateY(-4px);
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25),
-                  0 0 28px rgba(var(--accent-rgb), 0.07);
     }
 
     .product-img {
@@ -1268,9 +1351,16 @@
   <a href="#contact" class="cta-btn hero-animate">Start your project <span class="arrow" aria-hidden="true">&#8594;</span></a>
 
   <div class="hero-media" aria-hidden="true">
+    <img class="hero-image"
+      src="/assets/images/hero-poster.jpg"
+      srcset="/assets/images/hero-poster.jpg 1920w, /assets/images/hero-poster@2x.jpg 2688w"
+      sizes="100vw" alt="" decoding="async" fetchpriority="high">
+    <!-- Two earlier heroes, kept dormant — see the matching CSS comment above.
+    <canvas class="hero-3d-canvas" id="hero-3d-canvas"></canvas>
     <video class="hero-video" muted loop playsinline autoplay preload="auto"
       poster="/assets/images/hero-video-poster.jpg"
       data-src="/assets/videos/bg.mp4"></video>
+    -->
     <div class="hero-tint"></div>
   </div>
 </section>
@@ -1787,6 +1877,11 @@
 <script src="/js/vendor/gsap.min.js" defer></script>
 <script src="/js/vendor/ScrollTrigger.min.js" defer></script>
 <script src="/js/motion.js" defer></script>
+<script src="/js/hero-scale.js" defer></script>
+<!-- Dormant hero, kept for later — see the CSS/markup comments in .hero-media.
+<script src="/js/hero-3d.js" defer></script>
+-->
+<script src="/js/card-tilt.js" defer></script>
 
 <!-- JSON-LD Structured Data -->
 <script type="application/ld+json">
