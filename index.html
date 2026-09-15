@@ -194,26 +194,38 @@
       isolation: isolate;
     }
 
-    /* Hero background: the static hero-studio.png (served as hero-poster.jpg), with
-       a restrained scroll-linked scale-down (108% -> 100%) and a slight parallax
-       drift — no pin, no scroll-jacking. Desktop only, same convention as the
-       About/Work parallax in motion.js; phones and reduced motion see it at rest.
-       See js/hero-scale.js. */
+    /* Hero background: a pinned, scroll-scrubbed walkthrough of bg-scrub.mp4 (the
+       first 11s of the raw studio clip — push-in/orbit/glide — re-encoded
+       all-keyframe so seeking is smooth in both directions). Scroll progress maps
+       directly to the video's currentTime; the hero pins for the scrub, then
+       releases. Desktop + motion-allowed only. See js/hero-scrub.js. */
     .hero-media {
       position: absolute;
       inset: 0;
       z-index: -1;
       overflow: hidden;
-      background: var(--bg) url('/assets/images/hero-poster.jpg') center / cover no-repeat;
+      background: var(--bg) url('/assets/images/hero-scrub-poster.jpg') center / cover no-repeat;
     }
 
-    .hero-image {
+    .hero-scrub-video {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
-      will-change: transform;
+    }
+
+    .hero-scrub-video[hidden] { display: none; }
+
+    /* A solid near-black cover, faded in only during the last stretch of the pinned
+       scrub (see js/hero-scrub.js), so unpinning lands on a plain dark frame that
+       matches the next section's own background — a soft crossfade, not a hard cut. */
+    .hero-fade-cover {
+      position: absolute;
+      inset: 0;
+      background: var(--bg);
+      opacity: 0;
+      pointer-events: none;
     }
 
     .hero-3d-canvas {
@@ -226,16 +238,26 @@
 
     .hero-3d-canvas[hidden] { display: none; }
 
-    /* Two earlier heroes, kept dormant — a rotating abstract 3D sculpture, and before
-       that a plain looping video (CSS only; their markup is commented out in the
-       .hero-media block below). A third attempt, a particle system that assembled
-       the photo from scattered points on scroll, was tried and removed entirely
-       (not kept dormant) — it read as a gimmick rather than cinematic. To re-enable
-       either kept hero: uncomment its element below, comment out the active
-       <img class="hero-image">, and re-point .hero-media's background at
-       hero-3d-poster.jpg or hero-video-poster.jpg. js/hero-3d.js and
-       js/motion.js's video-gating block still work unchanged; scripts/swap-bg-video.sh
-       still builds bg.mp4.
+    /* Three earlier heroes, kept dormant (CSS only; their markup is commented out in
+       the .hero-media block below) — a static photo with a restrained scale/parallax
+       drift, a rotating abstract 3D sculpture, and before that a plain looping video.
+       A fourth attempt, a particle system that assembled the photo from scattered
+       points on scroll, was tried and removed entirely (not kept dormant) — it read
+       as a gimmick rather than cinematic. To re-enable any kept hero: uncomment its
+       element below, comment out the active <video class="hero-scrub-video">, and
+       re-point .hero-media's background at hero-poster.jpg, hero-3d-poster.jpg, or
+       hero-video-poster.jpg. js/hero-scale.js, js/hero-3d.js, and js/motion.js's
+       video-gating block all still work unchanged; scripts/swap-bg-video.sh still
+       builds bg.mp4.
+    .hero-image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      will-change: transform;
+    }
+
     .hero-video {
       position: absolute;
       inset: 0;
@@ -256,7 +278,7 @@
     }
 
     @media (max-width: 768px), (prefers-reduced-motion: reduce) {
-      .hero-3d-canvas { display: none; }
+      .hero-scrub-video, .hero-3d-canvas { display: none; }
     }
 
     .hero::before {
@@ -1351,17 +1373,21 @@
   <a href="#contact" class="cta-btn hero-animate">Start your project <span class="arrow" aria-hidden="true">&#8594;</span></a>
 
   <div class="hero-media" aria-hidden="true">
+    <video class="hero-scrub-video" muted playsinline preload="auto"
+      poster="/assets/images/hero-scrub-poster.jpg"
+      data-src="/assets/videos/bg-scrub.mp4"></video>
+    <!-- Three earlier heroes, kept dormant — see the matching CSS comment above.
     <img class="hero-image"
       src="/assets/images/hero-poster.jpg"
       srcset="/assets/images/hero-poster.jpg 1920w, /assets/images/hero-poster@2x.jpg 2688w"
       sizes="100vw" alt="" decoding="async" fetchpriority="high">
-    <!-- Two earlier heroes, kept dormant — see the matching CSS comment above.
     <canvas class="hero-3d-canvas" id="hero-3d-canvas"></canvas>
     <video class="hero-video" muted loop playsinline autoplay preload="auto"
       poster="/assets/images/hero-video-poster.jpg"
       data-src="/assets/videos/bg.mp4"></video>
     -->
     <div class="hero-tint"></div>
+    <div class="hero-fade-cover"></div>
   </div>
 </section>
 
@@ -1877,8 +1903,9 @@
 <script src="/js/vendor/gsap.min.js" defer></script>
 <script src="/js/vendor/ScrollTrigger.min.js" defer></script>
 <script src="/js/motion.js" defer></script>
+<script src="/js/hero-scrub.js" defer></script>
+<!-- Dormant heroes, kept for later — see the CSS/markup comments in .hero-media.
 <script src="/js/hero-scale.js" defer></script>
-<!-- Dormant hero, kept for later — see the CSS/markup comments in .hero-media.
 <script src="/js/hero-3d.js" defer></script>
 -->
 <script src="/js/card-tilt.js" defer></script>
