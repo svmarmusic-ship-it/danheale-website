@@ -45,12 +45,19 @@
     body {
       background: var(--bg);
       color: var(--text);
-      perspective: 1600px;
       font-family: 'DM Sans', sans-serif;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
+    /* No `perspective` here on purpose: every section that needs 3D depth for its
+       card-tilt/reveal effects already declares its own local perspective
+       (.services, .about-content, .reviews, .shop-preview, .how-it-works,
+       .my-work) — a `perspective` on body was redundant for all of them, and it
+       silently broke every `position: fixed` descendant sitewide, including
+       `nav`: a `perspective`/`transform`/`filter` on an ancestor makes it the
+       containing block for fixed descendants, so nav was scrolling away with
+       the page instead of staying fixed, only really visible near the very top. */
 
     /* ─── NAV ───────────────────────────────────────────── */
     nav {
@@ -194,18 +201,61 @@
       isolation: isolate;
     }
 
-    /* Hero background: a pinned, scroll-scrubbed walkthrough of bg-scrub.mp4 (the
-       first 11s of the raw studio clip — push-in/orbit/glide — re-encoded
-       all-keyframe so seeking is smooth in both directions). Scroll progress maps
-       directly to the video's currentTime; the hero pins for the scrub, then
-       releases. Desktop + motion-allowed only. See js/hero-scrub.js. */
+    /* Hero background: hero-studio.png with a restrained scale + parallax drift
+       tied to scroll position (js/hero-scale.js) — no pin, no scroll-hijacking,
+       the section sits at its own natural height in normal document flow, so
+       Services always begins immediately after it with no gap. Desktop only;
+       phones and reduced motion just see the still image. This replaces a
+       scroll-scrubbed video hero (bg-scrub.mp4 + js/hero-scrub.js) that went
+       through five consecutive layout bugs across a pin-based version and a
+       sticky rewrite — kept dormant below rather than deleted, in case it's
+       worth revisiting with more time. */
     .hero-media {
       position: absolute;
       inset: 0;
       z-index: -1;
       overflow: hidden;
-      background: var(--bg) url('/assets/images/hero-scrub-poster.jpg') center / cover no-repeat;
+      background: var(--bg) url('/assets/images/hero-poster.jpg') center / cover no-repeat;
     }
+
+    .hero-image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      will-change: transform;
+    }
+
+    /* Three later heroes, kept dormant (CSS only; their markup is commented out in
+       the .hero-media block below) — a rotating abstract 3D sculpture, a plain
+       looping video, and the scroll-scrubbed video walkthrough mentioned above.
+       A separate, particle-system attempt was tried and removed entirely (not
+       kept dormant) — it read as a gimmick rather than cinematic. To re-enable
+       any kept hero: uncomment its element below, comment out the active
+       <img class="hero-image">, and re-point .hero-media's background at
+       hero-3d-poster.jpg, hero-video-poster.jpg, or hero-scrub-poster.jpg.
+       js/hero-3d.js, js/hero-scrub.js, and js/motion.js's video-gating block all
+       still work unchanged; scripts/swap-bg-video.sh still builds bg.mp4.
+    .hero-3d-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .hero-3d-canvas[hidden] { display: none; }
+
+    .hero-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .hero-video[hidden] { display: none; }
 
     .hero-scrub-video {
       position: absolute;
@@ -217,9 +267,6 @@
 
     .hero-scrub-video[hidden] { display: none; }
 
-    /* A solid near-black cover, faded in only during the last stretch of the pinned
-       scrub (see js/hero-scrub.js), so unpinning lands on a plain dark frame that
-       matches the next section's own background — a soft crossfade, not a hard cut. */
     .hero-fade-cover {
       position: absolute;
       inset: 0;
@@ -227,46 +274,6 @@
       opacity: 0;
       pointer-events: none;
     }
-
-    .hero-3d-canvas {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      display: block;
-    }
-
-    .hero-3d-canvas[hidden] { display: none; }
-
-    /* Three earlier heroes, kept dormant (CSS only; their markup is commented out in
-       the .hero-media block below) — a static photo with a restrained scale/parallax
-       drift, a rotating abstract 3D sculpture, and before that a plain looping video.
-       A fourth attempt, a particle system that assembled the photo from scattered
-       points on scroll, was tried and removed entirely (not kept dormant) — it read
-       as a gimmick rather than cinematic. To re-enable any kept hero: uncomment its
-       element below, comment out the active <video class="hero-scrub-video">, and
-       re-point .hero-media's background at hero-poster.jpg, hero-3d-poster.jpg, or
-       hero-video-poster.jpg. js/hero-scale.js, js/hero-3d.js, and js/motion.js's
-       video-gating block all still work unchanged; scripts/swap-bg-video.sh still
-       builds bg.mp4.
-    .hero-image {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      will-change: transform;
-    }
-
-    .hero-video {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .hero-video[hidden] { display: none; }
     */
 
     .hero-tint {
@@ -467,6 +474,7 @@
       overflow: hidden;
       isolation: isolate;
       perspective: 1400px;
+      background: var(--bg);
     }
 
     /* Dimmed cinemagraph backdrop: a fader/knob macro, barely-there behind the list. */
@@ -1393,21 +1401,24 @@
   <a href="#contact" class="cta-btn hero-animate">Start your project <span class="arrow" aria-hidden="true">&#8594;</span></a>
 
   <div class="hero-media" aria-hidden="true">
-    <video class="hero-scrub-video" muted playsinline preload="auto"
-      poster="/assets/images/hero-scrub-poster.jpg"
-      data-src="/assets/videos/bg-scrub.mp4"></video>
-    <!-- Three earlier heroes, kept dormant — see the matching CSS comment above.
     <img class="hero-image"
       src="/assets/images/hero-poster.jpg"
       srcset="/assets/images/hero-poster.jpg 1920w, /assets/images/hero-poster@2x.jpg 2688w"
       sizes="100vw" alt="" decoding="async" fetchpriority="high">
+    <!-- Three later heroes, kept dormant — see the matching CSS comment above. The
+         scroll-scrubbed video hero (bg-scrub.mp4/bg.mp4 + js/hero-scrub.js) caused
+         five consecutive layout bugs across pinning and sticky rewrites; kept here
+         unused rather than deleted, in case it's worth revisiting with more time.
     <canvas class="hero-3d-canvas" id="hero-3d-canvas"></canvas>
     <video class="hero-video" muted loop playsinline autoplay preload="auto"
       poster="/assets/images/hero-video-poster.jpg"
       data-src="/assets/videos/bg.mp4"></video>
+    <video class="hero-scrub-video" muted playsinline preload="auto"
+      poster="/assets/images/hero-scrub-poster.jpg"
+      data-src="/assets/videos/bg-scrub.mp4"></video>
+    <div class="hero-fade-cover"></div>
     -->
     <div class="hero-tint"></div>
-    <div class="hero-fade-cover"></div>
   </div>
 </section>
 
@@ -1923,10 +1934,10 @@
 <script src="/js/vendor/gsap.min.js" defer></script>
 <script src="/js/vendor/ScrollTrigger.min.js" defer></script>
 <script src="/js/motion.js" defer></script>
-<script src="/js/hero-scrub.js" defer></script>
-<!-- Dormant heroes, kept for later — see the CSS/markup comments in .hero-media.
 <script src="/js/hero-scale.js" defer></script>
+<!-- Dormant heroes, kept for later — see the CSS/markup comments in .hero-media.
 <script src="/js/hero-3d.js" defer></script>
+<script src="/js/hero-scrub.js" defer></script>
 -->
 <script src="/js/card-tilt.js" defer></script>
 <script src="/js/cinemagraph-tilt.js" defer></script>

@@ -16,7 +16,7 @@ A rebuild of danheale.com — a single-page site for Dan Heale, a UK-based ghost
 mixing/mastering engineer, and DJ. The site should feel like a premium studio's site, not a
 generic AI-generated SaaS template.
 
-**Scope changes, 2026-09-14 → 2026-09-15 (in order).** The original plan was a full-page video
+**Scope changes, 2026-09-14 → 2026-09-16 (in order).** The original plan was a full-page video
 scrubbed by scroll position. That went first, replaced by the `hero-studio` still with a CSS
 scroll-pinned zoom-out. That pull-back is gone too — it read as gimmicky rather than cinematic —
 replaced by `bg.mp4` as a plain looping background video, no pin, no scroll-linked scale. That was
@@ -27,36 +27,47 @@ same reason ("gimmicky"). Next, a scroll-assembled particle system (the hero pho
 entirely rather than kept dormant. That was replaced with a deliberately plain, non-pinned photo
 scale + parallax (`js/hero-scale.js`) — calm, not cinematic in itself, but a known-good baseline.
 
-**Current hero, `js/hero-scrub.js`:** a pinned scroll-scrubbed video walkthrough. The hero section
-pins (`ScrollTrigger` `pin: true`) for ~1 viewport-height of scroll (roughly 2-3 normal scroll
-actions, not five), and scroll progress across that pinned range maps directly to
-`bg-scrub.mp4`'s `currentTime` (0 → 8 s) — scrolling "walks" the camera through the studio like a
-property tour, forward and backward. Headline/subhead, the video itself, and a solid
-`var(--bg)`-colored cover all fade together over the final quarter of the scrub — one exit, not
-the text leaving early while the video keeps panning on its own into an empty frame — so unpinning
-lands on a settled dark frame and flows into the next section as a crossfade rather than a hard cut. Every earlier hero
-(studio still, plain video, 3D sculpture, and now `hero-scale.js`) is kept in the repo and in
-`index.html` as commented-out dormant markup, not deleted — only the particle system was removed
-outright, per explicit instruction. Separately, every section's GSAP ScrollTrigger reveal was
-upgraded from a flat fade-up to a 3D entrance (rotateX/rotateY, scale, blur-to-sharp, real CSS
-`perspective` on each element's parent, a hand-written custom easing) — see "How the motion layer
-is wired" below. That reveal system is unrelated to the hero and applies site-wide regardless of
-which hero is active. Cards across the site (How It Works, Reviews, Services rows, Shop) also got
-a mouse-tracked magnetic 3D tilt + cursor-following glow on hover (`js/card-tilt.js`), independent
-of both the hero and the reveal system.
+**A scroll-scrubbed video walkthrough of `bg-scrub.mp4` then replaced that** and went through five
+consecutive layout bugs before being abandoned: (1) a GSAP `pin: true` version whose pin distance
+was double what was intended, (2) a fix for that which left a dead scroll gap before Services, (3)
+a fix for *that* which made hero and Services overlap during a crossfade, (4) a fix for that where
+GSAP's transform-based pin turned out not to clear its own `translate()` on release, skipping
+Services' own top content, and (5) a full rewrite dropping GSAP's `pin` entirely in favor of native
+`position: sticky` — which worked cleanly on its own terms but was still a scroll-scrubbed video,
+and the accumulated bug count was reason enough to abandon the approach rather than ship it. **The
+hero is back to `js/hero-scale.js`** — the plain photo scale + parallax from before the video
+detour — as the current, active, and intended-to-stay hero. `bg.mp4`, `bg-scrub.mp4`,
+`js/hero-scrub.js`, and `scripts/encode-scrub-hero.sh` are all kept in the repo and in
+`index.html` as commented-out dormant markup, unused rather than deleted, in case the video
+approach is worth revisiting with more time to get the scroll mechanics right. Separately, every
+section's GSAP ScrollTrigger reveal was upgraded from a flat fade-up to a 3D entrance
+(rotateX/rotateY, scale, blur-to-sharp, real CSS `perspective` on each element's parent, a
+hand-written custom easing) — see "How the motion layer is wired" below. That reveal system is
+unrelated to the hero and applies site-wide regardless of which hero is active. Cards across the
+site (How It Works, Reviews, Services rows, Shop) also got a mouse-tracked magnetic 3D tilt +
+cursor-following glow on hover (`js/card-tilt.js`), independent of both the hero and the reveal
+system.
 
-**Load-bearing gotcha:** the reveal system's `body { perspective: 1600px }` (needed for the
-sitewide 3D card entrances) makes `<body>` a containing block for any `position: fixed`
-descendant, which silently breaks GSAP's default fixed-position pin — a pinned element's `top`
-tracks scroll instead of holding still, so it looks like the pin isn't working even though
-`ScrollTrigger` reports it as pinned and scroll-progress math is otherwise correct. Any future pin
-(hero or otherwise) needs `pinType: 'transform'` in its `scrollTrigger` config to sidestep this
-without touching the sitewide `perspective` setup.
+**Load-bearing gotcha (unrelated to the hero, still real, still fixed):** `body` must never carry
+`perspective`/`transform`/`filter` — any of those make it the containing block for every
+`position: fixed` descendant on the page, which silently breaks them: `nav` scrolled away with the
+page instead of staying fixed (only really visible near the very top). The sitewide 3D reveal
+system used to put `perspective: 1600px` on `body` for its card entrances, but it was redundant —
+every section that actually needs 3D depth already declares its own local `perspective`
+(`.services`, `.about-content`, `.reviews`, `.shop-preview`, `.how-it-works`, `.my-work`) — so it's
+gone from `body` entirely now.
 
-The hero film is one continuous shot through Dan's studio — opening close on the pad controller,
-pulling back to reveal the desk, monitors, keyboard, rack and cables, then gliding across the
-room — while the DAW session on screen visibly builds up with more layers and colour, mirroring
-how a track comes together.
+**Retired approach, for the record (all dormant, not deleted):** the final pin-based video hero used
+`pinSpacing: false` with JS-computed wrapper heights around both `.hero` and (briefly) `#services`,
+trying to give each pin exactly the scroll distance it needed without GSAP's default spacer
+double-reserving space — this is what surfaced the transform-not-clearing bug (#4 above). The
+version after that dropped pinning for `position: sticky` inside a plain, JS-free 180vh container,
+reading scroll progress with a pin-less `ScrollTrigger` — this one didn't have a layout bug, but by
+that point the video hero itself was abandoned as more trouble than it was worth for now. The video
+concept, if revisited later, is one continuous shot through Dan's studio — opening close on the pad
+controller, pulling back to reveal the desk, monitors, keyboard, rack and cables, then gliding
+across the room — while the DAW session on screen visibly builds up with more layers and colour,
+mirroring how a track comes together.
 
 This supersedes the earlier React Three Fiber / GLB approach on this project (the `three-scenes`
 Vite project and its dependency). That approach produced AI renders that read as amateur when
@@ -77,21 +88,24 @@ The site should be built around one strong idea:
 
 ## Project facts
 
-- **Project type:** Cinematic landing page rebuild (pinned scroll-scrubbed hero video + scroll reveals)
+- **Project type:** Cinematic landing page rebuild (photo-scale hero + scroll reveals)
 - **Site:** danheale.com (existing repo: `svmarmusic-ship-it/danheale-website`)
 - **Subject:** Dan Heale — ghost producer, mixing/mastering engineer, DJ
-- **Core interaction:** Hero pins for ~1 viewport-height of scroll and scrubs `bg-scrub.mp4`
-  frame-by-frame (0–8 s) with scroll position, forward and backward; headline/subhead and the video
-  itself fade out together over the final quarter of the scrub, crossfading into the next section;
-  unpinned/dormant
-  photo-scale, plain-video, and 3D-sculpture heroes are kept commented out. GSAP ScrollTrigger
-  fade-up/stagger 3D-entrance reveals on every other section; magnetic tilt + glow on hover for
-  cards (How It Works, Reviews, Services, Shop)
-- **Main video concept:** One continuous camera move through the studio (close on the pad
-  controller, pull back and rise to reveal the full desk, glide laterally across it, settle on a
-  wider calmer frame) while the DAW session on screen fills up with more layers and colour — the
-  track being built, not gear coming apart. Raw Seedance output is ~15 s; only the first 8 s (the
-  camera-motion portion) is used for the scrub — the last ~4 s settle into a static frame
+- **Core interaction:** Hero is `hero-studio.png` (`.hero-image`) at its natural single-viewport
+  height, no pin, no scroll-hijacking of any kind — a restrained scale (108% → 100%) + parallax
+  drift tied to scroll position via `js/hero-scale.js`, settling by ~70% of the hero's own height.
+  Headline/subhead keep a CSS fade-up on load, unrelated to scroll. Services begins immediately
+  after the hero's natural height with no gap, since nothing about the hero touches layout beyond
+  its own box. Dormant: a scroll-scrubbed video walkthrough (5 consecutive layout bugs — see the
+  scope-changes note above), a plain looping video, and a 3D sculpture, all kept commented out.
+  GSAP ScrollTrigger fade-up/stagger 3D-entrance reveals on every other section; magnetic tilt +
+  glow on hover for cards (How It Works, Reviews, Services, Shop)
+- **Main video concept (dormant, not currently used):** One continuous camera move through the
+  studio (close on the pad controller, pull back and rise to reveal the full desk, glide laterally
+  across it, settle on a wider calmer frame) while the DAW session on screen fills up with more
+  layers and colour — the track being built, not gear coming apart. Raw Seedance output is ~15 s;
+  `bg-scrub.mp4` trims it to the first 8 s (the camera-motion portion) for scrubbing — see the
+  retired-approach note above for why this isn't wired up right now
 - **Audience:** prospective ghost production / mixing clients, DJ booking contacts, the existing
   ~13k email list and ~16k/~6k Instagram audiences
 - **Website goal:** Move away from the current numbered-card, stat-marquee, generic-SaaS-template
@@ -99,22 +113,21 @@ The site should be built around one strong idea:
 - **Build environment:** Claude Code, existing repo, deploys to Vercel via GitHub push
 - **Stack:** the existing static HTML pages + vendored GSAP 3, ScrollTrigger, and Three.js (core +
   GLTFLoader, used only by the dormant 3D-sculpture hero) in `js/vendor/` + `js/motion.js` (reveals,
-  dormant hero-video gating) + `js/hero-scrub.js` (the active hero) + `js/card-tilt.js` (sitewide
-  hover tilt/glow) + `js/cinemagraph-tilt.js` (tilt on the three section cinemagraphs). No bundler,
-  no framework, no build step — Vercel serves the repo root as-is
+  dormant hero-video gating) + `js/hero-scale.js` (the active hero) + `js/card-tilt.js` (sitewide
+  hover tilt/glow) + `js/cinemagraph-tilt.js` (tilt on the three section cinemagraphs). `js/hero-scrub.js`
+  and `js/hero-3d.js` are kept but dormant. No bundler, no framework, no build step — Vercel serves
+  the repo root as-is
 - **Image model:** GPT Image 2 through Higgsfield MCP
 - **Video model:** Seedance 2.0 through Higgsfield MCP
-- **Background video formats:** `bg.mp4` — 16:9 1080p H.264, standard GOP, CRF 27, silent, ping-pong
-  loop (~7 MB), dormant, used by the plain-video hero only. `bg-scrub.mp4` — 16:9 1080p H.264,
+- **Background video formats (both dormant):** `bg.mp4` — 16:9 1080p H.264, standard GOP, CRF 27,
+  silent, ping-pong loop (~7 MB), used by the plain-video hero. `bg-scrub.mp4` — 16:9 1080p H.264,
   **all-keyframe** (`-g 1 -keyint_min 1 -sc_threshold 0`, required for smooth bidirectional
   scrubbing — standard-GOP files stutter/refuse to seek cleanly), CRF 18, silent, 8 s trim of the
-  raw clip (~34 MB), active, used by `hero-scrub.js`. A server that serves video without HTTP Range
-  support (e.g. Python's `http.server`) makes Chrome report the video as unseekable regardless of
-  encoding. **The default local dev server matters here**: Python's `http.server` ignores HTTP
-  Range requests entirely, so Chrome reports the video as unseekable regardless of encoding —
-  the hero will look completely static even though the pin/scrub logic is correct. Serve locally
-  with `npx http-server -p 8765 -c-1` instead (drop-in replacement, same port, same static-file
-  behavior, adds Range support) whenever testing this hero, not just when debugging it
+  raw clip (~34 MB), used by `hero-scrub.js`. If this is ever revisited: a server that serves video
+  without HTTP Range support (e.g. Python's `http.server`) makes Chrome report the video as
+  unseekable regardless of encoding — the hero would look completely static even with correct
+  scrub logic. Serve locally with `npx http-server -p 8765 -c-1` instead (drop-in replacement,
+  same port, adds Range support) when testing it
 
 ---
 
@@ -128,11 +141,11 @@ danheale-website/
 │  │  ├─ studio-layers-reference.png
 │  │  ├─ gear-detail.png
 │  │  ├─ controller-detail.png
-│  │  ├─ hero-poster.jpg, hero-poster@2x.jpg   (hero-studio.png as JPEG — dormant still hero)
+│  │  ├─ hero-poster.jpg, hero-poster@2x.jpg   (hero-studio.png as JPEG — active hero image)
 │  │  ├─ hero-video-poster.jpg        (first frame of the raw clip — dormant video hero)
 │  │  ├─ hero-sculpture-source.png    (2048px concept render fed to image-to-3D)
 │  │  ├─ hero-3d-poster.jpg           (real capture of the live Three.js canvas — dormant)
-│  │  ├─ hero-scrub-poster.jpg        (first frame of bg-scrub.mp4 — active hero poster/fallback)
+│  │  ├─ hero-scrub-poster.jpg        (first frame of bg-scrub.mp4 — dormant scroll-scrub hero)
 │  │  ├─ gear-detail.jpg, controller-detail.jpg   (1600px JPEGs, dormant — see cinemagraphs below)
 │  │  ├─ gear-detail-loop-poster.jpg, controller-detail-loop-poster.jpg,
 │  │  │  fader-macro-loop-poster.jpg  (poster frames for the three cinemagraph loops)
@@ -153,8 +166,8 @@ danheale-website/
 │  ├─ vendor/three.module.min.js, vendor/GLTFLoader.js, vendor/BufferGeometryUtils.js
 │  │  (pinned from the `three` npm package; GLTFLoader's imports patched to relative paths)
 │  ├─ motion.js       (dormant hero-video gating, section cinemagraph autoplay, all scroll reveals)
-│  ├─ hero-scrub.js    (the active hero: pinned ScrollTrigger scrubs bg-scrub.mp4 by scroll)
-│  ├─ hero-scale.js    (dormant — photo scale + parallax, no pin)
+│  ├─ hero-scale.js    (the active hero: photo scale + parallax, no pin, no scroll-hijacking)
+│  ├─ hero-scrub.js    (dormant — scroll-scrubbed bg-scrub.mp4 walkthrough; 5 layout bugs, abandoned)
 │  ├─ hero-3d.js       (dormant — loads the GLB, rotates it, scroll-linked drift)
 │  ├─ card-tilt.js     (active, sitewide — magnetic hover tilt + cursor glow on cards)
 │  └─ cinemagraph-tilt.js  (active — cursor tilt + scale on the three section cinemagraphs)
@@ -212,20 +225,23 @@ How the motion layer is wired:
   target's actual parent element (13 containers — grids, lists, sections) — not a per-element
   `transformPerspective` trick, which would give each item its own vanishing point instead of a
   shared one.
-- The active hero (`js/hero-scrub.js`): a `<video class="hero-scrub-video">` inside `.hero-media`,
-  lazy-loaded from `data-src` and started once `canplaythrough` fires (4 s fallback timeout). One
-  `gsap.timeline()` under a single pinned `ScrollTrigger` (`pin: true`, `pinType: 'transform'` —
-  see the load-bearing gotcha above, `scrub: 0.5`, `end` recomputed live as
-  `innerHeight * 1.0` so it survives resize) drives synced tweens: the video's `currentTime` 0→8
-  across the whole timeline, plus `.hero-animate` fade-out (`autoAlpha`+`y`), the video's own
-  `opacity` 1→0, and `.hero-fade-cover` opacity 0→1 — all three sharing the same final-quarter
-  window so text, footage, and crossfade all finish together exactly at the end. Before building the
-  timeline, `.hero-animate` elements get `animation: none` set inline: their CSS entrance
-  (`animation: hero-fade-up ... forwards`) otherwise keeps winning the cascade over GSAP's inline
-  opacity — a forwards-filled CSS animation outranks a plain inline style on the same property, the
-  mirror image of the `filter`/inline-style issue in `card-tilt.js` below. Gated on desktop +
-  motion-allowed, same pattern as every other hero; everyone else gets `hero-scrub-poster.jpg` as
-  the video's `poster` with the video itself `hidden`, no pin, no scrub.
+- The active hero (`js/hero-scale.js`): `<img class="hero-image">` (`hero-poster.jpg`) inside
+  `.hero-media`, at `.hero`'s own natural `min-height: 100vh` — no pin, no scroll-hijacking, no
+  wrapper. `gsap.matchMedia('(min-width: 769px)')` scopes a `fromTo` (`scale: 1.08 → 1, yPercent:
+  -3 → 2`) to a `ScrollTrigger` scrubbing across `heroSection`'s own height × 0.7, settling well
+  before the section scrolls out of view. Headline/subhead keep their own CSS `animation:
+  hero-fade-up ... forwards` entrance, unrelated to scroll. Since `.hero` never changes size or
+  position, Services (right after it, untouched) always begins exactly at its natural document
+  position with no gap — there's no scroll mechanism here that could get out of sync with it.
+  Phones and reduced motion just see the still image, no JS needed.
+- Dormant hero paths, all kept in the repo rather than deleted: `<video class="hero-scrub-video">`
+  (scroll-scrubbed walkthrough of `bg-scrub.mp4`, `js/hero-scrub.js` — abandoned after five
+  consecutive layout bugs across a pin-based version and a `position: sticky` rewrite; see the
+  scope-changes and retired-approach notes above for the full history), `<video class="hero-video">`
+  (plain loop of `bg.mp4`), and `<canvas class="hero-3d-canvas">` (rotating GLB sculpture) all sit
+  commented out in `.hero-media`, with their script tags commented out too. `motion.js` still gates
+  the plain video's `src` on desktop + motion allowed if it's ever uncommented back in. The
+  particle-formation hero was removed outright, not kept dormant.
 - `js/card-tilt.js`: mouse-tracked magnetic 3D tilt (`rotateX`/`rotateY`, a few degrees, via
   `perspective(900px)`) plus a cursor-following radial glow (`--glow-x`/`--glow-y` custom
   properties) and a lift shadow, applied to How It Works steps, Reviews, Services rows, and Shop
@@ -244,11 +260,6 @@ How the motion layer is wired:
   receives its own mouse events; the hover area there is the whole `.services` section instead,
   with the transform still landing on `.services-media`. Same mouse-only/reduced-motion gating as
   `card-tilt.js`.
-- Dormant hero paths: `<img class="hero-image">` (CSS zoom-pull-back), `<video class="hero-video">`
-  (plain loop), `<canvas class="hero-3d-canvas">` (rotating GLB sculpture), and `js/hero-scale.js`
-  (photo scale + parallax, no pin) all sit commented out in `.hero-media` / the script tags;
-  `motion.js` still gates the plain video's `src` on desktop + motion allowed if it's ever
-  uncommented back in. The particle-formation hero was removed outright, not kept dormant.
 
 ---
 
