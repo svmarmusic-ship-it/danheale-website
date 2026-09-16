@@ -106,6 +106,70 @@ No text, no logos, no hands, no people.
 
 ---
 
+## Suno Reproduction hero — `assets/images/hero-video-poster.jpg` (reused, not generated)
+
+Decided 2026-09-16. The Suno Reproduction page hero reuses the existing `hero-video-poster.jpg`
+(first frame of `bg.mp4`, same studio, same violet/blue direction as `hero-studio.png`, a
+different specific camera moment so this page doesn't look like a duplicate of the homepage) with
+the same scale + parallax treatment (`js/hero-scale.js`) as the homepage — no pin, no
+scroll-hijacking, same lesson learned there. No new generation needed for this.
+
+## Superseded: waveform-split concept (Suno Reproduction hero)
+
+Tried 2026-09-16, replaced by the reused studio still above the same day. Kept for the record
+only. Do not use as reference or revive without approval.
+
+The concept: a waveform splitting into two paths — one rough/glitchy/artifact-heavy (the
+AI-generated demo) resolving into a clean, polished waveform (the human-rebuilt master). Two
+generations were made:
+
+- `assets/images/superseded/suno-hero-waveform-split-v1-warm-superseded.png` — job
+  `a65f19f8-a4c0-4ded-a4da-050be2e9b8ee`, 2688 x 1520, quality high, 2k. Rejected: a warm
+  orange/amber glow dominated the "clean" path, directly against the no-gold/warm-tones rule that
+  drove the earlier full palette pivot away from gold (see the superseded warm-gold hero
+  direction below).
+- `assets/images/superseded/suno-hero-waveform-split-v2-cool-superseded.png` — job
+  `cdfdfff9-3822-421b-a297-e128af73cf19`, 2688 x 1520, quality high, 2k. Fixed the color (verified
+  by direct pixel sampling: zero warm-leaning pixels across all lit areas) but the concept itself
+  was dropped in favor of reusing an existing studio still, for consistency with the homepage's
+  visual language and to avoid maintaining a second, unrelated visual motif.
+
+Prompt used for v2 (the color-corrected version; v1 was identical except for the color section):
+
+```txt
+Cinematic abstract visualization of a sound waveform splitting into two diverging paths, in a
+moody studio-adjacent atmosphere.
+
+Contents: a single glowing audio waveform enters from the left side of the frame, then splits
+into two distinct paths that run across the frame toward the right. One path is rough, glitchy,
+and artifact-heavy: jagged broken segments, erratic spikes, static-like distortion, a dense
+chaotic cluster of fractured light. The other path is smooth, clean, and polished: even confident
+curves, a coherent steady glow, gradually resolving into a single refined, settled waveform shape
+by the right edge of the frame — as if the rough signal has been rebuilt into a clean one.
+
+Color: strictly cool tones only, throughout the entire image, with no exceptions. Deep violet,
+cool blue, and near-black exclusively. Both halves of the image, including all resolution/
+settling effects and every glow, highlight, and light trail, must use only these cool tones. Do
+not use orange, amber, gold, yellow, or any warm color anywhere in the frame, including as a
+"resolution" or "settling" effect on the clean waveform — the clean path should resolve into a
+calm, steady violet or blue glow, never a warm one.
+
+Style: cinematic, moody lighting, deep violet and cool blue tones washing across a near-black
+background, realistic volumetric light and glow, shallow depth of field, high-end
+audio-visualization aesthetic rendered like physical light and energy in a dark space — not a
+flat UI mockup, not a screenshot, not a music app interface.
+
+Composition: the waveform split runs roughly through the middle of the frame with dark, empty
+negative space above and below so a website headline can sit over it. The glitchy path and the
+clean path should read as clearly different from each other at a glance, through shape and
+texture (jagged/dense versus smooth/simple), not through warm-versus-cool color — both stay
+cool-toned.
+
+Restrictions: no text, no lettering, no logos, no brand marks, no people, no hands, no UI chrome,
+no app interface elements, no cartoon or illustration style, no orange, no amber, no gold, no
+yellow, no warm colors of any kind anywhere in the image.
+```
+
 ## Superseded: warm-gold hero direction
 
 Replaced 2026-09-14 by the violet/blue direction above. Kept for the record only. Do not use as

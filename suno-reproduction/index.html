@@ -184,6 +184,40 @@
       justify-content: center;
       padding: 120px 64px 80px;
       position: relative;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    /* Hero background: hero-video-poster.jpg (same studio, same violet/blue
+       lighting as the homepage's hero-studio.png, a different specific frame so
+       this page doesn't look like a duplicate) with the same restrained scale +
+       parallax drift tied to scroll position (js/hero-scale.js) — no pin, no
+       scroll-hijacking. .hero sits at its own natural height in normal document
+       flow, same lesson learned on the homepage after five layout bugs from a
+       scroll-scrubbed video attempt there. */
+    .hero-media {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      overflow: hidden;
+      background: var(--bg) url('/assets/images/hero-video-poster.jpg') center / cover no-repeat;
+    }
+
+    .hero-image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      will-change: transform;
+    }
+
+    .hero-tint {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(var(--bg-rgb), 0.84) 0%, rgba(var(--bg-rgb), 0.5) 55%, rgba(var(--bg-rgb), 0.3) 100%),
+        linear-gradient(180deg, rgba(var(--bg-rgb), 0.35) 0%, rgba(var(--bg-rgb), 0.35) 60%, rgba(var(--bg-rgb), 0.96) 100%);
     }
 
     .hero::before {
@@ -202,25 +236,6 @@
       left: 64px; right: 64px;
       height: 1px;
       background: var(--border);
-    }
-
-    .hero-eyebrow {
-      font-size: 11px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--accent);
-      font-weight: 500;
-      margin-bottom: 32px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .hero-eyebrow::before {
-      content: '';
-      width: 32px; height: 1px;
-      background: var(--accent);
-      flex-shrink: 0;
     }
 
     .hero h1 {
@@ -272,30 +287,21 @@
     .cta-btn:hover .arrow { transform: translateX(4px); }
 
     /* ─── SECTION SHARED ────────────────────────────────── */
-    .section-label {
-      font-size: 11px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--accent);
-      font-weight: 500;
-      display: flex;
-      align-items: center;
-      gap: 12px;
+    /* Matches the homepage's current heading style: the heading text alone
+       does the work, no dash-line-prefixed all-caps label above it. Replaces
+       the old .section-label pattern (thin line + uppercase eyebrow text)
+       that the homepage rebuild removed earlier. */
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 38px;
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 48px;
     }
 
-    .section-label::before {
-      content: '';
-      width: 32px; height: 1px;
-      background: var(--accent);
-      flex-shrink: 0;
-    }
-
-    .section-header {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      margin-bottom: 56px;
-    }
+    .section-title em { font-style: italic; color: var(--accent); }
 
     /* ─── PROBLEM ───────────────────────────────────────── */
     .problem-section {
@@ -351,7 +357,7 @@
     .problem-item strong { color: var(--text); font-weight: 500; }
 
     /* ─── HOW IT WORKS ──────────────────────────────────── */
-    .how-it-works { padding: 100px 64px; border-top: 1px solid var(--border); }
+    .how-it-works { padding: 100px 64px; border-top: 1px solid var(--border); perspective: 1400px; }
 
     .how-steps {
       display: grid;
@@ -365,6 +371,34 @@
     }
 
     .how-step:first-child { padding-left: 0; border-left: none; }
+
+    /* ─── MAGNETIC TILT ─────────────────────────────────── */
+    /* Same mouse-tracked tilt + cursor glow as the homepage's card-tilt.js,
+       carried over onto this page's How It Works steps — the only card-like
+       element here. Mouse-only, untouched by JS on touch. */
+    .how-step {
+      --glow-x: 50%;
+      --glow-y: 50%;
+      position: relative;
+      transition: filter 0.4s ease;
+    }
+
+    .how-step::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+      background: radial-gradient(circle at var(--glow-x) var(--glow-y),
+        rgba(var(--accent-rgb), 0.16), rgba(var(--accent-2-rgb), 0.06) 45%, transparent 70%);
+    }
+
+    .how-step.tilt-active::after { opacity: 1; }
+
+    .how-step.tilt-settling {
+      transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), filter 0.4s ease;
+    }
 
     .how-step-num {
       font-family: 'Bebas Neue', sans-serif;
@@ -782,8 +816,6 @@
 
 <!-- ─── HERO ──────────────────────────────────────────────── -->
 <section class="hero" aria-label="Suno Reproduction Service">
-  <div class="hero-eyebrow hero-animate" aria-hidden="true">Suno Reproduction &bull; Dan Heale</div>
-
   <h1 class="hero-animate">Turning AI Demos<br>Into <em>Releasable Records</em></h1>
 
   <p class="hero-sub hero-animate">
@@ -791,13 +823,19 @@
   </p>
 
   <a href="#contact" class="cta-btn hero-animate">Get a quote <span class="arrow" aria-hidden="true">&#8594;</span></a>
+
+  <div class="hero-media" aria-hidden="true">
+    <img class="hero-image"
+      src="/assets/images/hero-video-poster.jpg"
+      alt="" decoding="async" fetchpriority="high">
+    <div class="hero-tint"></div>
+  </div>
 </section>
 
 
 <!-- ─── PROBLEM ───────────────────────────────────────────── -->
 <section class="problem-section reveal" aria-labelledby="problem-heading">
   <div class="problem-content">
-    <div class="section-label" aria-hidden="true">The Problem</div>
     <h2 id="problem-heading">Suno tracks can't be commercially <em>released</em></h2>
     <p>Labels and distributors are getting serious about AI-generated content. DistroKid, TuneCore, and most major label A&amp;R departments now require submissions to be 100% human-produced — and they're getting better at detecting when they're not.</p>
     <p>A track built on Suno — even with a strong vocal or a strong hook over it — hits a wall. The instrumental is AI-generated, and that disqualifies it from most commercial release pathways before it's even heard.</p>
@@ -826,9 +864,7 @@
 
 <!-- ─── HOW IT WORKS ─────────────────────────────────────── -->
 <section class="how-it-works reveal" aria-labelledby="process-heading">
-  <div class="section-header">
-    <div class="section-label" id="process-heading">How It Works</div>
-  </div>
+  <h2 class="section-title" id="process-heading">How It Works</h2>
 
   <div class="how-steps">
     <div class="how-step">
@@ -856,9 +892,7 @@
 
 <!-- ─── PROOF ─────────────────────────────────────────────── -->
 <section class="proof-section reveal" aria-labelledby="proof-heading">
-  <div class="section-header">
-    <div class="section-label" id="proof-heading">Past Reproductions</div>
-  </div>
+  <h2 class="section-title" id="proof-heading">Past Reproductions</h2>
 
   <div class="proof-inner">
     <div class="proof-embed">
@@ -1070,6 +1104,16 @@
     }, { passive: true });
   }
 </script>
+
+<!-- Motion layer: GSAP + ScrollTrigger (vendored, no CDN) — hero photo scale +
+     parallax (js/hero-scale.js) and the sitewide magnetic card tilt
+     (js/card-tilt.js, applies to .how-step here). Carried over from the
+     homepage; this page doesn't use motion.js's 3D reveal system, so it's
+     not loaded here. -->
+<script src="/js/vendor/gsap.min.js" defer></script>
+<script src="/js/vendor/ScrollTrigger.min.js" defer></script>
+<script src="/js/hero-scale.js" defer></script>
+<script src="/js/card-tilt.js" defer></script>
 
 <!-- JSON-LD Structured Data -->
 <script type="application/ld+json">
