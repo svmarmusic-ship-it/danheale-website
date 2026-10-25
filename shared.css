@@ -29,3 +29,34 @@
   --border:        rgba(242, 240, 245, 0.08);
   --border-hover:  rgba(242, 240, 245, 0.15);
 }
+
+/* ─── Currency toggle (£/$) ─────────────────────────────
+   Lives in the nav. See /js/currency.js. */
+.nav-actions { display: flex; align-items: center; gap: 16px; }
+
+.currency-toggle {
+  display: inline-flex;
+  border: 1px solid var(--border-hover);
+  border-radius: 999px;
+  padding: 2px;
+}
+
+.currency-toggle button {
+  min-width: 28px;
+  height: 24px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: var(--text-mid);
+  font: 500 12px/1 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.currency-toggle button:hover { color: var(--text); }
+
+.currency-toggle button[aria-pressed="true"] {
+  background: var(--accent-dim);
+  color: var(--text);
+}

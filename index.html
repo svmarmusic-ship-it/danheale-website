@@ -1355,13 +1355,20 @@
     <li><a href="/suno-reproduction" style="color:var(--accent)">Suno Reproduction</a></li>
   </ul>
 
-  <a href="#contact" class="nav-cta">Get a quote</a>
+  <div class="nav-actions">
+    <div class="currency-toggle" data-currency-toggle role="group" aria-label="Currency">
+      <button type="button" data-currency="GBP" aria-pressed="true" aria-label="Show prices in pounds">£</button>
+      <button type="button" data-currency="USD" aria-pressed="false" aria-label="Show prices in dollars">$</button>
+    </div>
 
-  <button class="nav-hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
-    <span></span>
-    <span></span>
-    <span></span>
-  </button>
+    <a href="#contact" class="nav-cta">Get a quote</a>
+
+    <button class="nav-hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
 </nav>
 
 <!-- Mobile nav drawer -->
@@ -1437,13 +1444,13 @@
     <a href="#contact" class="service-row" role="listitem">
       <h3>Ghost Production</h3>
       <p>Full track production from concept to master. Your name, your release, built by a producer who's done it at scale. Complete ownership and confidentiality.</p>
-      <div class="service-price">From £800 <span class="arrow-link" aria-hidden="true">&#8594;</span></div>
+      <div class="service-price"><span data-price="ghost">From £800</span> <span class="arrow-link" aria-hidden="true">&#8594;</span></div>
     </a>
 
     <a href="#contact" class="service-row" role="listitem">
       <h3>Mixing &amp; Finishing</h3>
       <p>Send your stems, get back a polished, release-ready track. Professional mixdown and mastering from someone who knows what labels actually want.</p>
-      <div class="service-price">From £150 <span class="arrow-link" aria-hidden="true">&#8594;</span></div>
+      <div class="service-price"><span data-price="mixing">From £150</span> <span class="arrow-link" aria-hidden="true">&#8594;</span></div>
     </a>
 
     <a href="#contact" class="service-row" role="listitem">
@@ -1455,7 +1462,7 @@
     <a href="#contact" class="service-row" role="listitem">
       <h3>Priority Production</h3>
       <p>For serious artists and labels who need release-ready music fast. Priority turnaround, stems delivery, and a 1-to-1 mix feedback call included. Limited availability — get in touch to discuss your project.</p>
-      <div class="service-price">From £2,500 <span class="arrow-link" aria-hidden="true">&#8594;</span></div>
+      <div class="service-price"><span data-price="priority">From £2,500</span> <span class="arrow-link" aria-hidden="true">&#8594;</span></div>
     </a>
 
     <a href="/suno-reproduction/" class="service-row" role="listitem">
@@ -1589,7 +1596,7 @@
        e.g. href="https://danheale.lemonsqueezy.com/checkout/buy/YOUR_PRODUCT_ID"
        For overlay checkout, add the Lemon.js script and data-lemonsqueezy-checkout to each link. -->
   <div class="shop-grid" data-reveal-group>
-    <a href="https://danhealemusic.gumroad.com/l/mixing-template" class="product-card" aria-label="Free Mixing Logic Pro Template — £0.00" target="_blank" rel="noopener noreferrer">
+    <a href="https://danhealemusic.gumroad.com/l/mixing-template" class="product-card" data-price-label="template" aria-label="Free Mixing Logic Pro Template — Free" target="_blank" rel="noopener noreferrer">
       <div class="product-img">
         <img src="images/Mixing Template Artwork.png" alt="Free Mixing Template artwork" style="width:100%;height:100%;object-fit:cover;display:block;">
       </div>
@@ -1597,11 +1604,11 @@
         <div class="product-tag">Logic Pro Template</div>
         <h4>Free Mixing Template</h4>
         <p>A Logic Pro mixing template with pre-built summing stacks, vocal chains, sends and a mastering chain. Ready to use.</p>
-        <div class="product-price">£0.00</div>
+        <div class="product-price" data-price="template">Free</div>
       </div>
     </a>
 
-    <a href="https://danhealemusic.gumroad.com/l/uk-house-essentials-vol-1" class="product-card" aria-label="UK House Essentials Vol. 1 — Sample Pack — £20.00" target="_blank" rel="noopener noreferrer">
+    <a href="https://danhealemusic.gumroad.com/l/uk-house-essentials-vol-1" class="product-card" data-price-label="essentials" aria-label="UK House Essentials Vol. 1 — Sample Pack — £20" target="_blank" rel="noopener noreferrer">
       <div class="product-img">
         <img src="images/UK House Essentials Vol. 1 Thumbnail.png" alt="UK House Essentials Vol. 1 artwork" style="width:100%;height:100%;object-fit:cover;display:block;">
       </div>
@@ -1609,7 +1616,7 @@
         <div class="product-tag">Sample Pack</div>
         <h4>UK House Essentials Vol. 1</h4>
         <p>150+ samples and 30+ Serum 2 presets built for commercial UK house music.</p>
-        <div class="product-price">£20.00</div>
+        <div class="product-price" data-price="essentials">£20</div>
       </div>
     </a>
 
@@ -1688,14 +1695,15 @@
         </div>
         <div class="form-field">
           <label for="budget">Budget range</label>
-          <select id="budget" name="budget" required>
+          <select id="budget" name="budget" required data-budget>
             <option value="" disabled selected>Select a budget</option>
-            <option value="under-500">Under £500</option>
-            <option value="500-1500">£500–£1,500</option>
-            <option value="1500-3000">£1,500–£3,000</option>
-            <option value="3000-plus">£3,000+</option>
-            <option value="not-sure">Not sure yet</option>
+            <option value="Under £800">Under £800</option>
+            <option value="£800–£1,500">£800–£1,500</option>
+            <option value="£1,500–£3,000">£1,500–£3,000</option>
+            <option value="£3,000+">£3,000+</option>
+            <option value="Not sure yet">Not sure yet</option>
           </select>
+          <input type="hidden" name="currency" value="GBP">
         </div>
       </div>
 
@@ -1931,6 +1939,7 @@
 </script>
 
 <!-- Motion layer: GSAP + ScrollTrigger (vendored, no CDN) -->
+<script src="/js/currency.js" defer></script>
 <script src="/js/vendor/gsap.min.js" defer></script>
 <script src="/js/vendor/ScrollTrigger.min.js" defer></script>
 <script src="/js/motion.js" defer></script>

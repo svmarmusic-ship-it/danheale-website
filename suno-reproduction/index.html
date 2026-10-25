@@ -787,13 +787,20 @@
     <li><a href="/suno-reproduction" style="color:var(--accent)">Suno Reproduction</a></li>
   </ul>
 
-  <a href="#contact" class="nav-cta">Get a quote</a>
+  <div class="nav-actions">
+    <div class="currency-toggle" data-currency-toggle role="group" aria-label="Currency">
+      <button type="button" data-currency="GBP" aria-pressed="true" aria-label="Show prices in pounds">£</button>
+      <button type="button" data-currency="USD" aria-pressed="false" aria-label="Show prices in dollars">$</button>
+    </div>
 
-  <button class="nav-hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
-    <span></span>
-    <span></span>
-    <span></span>
-  </button>
+    <a href="#contact" class="nav-cta">Get a quote</a>
+
+    <button class="nav-hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
 </nav>
 
 <div class="nav-mobile-menu" id="mobileMenu" role="navigation" aria-label="Mobile navigation">
@@ -961,14 +968,15 @@
         </div>
         <div class="form-field">
           <label for="budget">Budget range</label>
-          <select id="budget" name="budget" required>
+          <select id="budget" name="budget" required data-budget>
             <option value="" disabled selected>Select a budget</option>
-            <option value="under-500">Under £500</option>
-            <option value="500-1500">£500–£1,500</option>
-            <option value="1500-3000">£1,500–£3,000</option>
-            <option value="3000-plus">£3,000+</option>
-            <option value="not-sure">Not sure yet</option>
+            <option value="Under £800">Under £800</option>
+            <option value="£800–£1,500">£800–£1,500</option>
+            <option value="£1,500–£3,000">£1,500–£3,000</option>
+            <option value="£3,000+">£3,000+</option>
+            <option value="Not sure yet">Not sure yet</option>
           </select>
+          <input type="hidden" name="currency" value="GBP">
         </div>
       </div>
 
@@ -1099,6 +1107,7 @@
      (js/card-tilt.js, applies to .how-step here). Carried over from the
      homepage; this page doesn't use motion.js's 3D reveal system, so it's
      not loaded here. -->
+<script src="/js/currency.js" defer></script>
 <script src="/js/vendor/gsap.min.js" defer></script>
 <script src="/js/vendor/ScrollTrigger.min.js" defer></script>
 <script src="/js/hero-scale.js" defer></script>
