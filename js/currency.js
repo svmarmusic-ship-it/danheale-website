@@ -1,5 +1,6 @@
-/* Currency display: GBP by default, USD for US visitors.
+/* Currency display: GBP for UK visitors, USD for everyone else.
    - Country comes from /api/geo (Vercel's x-vercel-ip-country header).
+   - Unknown country or a failed lookup → USD. Local preview → GBP.
    - The £/$ toggle saves a `currency` cookie, which overrides detection.
    - Fixed prices, no live conversion.
 
@@ -35,7 +36,8 @@
   };
 
   var COOKIE = 'currency';
-  var GEO_CACHE = 'geoCurrency';
+  // Bumped from 'geoCurrency' so sessions cached under the old US-only rule re-detect.
+  var GEO_CACHE = 'geoCurrency2';
 
   function readCookie() {
     var m = document.cookie.match(/(?:^|;\s*)currency=(GBP|USD)\b/);
@@ -84,7 +86,17 @@
     });
   }
 
+  // Local preview has no Vercel geo header, so default to GBP there for testing.
+  function isLocal() {
+    var h = location.hostname;
+    return location.protocol === 'file:' || h === 'localhost' || h === '127.0.0.1' ||
+      h === '[::1]' || /\.local$/.test(h) || /^(10|192\.168)\./.test(h);
+  }
+
+  // GB → GBP. Every other country, or an unknown one, → USD.
   function detect() {
+    if (isLocal()) return Promise.resolve('GBP');
+
     var cached = null;
     try { cached = sessionStorage.getItem(GEO_CACHE); } catch (e) {}
     if (cached === 'GBP' || cached === 'USD') return Promise.resolve(cached);
@@ -92,11 +104,11 @@
     return fetch('/api/geo', { headers: { 'Accept': 'application/json' } })
       .then(function (r) { return r.ok ? r.json() : {}; })
       .then(function (data) {
-        var c = data && data.country === 'US' ? 'USD' : 'GBP';
+        var c = data && data.country === 'GB' ? 'GBP' : 'USD';
         try { sessionStorage.setItem(GEO_CACHE, c); } catch (e) {}
         return c;
       })
-      .catch(function () { return 'GBP'; });
+      .catch(function () { return 'USD'; });
   }
 
   function init() {
