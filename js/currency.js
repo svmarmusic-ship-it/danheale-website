@@ -21,7 +21,7 @@
     // /vocals page
     vocalMix:     { GBP: '£60',       USD: '$80' },
     fullVocalMix: { GBP: '£120',      USD: '$160' },
-    mixMaster:    { GBP: 'from £150', USD: 'from $200' },
+    mixMaster:    { GBP: '£150',      USD: '$200' },
     extraRound:   { GBP: '£15',       USD: '$20' }
   };
 

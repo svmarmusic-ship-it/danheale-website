@@ -313,8 +313,32 @@
       gap: 6px;
     }
 
-    .pay-btn {
+    /* Button area: same height in every card on desktop so the Pay & book
+       buttons line up even though only Mix & Master has a link under it. */
+    .price-actions {
       margin-top: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    @media (min-width: 1101px) {
+      .price-actions { min-height: 90px; }
+    }
+
+    .price-aside {
+      align-self: center;
+      font-size: 13px;
+      color: var(--text-mid);
+      text-decoration: underline;
+      text-decoration-color: var(--border-hover);
+      text-underline-offset: 3px;
+      transition: color 0.3s ease;
+    }
+
+    .price-aside:hover { color: var(--text); }
+
+    .pay-btn {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -729,12 +753,14 @@
         <li>3–5 days</li>
         <li>1 round of revisions</li>
       </ul>
-      <a class="pay-btn" data-tier="vocal_mix"
-        href="https://buy.stripe.com/14AdRbfCAca34Hvgk448001"
-        data-href-gbp="https://buy.stripe.com/14AdRbfCAca34Hvgk448001"
-        data-href-usd="https://buy.stripe.com/dRmeVf2PO8XR1vjaZK48002">
-        Pay &amp; book <span class="arrow" aria-hidden="true">&#8594;</span>
-      </a>
+      <div class="price-actions">
+        <a class="pay-btn" data-tier="vocal_mix"
+          href="https://buy.stripe.com/14AdRbfCAca34Hvgk448001"
+          data-href-gbp="https://buy.stripe.com/14AdRbfCAca34Hvgk448001"
+          data-href-usd="https://buy.stripe.com/dRmeVf2PO8XR1vjaZK48002">
+          Pay &amp; book <span class="arrow" aria-hidden="true">&#8594;</span>
+        </a>
+      </div>
     </article>
 
     <article class="price-card reveal">
@@ -745,28 +771,34 @@
         <li>3–5 days</li>
         <li>2 rounds of revisions</li>
       </ul>
-      <a class="pay-btn" data-tier="full_vocal_mix"
-        href="https://buy.stripe.com/cNi8wR7640rl3Dr0l648003"
-        data-href-gbp="https://buy.stripe.com/cNi8wR7640rl3Dr0l648003"
-        data-href-usd="https://buy.stripe.com/cNi9AV3TSfmfgqdaZK48004">
-        Pay &amp; book <span class="arrow" aria-hidden="true">&#8594;</span>
-      </a>
+      <div class="price-actions">
+        <a class="pay-btn" data-tier="full_vocal_mix"
+          href="https://buy.stripe.com/cNi8wR7640rl3Dr0l648003"
+          data-href-gbp="https://buy.stripe.com/cNi8wR7640rl3Dr0l648003"
+          data-href-usd="https://buy.stripe.com/cNi9AV3TSfmfgqdaZK48004">
+          Pay &amp; book <span class="arrow" aria-hidden="true">&#8594;</span>
+        </a>
+      </div>
     </article>
 
     <article class="price-card reveal">
       <h3>Mix &amp; Master</h3>
-      <div class="price-amount" data-price="mixMaster">from £150</div>
+      <div class="price-amount" data-price="mixMaster">£150</div>
       <p>The whole song, mixed and mastered, release-ready.</p>
       <ul class="price-turnaround">
         <li>5–7 days</li>
+        <li>up to 30 stems, up to 4 minutes</li>
         <li>3 rounds of revisions</li>
       </ul>
-      <a class="pay-btn" data-tier="mix_master"
-        href="https://buy.stripe.com/aFadRbfCAb5Z8XLebW48005"
-        data-href-gbp="https://buy.stripe.com/aFadRbfCAb5Z8XLebW48005"
-        data-href-usd="https://buy.stripe.com/dRm4gB3TSa1V8XL1pa48006">
-        Pay &amp; book <span class="arrow" aria-hidden="true">&#8594;</span>
-      </a>
+      <div class="price-actions">
+        <a class="pay-btn" data-tier="mix_master"
+          href="https://buy.stripe.com/aFadRbfCAb5Z8XLebW48005"
+          data-href-gbp="https://buy.stripe.com/aFadRbfCAb5Z8XLebW48005"
+          data-href-usd="https://buy.stripe.com/dRm4gB3TSa1V8XL1pa48006">
+          Pay &amp; book <span class="arrow" aria-hidden="true">&#8594;</span>
+        </a>
+        <a class="price-aside" href="mailto:info@danheale.com?subject=Mix%20%26%20Master%20quote">bigger session? email me first</a>
+      </div>
     </article>
   </div>
 
