@@ -307,6 +307,10 @@
       text-transform: uppercase;
       color: var(--text-dim);
       margin-bottom: 28px;
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
     }
 
     .pay-btn {
@@ -721,7 +725,10 @@
       <h3>Vocal Mix</h3>
       <div class="price-amount" data-price="vocalMix">£60</div>
       <p>Lead vocal tuned, cleaned, compressed and sitting properly.</p>
-      <div class="price-turnaround">3–5 days</div>
+      <ul class="price-turnaround">
+        <li>3–5 days</li>
+        <li>1 round of revisions</li>
+      </ul>
       <a class="pay-btn" data-tier="vocal_mix"
         href="https://buy.stripe.com/14AdRbfCAca34Hvgk448001"
         data-href-gbp="https://buy.stripe.com/14AdRbfCAca34Hvgk448001"
@@ -734,7 +741,10 @@
       <h3>Full Vocal Mix</h3>
       <div class="price-amount" data-price="fullVocalMix">£120</div>
       <p>Lead, backing vocals and ad-libs, all mixed to sit together.</p>
-      <div class="price-turnaround">3–5 days</div>
+      <ul class="price-turnaround">
+        <li>3–5 days</li>
+        <li>2 rounds of revisions</li>
+      </ul>
       <a class="pay-btn" data-tier="full_vocal_mix"
         href="https://buy.stripe.com/cNi8wR7640rl3Dr0l648003"
         data-href-gbp="https://buy.stripe.com/cNi8wR7640rl3Dr0l648003"
@@ -747,7 +757,10 @@
       <h3>Mix &amp; Master</h3>
       <div class="price-amount" data-price="mixMaster">from £150</div>
       <p>The whole song, mixed and mastered, release-ready.</p>
-      <div class="price-turnaround">5–7 days</div>
+      <ul class="price-turnaround">
+        <li>5–7 days</li>
+        <li>3 rounds of revisions</li>
+      </ul>
       <a class="pay-btn" data-tier="mix_master"
         href="https://buy.stripe.com/aFadRbfCAb5Z8XLebW48005"
         data-href-gbp="https://buy.stripe.com/aFadRbfCAb5Z8XLebW48005"
@@ -757,7 +770,7 @@
     </article>
   </div>
 
-  <p class="price-note">one round of revisions included, because I'm not a monster.</p>
+  <p class="price-note">extra rounds <span data-price="extraRound">£15</span> each. 'one more tweak' is never one.</p>
 </section>
 
 
