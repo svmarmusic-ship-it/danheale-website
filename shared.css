@@ -60,3 +60,13 @@
   background: var(--accent-dim);
   color: var(--text);
 }
+
+/* ─── Nav spacing between 901px and 1180px ──────────────
+   Keeps the six nav links, £/$ toggle and CTA on one line before the
+   hamburger takes over at 900px. */
+.nav-links a, .nav-cta { white-space: nowrap; }
+
+@media (min-width: 901px) and (max-width: 1180px) {
+  nav .nav-links { gap: 20px; }
+  nav .nav-actions { gap: 12px; }
+}

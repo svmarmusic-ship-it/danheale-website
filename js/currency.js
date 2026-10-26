@@ -8,6 +8,7 @@
      [data-price="key"]        text swapped from PRICES[key]
      [data-price-label="key"]  aria-label swapped from LABELS[key]
      select[data-budget]       options rebuilt from BUDGETS (selection kept by position)
+     a[data-href-gbp][data-href-usd]  href swapped to the active currency's link
      input[name="currency"]    hidden field submitted with the contact form
      [data-currency-toggle]    wrapper holding buttons with data-currency="GBP|USD" */
 (function () {
@@ -16,7 +17,11 @@
     mixing:    { GBP: 'From £150',   USD: 'From $199' },
     priority:  { GBP: 'From £2,500', USD: 'From $3,500' },
     essentials:{ GBP: '£20',         USD: '$25' },
-    template:  { GBP: 'Free',        USD: 'Free' }
+    template:  { GBP: 'Free',        USD: 'Free' },
+    // /vocals page
+    vocalMix:     { GBP: '£60',       USD: '$80' },
+    fullVocalMix: { GBP: '£120',      USD: '$160' },
+    mixMaster:    { GBP: 'from £150', USD: 'from $200' }
   };
 
   var LABELS = {
@@ -75,6 +80,10 @@
         opt.textContent = options[i];
       }
       select.selectedIndex = selected;
+    });
+
+    document.querySelectorAll('a[data-href-gbp][data-href-usd]').forEach(function (a) {
+      a.href = a.getAttribute(currency === 'USD' ? 'data-href-usd' : 'data-href-gbp');
     });
 
     document.querySelectorAll('input[name="currency"]').forEach(function (input) {

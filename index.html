@@ -505,6 +505,22 @@
 
     .services-list { display: flex; flex-direction: column; perspective: 1100px; }
 
+    .services-vocals-note {
+      margin-top: 28px;
+      font-size: 14px;
+      color: var(--text-dim);
+    }
+
+    .services-vocals-note a {
+      color: var(--text-mid);
+      text-decoration: underline;
+      text-decoration-color: var(--border-hover);
+      text-underline-offset: 3px;
+      transition: color 0.3s ease;
+    }
+
+    .services-vocals-note a:hover { color: var(--accent); }
+
     .service-row {
       display: grid;
       grid-template-columns: 220px 1fr 130px;
@@ -1352,6 +1368,7 @@
     <li><a href="#about">About</a></li>
     <li><a href="#reviews">Reviews</a></li>
     <li><a href="#shop">Shop</a></li>
+    <li><a href="/vocals">Vocal mixing</a></li>
     <li><a href="/suno-reproduction" style="color:var(--accent)">Suno Reproduction</a></li>
   </ul>
 
@@ -1377,6 +1394,7 @@
   <a href="#about">About</a>
   <a href="#reviews">Reviews</a>
   <a href="#shop">Shop</a>
+  <a href="/vocals">Vocal mixing</a>
   <a href="/suno-reproduction" style="color:var(--accent)">Suno Reproduction</a>
   <a href="#contact" class="nav-cta">Get a quote</a>
 </div>
@@ -1471,6 +1489,8 @@
       <div class="service-price">On request <span class="arrow-link" aria-hidden="true">&#8594;</span></div>
     </a>
   </div>
+
+  <p class="services-vocals-note" data-reveal>just need vocals mixed? <a href="/vocals">vocal mixing &#8594;</a></p>
 </section>
 
 

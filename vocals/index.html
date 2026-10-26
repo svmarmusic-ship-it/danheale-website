@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO -->
+  <title>Vocal Mixing — Dan Heale</title>
+  <meta name="description" content="Vocal mixing from £60. Same process as the reels. 3–5 day turnaround.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://danheale.com/vocals">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://danheale.com/vocals">
+  <meta property="og:title" content="Vocal Mixing — Dan Heale">
+  <meta property="og:description" content="Vocal mixing from £60. Same process as the reels. 3–5 day turnaround.">
+  <meta property="og:image" content="https://www.danheale.com/images/og-default.jpg">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Vocal Mixing — Dan Heale">
+  <meta name="twitter:description" content="Vocal mixing from £60. Same process as the reels. 3–5 day turnaround.">
+  <meta name="twitter:image" content="https://www.danheale.com/images/og-default.jpg">
+
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/shared.css">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ─── NAV ───────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 20px 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(var(--bg-rgb), 0.9);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border);
+      transition: padding 0.3s ease;
+    }
+
+    nav.scrolled { padding-top: 14px; padding-bottom: 14px; }
+
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-links { display: flex; gap: 36px; list-style: none; }
+
+    .nav-links a {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-mid);
+      text-decoration: none;
+      letter-spacing: 0.03em;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a:focus-visible { color: var(--accent); }
+
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+    }
+
+    .form-field input:focus-visible,
+    .form-field select:focus-visible,
+    .form-field textarea:focus-visible { outline: none; }
+
+    .nav-cta {
+      padding: 10px 24px;
+      background: var(--accent);
+      color: var(--bg);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+
+    .nav-cta:hover { background: var(--accent-hover); transform: translateY(-1px); }
+
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 32px;
+      height: 32px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .nav-hamburger span {
+      display: block;
+      height: 1px;
+      background: var(--text);
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+    .nav-mobile-menu {
+      display: none;
+      position: fixed;
+      top: 57px;
+      left: 0; right: 0;
+      background: rgba(var(--bg-rgb), 0.97);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border);
+      padding: 24px;
+      z-index: 99;
+      flex-direction: column;
+    }
+
+    .nav-mobile-menu.open { display: flex; }
+
+    .nav-mobile-menu a {
+      display: block;
+      padding: 16px 0;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text-mid);
+      text-decoration: none;
+      border-bottom: 1px solid var(--border);
+      transition: color 0.3s ease;
+    }
+
+    .nav-mobile-menu a:last-child { border-bottom: none; }
+    .nav-mobile-menu a:hover { color: var(--accent); }
+
+    .nav-mobile-menu .nav-cta {
+      margin-top: 20px;
+      display: inline-block;
+      text-align: center;
+      padding: 14px 24px;
+      color: var(--bg);
+      border-bottom: none;
+    }
+
+    /* ─── HERO ──────────────────────────────────────────── */
+    /* Shorter than the other pages' heroes: most visitors arrive from
+       Instagram on a phone, so the prices should be close to the fold. */
+    .hero {
+      min-height: 72vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 140px 64px 80px;
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .hero-media {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      overflow: hidden;
+      background: var(--bg) url('/assets/images/gear-detail.jpg') center / cover no-repeat;
+    }
+
+    .hero-image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      will-change: transform;
+    }
+
+    .hero-tint {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(var(--bg-rgb), 0.88) 0%, rgba(var(--bg-rgb), 0.6) 55%, rgba(var(--bg-rgb), 0.4) 100%),
+        linear-gradient(180deg, rgba(var(--bg-rgb), 0.4) 0%, rgba(var(--bg-rgb), 0.4) 60%, rgba(var(--bg-rgb), 0.96) 100%);
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 60%; height: 100%;
+      background: radial-gradient(ellipse at 80% 30%, var(--accent-glow) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .hero h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(44px, 7vw, 88px);
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 28px;
+      max-width: 900px;
+    }
+
+    .hero h1 em { font-style: normal; color: var(--accent); display: block; margin-top: 8px; }
+
+    .hero-sub {
+      font-size: 17px;
+      font-weight: 300;
+      color: var(--text-mid);
+      max-width: 520px;
+      line-height: 1.7;
+    }
+
+    /* ─── SECTION SHARED ────────────────────────────────── */
+    section { scroll-margin-top: 80px; }
+
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 38px;
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 40px;
+    }
+
+    /* ─── PRICING ───────────────────────────────────────── */
+    .pricing { padding: 80px 64px 100px; border-top: 1px solid var(--border); }
+
+    .price-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .price-card {
+      display: flex;
+      flex-direction: column;
+      padding: 36px 32px 32px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      transition: border-color 0.3s ease;
+    }
+
+    .price-card:hover { border-color: rgba(var(--accent-rgb), 0.35); }
+
+    .price-card h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 18px;
+    }
+
+    .price-amount {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 56px;
+      line-height: 1;
+      color: var(--text);
+      margin-bottom: 20px;
+    }
+
+    .price-card p {
+      font-size: 14px;
+      color: var(--text-mid);
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+
+    .price-turnaround {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 28px;
+    }
+
+    .pay-btn {
+      margin-top: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 18px 24px;
+      background: var(--accent);
+      color: var(--bg);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 16px;
+      letter-spacing: 0.03em;
+      text-decoration: none;
+      transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .pay-btn:hover {
+      background: var(--accent-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(var(--accent-rgb), 0.2);
+    }
+
+    .pay-btn .arrow { transition: transform 0.3s ease; }
+    .pay-btn:hover .arrow { transform: translateX(4px); }
+
+    .price-note {
+      margin-top: 28px;
+      font-size: 13px;
+      color: var(--text-dim);
+      text-align: center;
+    }
+
+    /* ─── HOW IT WORKS ──────────────────────────────────── */
+    .how-it-works { padding: 100px 64px; border-top: 1px solid var(--border); }
+
+    .how-steps { display: grid; grid-template-columns: repeat(3, 1fr); }
+
+    .how-step { padding: 0 48px 0 40px; border-left: 1px solid var(--border); }
+    .how-step:first-child { padding-left: 0; border-left: none; }
+
+    .how-step h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 14px;
+    }
+
+    .how-step p { font-size: 14px; color: var(--text-mid); line-height: 1.75; }
+
+    .how-step a { color: var(--text); text-decoration: underline; text-decoration-color: rgba(var(--accent-rgb), 0.6); text-underline-offset: 3px; }
+
+    /* ─── BEFORE / AFTER ────────────────────────────────── */
+    .before-after { padding: 100px 64px; border-top: 1px solid var(--border); }
+
+    .ab-list { display: flex; flex-direction: column; gap: 12px; max-width: 760px; }
+
+    .ab-player {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      grid-template-areas:
+        "play info switch"
+        "play bar  bar";
+      align-items: center;
+      column-gap: 18px;
+      row-gap: 12px;
+      padding: 18px 20px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+    }
+
+    .ab-play {
+      grid-area: play;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 1px solid rgba(var(--accent-rgb), 0.5);
+      background: none;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .ab-play:hover { background: var(--accent-dim); border-color: var(--accent); }
+    .ab-play svg { width: 16px; height: 16px; fill: currentColor; }
+    .ab-play .icon-pause { display: none; }
+    .ab-player.is-playing .ab-play .icon-play { display: none; }
+    .ab-player.is-playing .ab-play .icon-pause { display: block; }
+
+    .ab-info { grid-area: info; display: flex; align-items: baseline; gap: 12px; min-width: 0; }
+
+    .ab-title {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .ab-time {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--text-dim);
+      white-space: nowrap;
+    }
+
+    .ab-switch {
+      grid-area: switch;
+      display: inline-flex;
+      border: 1px solid var(--border-hover);
+      border-radius: 999px;
+      padding: 2px;
+    }
+
+    .ab-switch button {
+      height: 28px;
+      padding: 0 14px;
+      border: 0;
+      border-radius: 999px;
+      background: none;
+      color: var(--text-mid);
+      font: 500 12px/1 'DM Sans', sans-serif;
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .ab-switch button:hover { color: var(--text); }
+    .ab-switch button[aria-pressed="true"] { background: var(--accent-dim); color: var(--text); }
+
+    .ab-bar {
+      grid-area: bar;
+      position: relative;
+      height: 20px;
+      cursor: pointer;
+      touch-action: none;
+    }
+
+    .ab-bar::before,
+    .ab-fill {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 9px;
+      height: 2px;
+      background: var(--border-hover);
+      width: 100%;
+    }
+
+    .ab-fill { background: var(--accent); width: 0%; }
+
+    .ab-player.is-unavailable .ab-play,
+    .ab-player.is-unavailable .ab-switch,
+    .ab-player.is-unavailable .ab-bar { opacity: 0.35; pointer-events: none; }
+
+    /* ─── FREE CHAIN CTA ────────────────────────────────── */
+    .free-chain {
+      padding: 90px 64px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .free-chain h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(30px, 4vw, 44px);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+      max-width: 680px;
+      margin: 0 auto 32px;
+    }
+
+    .ghost-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 32px;
+      border: 1px solid rgba(var(--accent-rgb), 0.5);
+      color: var(--text);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 15px;
+      letter-spacing: 0.03em;
+      text-decoration: none;
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+
+    .ghost-btn:hover { background: var(--accent-dim); border-color: var(--accent); }
+
+    /* ─── SERVICES LINK (quiet) ─────────────────────────── */
+    .services-link {
+      padding: 0 64px 90px;
+      text-align: center;
+      font-size: 14px;
+      color: var(--text-dim);
+    }
+
+    .services-link a {
+      color: var(--text-mid);
+      text-decoration: underline;
+      text-decoration-color: var(--border-hover);
+      text-underline-offset: 3px;
+      transition: color 0.3s ease;
+    }
+
+    .services-link a:hover { color: var(--text); }
+
+    /* ─── FOOTER ────────────────────────────────────────── */
+    footer {
+      padding: 48px 64px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-left { font-size: 13px; color: var(--text-dim); }
+
+    .footer-links { display: flex; gap: 24px; list-style: none; }
+
+    .footer-links a {
+      font-size: 13px;
+      color: var(--text-dim);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .footer-links a:hover { color: var(--accent); }
+
+    /* ─── HERO ANIMATION ────────────────────────────────── */
+    @keyframes hero-fade-up {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-animate {
+      opacity: 0;
+      animation: hero-fade-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    .hero > .hero-animate:nth-child(1) { animation-delay: 0.15s; }
+    .hero > .hero-animate:nth-child(2) { animation-delay: 0.30s; }
+
+    /* ─── SCROLL REVEAL ─────────────────────────────────── */
+    .js .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .js .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ─── GRAIN TEXTURE ─────────────────────────────────── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1000;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 300px 300px;
+    }
+
+    /* ─── REDUCED MOTION ────────────────────────────────── */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .hero-animate { opacity: 1; animation: none; }
+      .js .reveal { opacity: 1; transform: none; transition: none; }
+      .pay-btn, .nav-cta { transition: none; }
+      body::after { display: none; }
+    }
+
+    /* ─── TABLET ────────────────────────────────────────── */
+    @media (max-width: 1100px) {
+      .price-grid { grid-template-columns: 1fr; max-width: 560px; }
+    }
+
+    /* ─── MOBILE ────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      nav { padding: 16px 24px; }
+      .nav-links { display: none; }
+      .nav-cta { display: none; }
+      .nav-hamburger { display: flex; }
+
+      .hero { min-height: 0; padding: 120px 24px 56px; }
+
+      .pricing { padding: 56px 24px 72px; }
+      .price-grid { max-width: none; gap: 14px; }
+      .price-card { padding: 28px 22px 22px; }
+      .price-amount { font-size: 48px; margin-bottom: 14px; }
+
+      .how-it-works { padding: 64px 24px; }
+      .how-steps { grid-template-columns: 1fr; }
+      .how-step { border-left: none; border-top: 1px solid var(--border); padding: 28px 0; }
+      .how-step:first-child { border-top: none; padding-top: 0; }
+
+      .before-after { padding: 64px 24px; }
+
+      .free-chain { padding: 64px 24px; }
+      .services-link { padding: 0 24px 64px; }
+
+      footer {
+        padding: 32px 24px;
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 { font-size: clamp(40px, 11vw, 56px); }
+      .hero-sub { font-size: 15px; }
+      .section-title { font-size: 32px; margin-bottom: 28px; }
+
+      .ab-player {
+        grid-template-columns: auto 1fr;
+        grid-template-areas:
+          "play info"
+          "play switch"
+          "bar  bar";
+        padding: 16px;
+        column-gap: 14px;
+      }
+      .ab-switch { justify-self: start; }
+    }
+  </style>
+
+  <script>document.documentElement.classList.add('js');</script>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-370PNJD2Z2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-370PNJD2Z2');
+  </script>
+</head>
+<body>
+
+<!-- ─── NAV ──────────────────────────────────────────────── -->
+<nav id="nav" role="banner">
+  <a href="/" class="nav-logo" aria-label="Dan Heale — home"><img src="/images/logo-white.png" alt="Dan Heale" height="34" style="width:auto;display:block;"></a>
+
+  <ul class="nav-links" role="list">
+    <li><a href="/#services">Services</a></li>
+    <li><a href="/#about">About</a></li>
+    <li><a href="/#reviews">Reviews</a></li>
+    <li><a href="/#shop">Shop</a></li>
+    <li><a href="/vocals" aria-current="page">Vocal mixing</a></li>
+    <li><a href="/suno-reproduction" style="color:var(--accent)">Suno Reproduction</a></li>
+  </ul>
+
+  <div class="nav-actions">
+    <div class="currency-toggle" data-currency-toggle role="group" aria-label="Currency">
+      <button type="button" data-currency="GBP" aria-pressed="true" aria-label="Show prices in pounds">£</button>
+      <button type="button" data-currency="USD" aria-pressed="false" aria-label="Show prices in dollars">$</button>
+    </div>
+
+    <a href="/#contact" class="nav-cta">Get a quote</a>
+
+    <button class="nav-hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="nav-mobile-menu" id="mobileMenu" role="navigation" aria-label="Mobile navigation">
+  <a href="/#services">Services</a>
+  <a href="/#about">About</a>
+  <a href="/#reviews">Reviews</a>
+  <a href="/#shop">Shop</a>
+  <a href="/vocals" aria-current="page">Vocal mixing</a>
+  <a href="/suno-reproduction" style="color:var(--accent)">Suno Reproduction</a>
+  <a href="/#contact" class="nav-cta">Get a quote</a>
+</div>
+
+
+<main>
+
+<!-- ─── HERO ──────────────────────────────────────────────── -->
+<section class="hero" aria-label="Vocal mixing">
+  <h1 class="hero-animate">people keep asking if I'll mix their vocals.<em>yes. for money.</em></h1>
+
+  <p class="hero-sub hero-animate">same process as the reels. your vocal, sitting properly in the track.</p>
+
+  <div class="hero-media" aria-hidden="true">
+    <img class="hero-image"
+      src="/assets/images/gear-detail.jpg"
+      alt="" decoding="async" fetchpriority="high">
+    <div class="hero-tint"></div>
+  </div>
+</section>
+
+
+<!-- ─── PRICING ───────────────────────────────────────────── -->
+<!-- Prices and Stripe links swap with the £/$ toggle via /js/currency.js.
+     The values in the HTML are the GBP defaults. -->
+<section class="pricing" id="pricing" aria-labelledby="pricing-heading">
+  <h2 class="section-title reveal" id="pricing-heading">Pricing</h2>
+
+  <div class="price-grid">
+    <article class="price-card reveal">
+      <h3>Vocal Mix</h3>
+      <div class="price-amount" data-price="vocalMix">£60</div>
+      <p>Lead vocal tuned, cleaned, compressed and sitting properly.</p>
+      <div class="price-turnaround">3–5 days</div>
+      <a class="pay-btn" data-tier="vocal_mix"
+        href="https://buy.stripe.com/14AdRbfCAca34Hvgk448001"
+        data-href-gbp="https://buy.stripe.com/14AdRbfCAca34Hvgk448001"
+        data-href-usd="https://buy.stripe.com/dRmeVf2PO8XR1vjaZK48002">
+        Pay &amp; book <span class="arrow" aria-hidden="true">&#8594;</span>
+      </a>
+    </article>
+
+    <article class="price-card reveal">
+      <h3>Full Vocal Mix</h3>
+      <div class="price-amount" data-price="fullVocalMix">£120</div>
+      <p>Lead, backing vocals and ad-libs, all mixed to sit together.</p>
+      <div class="price-turnaround">3–5 days</div>
+      <a class="pay-btn" data-tier="full_vocal_mix"
+        href="https://buy.stripe.com/cNi8wR7640rl3Dr0l648003"
+        data-href-gbp="https://buy.stripe.com/cNi8wR7640rl3Dr0l648003"
+        data-href-usd="https://buy.stripe.com/cNi9AV3TSfmfgqdaZK48004">
+        Pay &amp; book <span class="arrow" aria-hidden="true">&#8594;</span>
+      </a>
+    </article>
+
+    <article class="price-card reveal">
+      <h3>Mix &amp; Master</h3>
+      <div class="price-amount" data-price="mixMaster">from £150</div>
+      <p>The whole song, mixed and mastered, release-ready.</p>
+      <div class="price-turnaround">5–7 days</div>
+      <a class="pay-btn" data-tier="mix_master"
+        href="https://buy.stripe.com/aFadRbfCAb5Z8XLebW48005"
+        data-href-gbp="https://buy.stripe.com/aFadRbfCAb5Z8XLebW48005"
+        data-href-usd="https://buy.stripe.com/dRm4gB3TSa1V8XL1pa48006">
+        Pay &amp; book <span class="arrow" aria-hidden="true">&#8594;</span>
+      </a>
+    </article>
+  </div>
+
+  <p class="price-note">one round of revisions included, because I'm not a monster.</p>
+</section>
+
+
+<!-- ─── HOW IT WORKS ──────────────────────────────────────── -->
+<section class="how-it-works" id="how-it-works" aria-labelledby="how-heading">
+  <h2 class="section-title reveal" id="how-heading">How it works</h2>
+
+  <div class="how-steps">
+    <div class="how-step reveal">
+      <h3>Pay &amp; book</h3>
+      <p>Pick a tier above and pay through Stripe.</p>
+    </div>
+    <div class="how-step reveal">
+      <h3>Send your files</h3>
+      <p>Send stems or a dry vocal WAV plus the beat to <a href="mailto:info@danheale.com">info@danheale.com</a> (WeTransfer or Google Drive link), song title in the subject.</p>
+    </div>
+    <div class="how-step reveal">
+      <h3>Get your mix back</h3>
+      <p>In 3–5 days (5–7 for mix &amp; master).</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ─── BEFORE / AFTER ────────────────────────────────────── -->
+<!-- BEFORE / AFTER IS SWITCHED OFF by the `hidden` attribute on the section
+     below. To switch it on: add the files to /audio/vocals/ with the names in
+     the data-src paths (or change the paths and titles), then delete `hidden`.
+     While hidden, no audio is downloaded. Players that can't load their files
+     show "audio coming soon". -->
+<section class="before-after" id="before-after" aria-labelledby="ab-heading" hidden>
+  <h2 class="section-title reveal" id="ab-heading">Before / after</h2>
+
+  <div class="ab-list">
+    <div class="ab-player reveal">
+      <button class="ab-play" type="button" aria-label="Play Example 1">
+        <svg class="icon-play" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5v11l9-5.5z"/></svg>
+        <svg class="icon-pause" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h3v11H4zM9 2.5h3v11H9z"/></svg>
+      </button>
+      <div class="ab-info"><span class="ab-title">Example 1</span><span class="ab-time">0:00</span></div>
+      <div class="ab-switch" role="group" aria-label="Version">
+        <button type="button" data-version="before" aria-pressed="true">Before</button>
+        <button type="button" data-version="after" aria-pressed="false">After</button>
+      </div>
+      <div class="ab-bar" role="slider" tabindex="0" aria-label="Seek" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="ab-fill"></div></div>
+      <audio data-version="before" preload="metadata" data-src="/audio/vocals/example-1-before.mp3"></audio>
+      <audio data-version="after" preload="metadata" data-src="/audio/vocals/example-1-after.mp3"></audio>
+    </div>
+
+    <div class="ab-player reveal">
+      <button class="ab-play" type="button" aria-label="Play Example 2">
+        <svg class="icon-play" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5v11l9-5.5z"/></svg>
+        <svg class="icon-pause" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h3v11H4zM9 2.5h3v11H9z"/></svg>
+      </button>
+      <div class="ab-info"><span class="ab-title">Example 2</span><span class="ab-time">0:00</span></div>
+      <div class="ab-switch" role="group" aria-label="Version">
+        <button type="button" data-version="before" aria-pressed="true">Before</button>
+        <button type="button" data-version="after" aria-pressed="false">After</button>
+      </div>
+      <div class="ab-bar" role="slider" tabindex="0" aria-label="Seek" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="ab-fill"></div></div>
+      <audio data-version="before" preload="metadata" data-src="/audio/vocals/example-2-before.mp3"></audio>
+      <audio data-version="after" preload="metadata" data-src="/audio/vocals/example-2-after.mp3"></audio>
+    </div>
+
+    <div class="ab-player reveal">
+      <button class="ab-play" type="button" aria-label="Play Example 3">
+        <svg class="icon-play" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5v11l9-5.5z"/></svg>
+        <svg class="icon-pause" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h3v11H4zM9 2.5h3v11H9z"/></svg>
+      </button>
+      <div class="ab-info"><span class="ab-title">Example 3</span><span class="ab-time">0:00</span></div>
+      <div class="ab-switch" role="group" aria-label="Version">
+        <button type="button" data-version="before" aria-pressed="true">Before</button>
+        <button type="button" data-version="after" aria-pressed="false">After</button>
+      </div>
+      <div class="ab-bar" role="slider" tabindex="0" aria-label="Seek" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="ab-fill"></div></div>
+      <audio data-version="before" preload="metadata" data-src="/audio/vocals/example-3-before.mp3"></audio>
+      <audio data-version="after" preload="metadata" data-src="/audio/vocals/example-3-after.mp3"></audio>
+    </div>
+  </div>
+</section>
+
+
+<!-- ─── FREE VOCAL CHAIN ──────────────────────────────────── -->
+<section class="free-chain" aria-labelledby="free-chain-heading">
+  <h2 id="free-chain-heading" class="reveal">not ready to pay someone? fair. grab the free vocal chain.</h2>
+  <a href="https://danhealemusic.gumroad.com/" class="ghost-btn reveal" target="_blank" rel="noopener noreferrer">
+    Get the free vocal chains <span aria-hidden="true">&#8594;</span>
+  </a>
+</section>
+
+
+<!-- ─── SERVICES LINK (quiet) ─────────────────────────────── -->
+<p class="services-link">
+  need a whole track made, not just the vocals? <a href="/#services">see all services &#8594;</a>
+</p>
+
+</main>
+
+
+<!-- ─── FOOTER ────────────────────────────────────────────── -->
+<footer role="contentinfo">
+  <div class="footer-left">&#169; 2026 Dan Heale. All rights reserved.</div>
+  <ul class="footer-links" role="list" aria-label="Social links">
+    <li><a href="https://www.instagram.com/prodbydanheale" rel="noopener noreferrer" target="_blank">Instagram</a></li>
+    <li><a href="https://www.youtube.com/@danhealemusic" rel="noopener noreferrer" target="_blank">YouTube</a></li>
+    <li><a href="https://open.spotify.com/playlist/3lEUOgRppfqjeRlIvy3B3h" rel="noopener noreferrer" target="_blank">Spotify</a></li>
+    <li><a href="https://www.tiktok.com/@prodbydanheale" rel="noopener noreferrer" target="_blank">TikTok</a></li>
+  </ul>
+</footer>
+
+
+<script src="/js/currency.js" defer></script>
+<script src="/js/vocals.js" defer></script>
+<script src="/js/vendor/gsap.min.js" defer></script>
+<script src="/js/vendor/ScrollTrigger.min.js" defer></script>
+<script src="/js/hero-scale.js" defer></script>
+
+<!-- JSON-LD Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": "Vocal Mixing",
+  "provider": {
+    "@type": "Person",
+    "name": "Dan Heale",
+    "url": "https://danheale.com"
+  },
+  "description": "Vocal mixing from £60. Same process as the reels. 3–5 day turnaround.",
+  "url": "https://danheale.com/vocals",
+  "areaServed": "Worldwide"
+}
+</script>
+
+</body>
+</html>
