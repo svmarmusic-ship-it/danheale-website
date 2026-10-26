@@ -103,22 +103,28 @@
       h === '[::1]' || /\.local$/.test(h) || /^(10|192\.168)\./.test(h);
   }
 
+  function readCache() {
+    try {
+      var c = sessionStorage.getItem(GEO_CACHE);
+      return c === 'GBP' || c === 'USD' ? c : null;
+    } catch (e) { return null; }
+  }
+
   // GB → GBP. Every other country, or an unknown one, → USD.
+  // Checked on every page load so a change of location (travel, VPN) shows
+  // up straight away. The last answer is kept per tab only to avoid a flash
+  // of the wrong currency while the check runs.
   function detect() {
     if (isLocal()) return Promise.resolve('GBP');
 
-    var cached = null;
-    try { cached = sessionStorage.getItem(GEO_CACHE); } catch (e) {}
-    if (cached === 'GBP' || cached === 'USD') return Promise.resolve(cached);
-
-    return fetch('/api/geo', { headers: { 'Accept': 'application/json' } })
+    return fetch('/api/geo', { headers: { 'Accept': 'application/json' }, cache: 'no-store' })
       .then(function (r) { return r.ok ? r.json() : {}; })
       .then(function (data) {
         var c = data && data.country === 'GB' ? 'GBP' : 'USD';
         try { sessionStorage.setItem(GEO_CACHE, c); } catch (e) {}
         return c;
       })
-      .catch(function () { return 'USD'; });
+      .catch(function () { return readCache() || 'USD'; });
   }
 
   function init() {
@@ -135,7 +141,7 @@
       apply(saved);
       return;
     }
-    apply('GBP');
+    apply(isLocal() ? 'GBP' : (readCache() || 'GBP'));
     detect().then(function (c) {
       // A toggle click may have landed while we were waiting.
       apply(readCookie() || c);
