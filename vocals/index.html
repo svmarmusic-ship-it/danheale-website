@@ -389,111 +389,196 @@
 
     .how-step a { color: var(--text); text-decoration: underline; text-decoration-color: rgba(var(--accent-rgb), 0.6); text-underline-offset: 3px; }
 
-    /* ─── BEFORE / AFTER ────────────────────────────────── */
-    .before-after { padding: 100px 64px; border-top: 1px solid var(--border); }
+    /* ─── HEAR THE DIFFERENCE ───────────────────────────── */
+    /* Before/after players. Behaviour lives in /js/ab-compare.js; every card
+       is driven by data attributes, so a new card is just a copy of the HTML. */
+    .hear { padding: 100px 64px; border-top: 1px solid var(--border); }
 
-    .ab-list { display: flex; flex-direction: column; gap: 12px; max-width: 760px; }
-
-    .ab-player {
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      grid-template-areas:
-        "play info switch"
-        "play bar  bar";
-      align-items: center;
-      column-gap: 18px;
-      row-gap: 12px;
-      padding: 18px 20px;
-      background: var(--bg-elevated);
-      border: 1px solid var(--border);
+    .hear h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(44px, 6vw, 72px);
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      margin-bottom: 18px;
     }
 
-    .ab-play {
-      grid-area: play;
-      width: 48px;
-      height: 48px;
+    .hear-intro {
+      font-size: 16px;
+      color: var(--text-mid);
+      line-height: 1.7;
+      max-width: 560px;
+      margin-bottom: 48px;
+    }
+
+    .hear-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      perspective: 1400px; /* depth for the GSAP group reveal (motion.js) */
+    }
+
+    .hear-card {
+      position: relative;
+      padding: 32px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      transition: border-color 0.35s ease, box-shadow 0.35s ease;
+    }
+
+    .hear-card.is-playing {
+      border-color: rgba(var(--accent-rgb), 0.7);
+      box-shadow:
+        0 0 0 1px rgba(var(--accent-rgb), 0.25),
+        0 0 36px rgba(var(--accent-rgb), 0.22),
+        0 0 90px rgba(var(--accent-2-rgb), 0.1);
+    }
+
+    .hear-tag {
+      display: block;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 14px;
+    }
+
+    .hear-card h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 8px;
+    }
+
+    .hear-card p {
+      font-size: 14px;
+      color: var(--text-mid);
+      line-height: 1.6;
+      margin-bottom: 26px;
+    }
+
+    /* Dry / Full FX pill with a sliding highlight */
+    .hear-toggle {
+      position: relative;
+      display: inline-grid;
+      grid-template-columns: 1fr 1fr;
+      border: 1px solid var(--border-hover);
+      border-radius: 999px;
+      padding: 3px;
+      margin-bottom: 26px;
+      isolation: isolate;
+    }
+
+    .hear-toggle-thumb {
+      position: absolute;
+      top: 3px; bottom: 3px; left: 3px;
+      width: calc(50% - 3px);
+      border-radius: 999px;
+      background: var(--accent-dim);
+      box-shadow: inset 0 0 0 1px rgba(var(--accent-rgb), 0.45);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: -1;
+    }
+
+    .hear-toggle[data-active="fx"] .hear-toggle-thumb { transform: translateX(100%); }
+
+    .hear-toggle button {
+      min-width: 92px;
+      height: 36px;
+      padding: 0 18px;
+      border: 0;
+      background: none;
+      color: var(--text-mid);
+      font: 500 13px/1 'DM Sans', sans-serif;
+      cursor: pointer;
+      transition: color 0.25s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .hear-toggle button:hover,
+    .hear-toggle button[aria-pressed="true"] { color: var(--text); }
+
+    /* Transport: play button, progress bar, time */
+    .hear-transport {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .hear-play {
+      width: 52px;
+      height: 52px;
       border-radius: 50%;
-      border: 1px solid rgba(var(--accent-rgb), 0.5);
+      border: 1px solid rgba(var(--accent-rgb), 0.55);
       background: none;
       color: var(--text);
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      transition: background 0.2s ease, border-color 0.2s ease;
+      transition: background 0.25s ease, border-color 0.25s ease;
+      -webkit-tap-highlight-color: transparent;
     }
 
-    .ab-play:hover { background: var(--accent-dim); border-color: var(--accent); }
-    .ab-play svg { width: 16px; height: 16px; fill: currentColor; }
-    .ab-play .icon-pause { display: none; }
-    .ab-player.is-playing .ab-play .icon-play { display: none; }
-    .ab-player.is-playing .ab-play .icon-pause { display: block; }
+    .hear-play:hover { background: var(--accent-dim); border-color: var(--accent); }
+    .hear-card.is-playing .hear-play { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+    .hear-play svg { width: 16px; height: 16px; fill: currentColor; }
+    .hear-play .icon-pause { display: none; }
+    .hear-card.is-playing .hear-play .icon-play { display: none; }
+    .hear-card.is-playing .hear-play .icon-pause { display: block; }
 
-    .ab-info { grid-area: info; display: flex; align-items: baseline; gap: 12px; min-width: 0; }
-
-    .ab-title {
-      font-size: 15px;
-      font-weight: 500;
-      color: var(--text);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .ab-time {
-      font-family: 'Space Mono', monospace;
-      font-size: 11px;
-      color: var(--text-dim);
-      white-space: nowrap;
-    }
-
-    .ab-switch {
-      grid-area: switch;
-      display: inline-flex;
-      border: 1px solid var(--border-hover);
-      border-radius: 999px;
-      padding: 2px;
-    }
-
-    .ab-switch button {
-      height: 28px;
-      padding: 0 14px;
-      border: 0;
-      border-radius: 999px;
-      background: none;
-      color: var(--text-mid);
-      font: 500 12px/1 'DM Sans', sans-serif;
-      cursor: pointer;
-      transition: background 0.2s ease, color 0.2s ease;
-    }
-
-    .ab-switch button:hover { color: var(--text); }
-    .ab-switch button[aria-pressed="true"] { background: var(--accent-dim); color: var(--text); }
-
-    .ab-bar {
-      grid-area: bar;
+    .hear-progress {
       position: relative;
-      height: 20px;
+      height: 32px; /* tall hit area for thumbs; the visible track is 3px */
       cursor: pointer;
       touch-action: none;
+      --pct: 0%;
     }
 
-    .ab-bar::before,
-    .ab-fill {
+    .hear-progress::before,
+    .hear-progress::after {
       content: '';
       position: absolute;
       left: 0;
-      top: 9px;
-      height: 2px;
-      background: var(--border-hover);
-      width: 100%;
+      top: 50%;
+      height: 3px;
+      margin-top: -1.5px;
+      border-radius: 3px;
     }
 
-    .ab-fill { background: var(--accent); width: 0%; }
+    .hear-progress::before { width: 100%; background: var(--border-hover); }
+    .hear-progress::after { width: var(--pct); background: var(--accent); }
 
-    .ab-player.is-unavailable .ab-play,
-    .ab-player.is-unavailable .ab-switch,
-    .ab-player.is-unavailable .ab-bar { opacity: 0.35; pointer-events: none; }
+    .hear-progress-knob {
+      position: absolute;
+      top: 50%;
+      left: var(--pct);
+      width: 12px;
+      height: 12px;
+      margin: -6px 0 0 -6px;
+      border-radius: 50%;
+      background: var(--text);
+      box-shadow: 0 0 0 4px rgba(var(--accent-rgb), 0.25);
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      pointer-events: none;
+    }
+
+    .hear-card.is-playing .hear-progress-knob,
+    .hear-progress:hover .hear-progress-knob,
+    .hear-progress:focus-visible .hear-progress-knob { opacity: 1; }
+
+    .hear-time {
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      color: var(--text-dim);
+      white-space: nowrap;
+      min-width: 92px;
+      text-align: right;
+    }
 
     /* ─── FREE CHAIN CTA ────────────────────────────────── */
     .free-chain {
@@ -592,6 +677,19 @@
 
     .js .reveal.visible { opacity: 1; transform: translateY(0); }
 
+    /* ─── GSAP SCROLL REVEAL (js/motion.js, same as the homepage) ── */
+    /* Hidden only while <html class="js">; motion.js removes that class if it cannot run. */
+    .js [data-reveal],
+    .js [data-reveal-group] > * {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .js [data-reveal],
+      .js [data-reveal-group] > * { opacity: 1; visibility: visible; }
+    }
+
     /* ─── GRAIN TEXTURE ─────────────────────────────────── */
     body::after {
       content: '';
@@ -610,6 +708,7 @@
       .hero-animate { opacity: 1; animation: none; }
       .js .reveal { opacity: 1; transform: none; transition: none; }
       .pay-btn, .nav-cta { transition: none; }
+      .hear-toggle-thumb { transition: none; }
       body::after { display: none; }
     }
 
@@ -637,7 +736,10 @@
       .how-step { border-left: none; border-top: 1px solid var(--border); padding: 28px 0; }
       .how-step:first-child { border-top: none; padding-top: 0; }
 
-      .before-after { padding: 64px 24px; }
+      .hear { padding: 64px 24px; }
+      .hear-grid { grid-template-columns: 1fr; gap: 14px; }
+      .hear-card { padding: 26px 22px; }
+      .hear-intro { margin-bottom: 32px; }
 
       .free-chain { padding: 64px 24px; }
       .services-link { padding: 0 24px 64px; }
@@ -655,16 +757,9 @@
       .hero-sub { font-size: 15px; }
       .section-title { font-size: 32px; margin-bottom: 28px; }
 
-      .ab-player {
-        grid-template-columns: auto 1fr;
-        grid-template-areas:
-          "play info"
-          "play switch"
-          "bar  bar";
-        padding: 16px;
-        column-gap: 14px;
-      }
-      .ab-switch { justify-self: start; }
+      .hear-toggle { display: grid; width: 100%; }
+      .hear-transport { gap: 12px; }
+      .hear-time { min-width: 0; font-size: 11px; }
     }
   </style>
 
@@ -734,6 +829,71 @@
       src="/assets/images/gear-detail.jpg"
       alt="" decoding="async" fetchpriority="high">
     <div class="hero-tint"></div>
+  </div>
+</section>
+
+
+<!-- ─── HEAR THE DIFFERENCE ───────────────────────────────── -->
+<!-- Before/after players (js/ab-compare.js). To add a card, copy one
+     <article class="hear-card"> and change the tag text and the two audio
+     paths. data-dry-gain sets the dry file's level for level-matching
+     (1 = unchanged). Each pair must start at the same moment. -->
+<section class="hear" id="hear" aria-labelledby="hear-heading">
+  <h2 id="hear-heading" data-reveal>Hear the difference</h2>
+  <p class="hear-intro" data-reveal>Hit play, then flip between the dry vocal and the full FX chain. Same take, same moment.</p>
+
+  <div class="hear-grid" data-reveal-group>
+    <article class="hear-card" data-ab data-dry-gain="1">
+      <span class="hear-tag">Pop &middot; Female Vocal</span>
+      <h3>Dry &#8594; Full chain</h3>
+      <p>Zero processing vs the finished vocal chain.</p>
+
+      <div class="hear-toggle" data-ab-toggle data-active="dry" role="group" aria-label="Version">
+        <span class="hear-toggle-thumb" aria-hidden="true"></span>
+        <button type="button" data-ab-show="dry" aria-pressed="true">Dry</button>
+        <button type="button" data-ab-show="fx" aria-pressed="false">Full FX</button>
+      </div>
+
+      <div class="hear-transport">
+        <button class="hear-play" type="button" data-ab-play aria-label="Play Pop &middot; Female Vocal">
+          <svg class="icon-play" viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 2.5v11l9-5.5z"/></svg>
+          <svg class="icon-pause" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h3v11H4zM9 2.5h3v11H9z"/></svg>
+        </button>
+        <div class="hear-progress" data-ab-seek role="slider" tabindex="0" aria-label="Seek Pop &middot; Female Vocal" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+          <span class="hear-progress-knob"></span>
+        </div>
+        <span class="hear-time" data-ab-time>0:00</span>
+      </div>
+
+      <audio data-ab-dry src="/vocals/audio/pop-dry.mp3" preload="metadata" playsinline></audio>
+      <audio data-ab-fx src="/vocals/audio/pop-fx.mp3" preload="metadata" playsinline></audio>
+    </article>
+
+    <article class="hear-card" data-ab data-dry-gain="1">
+      <span class="hear-tag">Dance &middot; Topline</span>
+      <h3>Dry &#8594; Full chain</h3>
+      <p>Zero processing vs the finished vocal chain.</p>
+
+      <div class="hear-toggle" data-ab-toggle data-active="dry" role="group" aria-label="Version">
+        <span class="hear-toggle-thumb" aria-hidden="true"></span>
+        <button type="button" data-ab-show="dry" aria-pressed="true">Dry</button>
+        <button type="button" data-ab-show="fx" aria-pressed="false">Full FX</button>
+      </div>
+
+      <div class="hear-transport">
+        <button class="hear-play" type="button" data-ab-play aria-label="Play Dance &middot; Topline">
+          <svg class="icon-play" viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 2.5v11l9-5.5z"/></svg>
+          <svg class="icon-pause" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h3v11H4zM9 2.5h3v11H9z"/></svg>
+        </button>
+        <div class="hear-progress" data-ab-seek role="slider" tabindex="0" aria-label="Seek Dance &middot; Topline" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+          <span class="hear-progress-knob"></span>
+        </div>
+        <span class="hear-time" data-ab-time>0:00</span>
+      </div>
+
+      <audio data-ab-dry src="/vocals/audio/dance-dry.mp3" preload="metadata" playsinline></audio>
+      <audio data-ab-fx src="/vocals/audio/dance-wet.mp3" preload="metadata" playsinline></audio>
+    </article>
   </div>
 </section>
 
@@ -827,64 +987,6 @@
 </section>
 
 
-<!-- ─── BEFORE / AFTER ────────────────────────────────────── -->
-<!-- BEFORE / AFTER IS SWITCHED OFF by the `hidden` attribute on the section
-     below. To switch it on: add the files to /audio/vocals/ with the names in
-     the data-src paths (or change the paths and titles), then delete `hidden`.
-     While hidden, no audio is downloaded. Players that can't load their files
-     show "audio coming soon". -->
-<section class="before-after" id="before-after" aria-labelledby="ab-heading" hidden>
-  <h2 class="section-title reveal" id="ab-heading">Before / after</h2>
-
-  <div class="ab-list">
-    <div class="ab-player reveal">
-      <button class="ab-play" type="button" aria-label="Play Example 1">
-        <svg class="icon-play" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5v11l9-5.5z"/></svg>
-        <svg class="icon-pause" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h3v11H4zM9 2.5h3v11H9z"/></svg>
-      </button>
-      <div class="ab-info"><span class="ab-title">Example 1</span><span class="ab-time">0:00</span></div>
-      <div class="ab-switch" role="group" aria-label="Version">
-        <button type="button" data-version="before" aria-pressed="true">Before</button>
-        <button type="button" data-version="after" aria-pressed="false">After</button>
-      </div>
-      <div class="ab-bar" role="slider" tabindex="0" aria-label="Seek" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="ab-fill"></div></div>
-      <audio data-version="before" preload="metadata" data-src="/audio/vocals/example-1-before.mp3"></audio>
-      <audio data-version="after" preload="metadata" data-src="/audio/vocals/example-1-after.mp3"></audio>
-    </div>
-
-    <div class="ab-player reveal">
-      <button class="ab-play" type="button" aria-label="Play Example 2">
-        <svg class="icon-play" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5v11l9-5.5z"/></svg>
-        <svg class="icon-pause" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h3v11H4zM9 2.5h3v11H9z"/></svg>
-      </button>
-      <div class="ab-info"><span class="ab-title">Example 2</span><span class="ab-time">0:00</span></div>
-      <div class="ab-switch" role="group" aria-label="Version">
-        <button type="button" data-version="before" aria-pressed="true">Before</button>
-        <button type="button" data-version="after" aria-pressed="false">After</button>
-      </div>
-      <div class="ab-bar" role="slider" tabindex="0" aria-label="Seek" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="ab-fill"></div></div>
-      <audio data-version="before" preload="metadata" data-src="/audio/vocals/example-2-before.mp3"></audio>
-      <audio data-version="after" preload="metadata" data-src="/audio/vocals/example-2-after.mp3"></audio>
-    </div>
-
-    <div class="ab-player reveal">
-      <button class="ab-play" type="button" aria-label="Play Example 3">
-        <svg class="icon-play" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5v11l9-5.5z"/></svg>
-        <svg class="icon-pause" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h3v11H4zM9 2.5h3v11H9z"/></svg>
-      </button>
-      <div class="ab-info"><span class="ab-title">Example 3</span><span class="ab-time">0:00</span></div>
-      <div class="ab-switch" role="group" aria-label="Version">
-        <button type="button" data-version="before" aria-pressed="true">Before</button>
-        <button type="button" data-version="after" aria-pressed="false">After</button>
-      </div>
-      <div class="ab-bar" role="slider" tabindex="0" aria-label="Seek" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="ab-fill"></div></div>
-      <audio data-version="before" preload="metadata" data-src="/audio/vocals/example-3-before.mp3"></audio>
-      <audio data-version="after" preload="metadata" data-src="/audio/vocals/example-3-after.mp3"></audio>
-    </div>
-  </div>
-</section>
-
-
 <!-- ─── FREE VOCAL CHAIN ──────────────────────────────────── -->
 <section class="free-chain" aria-labelledby="free-chain-heading">
   <h2 id="free-chain-heading" class="reveal">not ready to pay someone? fair. grab one of my free vocal chains.</h2>
@@ -916,8 +1018,10 @@
 
 <script src="/js/currency.js" defer></script>
 <script src="/js/vocals.js" defer></script>
+<script src="/js/ab-compare.js" defer></script>
 <script src="/js/vendor/gsap.min.js" defer></script>
 <script src="/js/vendor/ScrollTrigger.min.js" defer></script>
+<script src="/js/motion.js" defer></script>
 <script src="/js/hero-scale.js" defer></script>
 
 <!-- JSON-LD Structured Data -->
